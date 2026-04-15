@@ -1,0 +1,40 @@
+# Data — large files and sensitive outputs
+data/raw/
+data/processed/
+
+# Environment
+.env
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Chroma persistent store
+chroma_db/
+
+# Model checkpoints
+*.pt
+*.bin
+*.safetensors
+models/
+
+# Logs
+*.log
+wandb/
+
+# OS
+.DS_Store
+Thumbs.db
