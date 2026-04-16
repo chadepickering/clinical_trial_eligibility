@@ -27,8 +27,11 @@ def init_schema(conn: duckdb.DuckDBPyConnection) -> None:
             max_age              VARCHAR,      -- nullable — often absent
             sex                  VARCHAR,      -- "ALL", "MALE", "FEMALE"
             std_ages             VARCHAR[],
-            primary_outcomes     VARCHAR[],
-            brief_summary        TEXT,
+            primary_outcomes          VARCHAR[],
+            secondary_outcomes        VARCHAR[],    -- secondary endpoint measures — NER source for LAB_VALUE, SCALE, THRESHOLD, TIMEFRAME
+            intervention_descriptions VARCHAR[],    -- parallel to interventions — dosing/route/schedule prose — NER source for DRUG, THRESHOLD, TIMEFRAME
+            intervention_other_names  VARCHAR[],    -- parallel to interventions — drug aliases e.g. "anti-PD1" — NER source for DRUG
+            brief_summary             TEXT,
             detailed_description TEXT,         -- nullable
             eligibility_text     TEXT,
             mesh_conditions      VARCHAR[],    -- MeSH-normalized condition terms

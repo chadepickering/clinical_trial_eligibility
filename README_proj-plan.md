@@ -235,6 +235,9 @@ def initialize_database(db_path: str = "data/processed/trials.duckdb"):
             sex VARCHAR,                     -- "ALL", "MALE", "FEMALE"
             std_ages VARCHAR[],              -- ["ADULT", "OLDER_ADULT"] etc.
             primary_outcomes VARCHAR[],
+            secondary_outcomes VARCHAR[],    -- secondary endpoint measures — NER source for LAB_VALUE, SCALE, THRESHOLD, TIMEFRAME
+            intervention_descriptions VARCHAR[],  -- parallel to interventions — dosing/route/schedule prose — NER source for DRUG, THRESHOLD, TIMEFRAME
+            intervention_other_names VARCHAR[],   -- parallel to interventions — drug aliases e.g. "anti-PD1" — NER source for DRUG
             brief_summary TEXT,              -- narrative description — rich NER source
             detailed_description TEXT,       -- nullable — long-form scientific background; variable length
             eligibility_text TEXT,           -- primary classifier + NER source
