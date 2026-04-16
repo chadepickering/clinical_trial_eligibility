@@ -224,14 +224,22 @@ def initialize_database(db_path: str = "data/processed/trials.duckdb"):
     con.execute("""
         CREATE TABLE IF NOT EXISTS trials (
             nct_id VARCHAR PRIMARY KEY,
+            brief_title VARCHAR,             -- human-readable name for UI + light NER source
             conditions VARCHAR[],
             interventions VARCHAR[],
+            intervention_types VARCHAR[],    -- parallel array to interventions (DRUG, DEVICE, etc.)
             phases VARCHAR[],
             status VARCHAR,
-            min_age VARCHAR,
-            max_age VARCHAR,
+            min_age VARCHAR,                 -- stored as string e.g. "18 Years" — parsed downstream
+            max_age VARCHAR,                 -- nullable — often absent
+            sex VARCHAR,                     -- "ALL", "MALE", "FEMALE"
+            std_ages VARCHAR[],              -- ["ADULT", "OLDER_ADULT"] etc.
             primary_outcomes VARCHAR[],
-            eligibility_text TEXT,
+            brief_summary TEXT,              -- narrative description — rich NER source
+            detailed_description TEXT,       -- nullable — long-form scientific background; variable length
+            eligibility_text TEXT,           -- primary classifier + NER source
+            mesh_conditions VARCHAR[],       -- MeSH-normalized condition terms — NER gold labels
+            mesh_interventions VARCHAR[],    -- MeSH-normalized drug/intervention terms — NER gold labels
             ingested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -254,6 +262,8 @@ def initialize_database(db_path: str = "data/processed/trials.duckdb"):
             extracted_lab_values VARCHAR[],
             extracted_thresholds VARCHAR[],
             extracted_demographics VARCHAR[],
+            extracted_scales VARCHAR[],      -- e.g. "ECOG 0-2", "CTCAE Grade 3" → feeds B2
+            extracted_timeframes VARCHAR[],  -- e.g. "within 6 months" → feeds B3
             processed_at TIMESTAMP
         )
     """)
@@ -280,9 +290,8 @@ def fetch_oncology_trials(
         "query.cond": "cancer OR oncology OR neoplasm OR tumor OR carcinoma",
         "filter.overallStatus": "RECRUITING,ACTIVE_NOT_RECRUITING,COMPLETED",
         "pageSize": page_size,
-        "format": "json",
-        "fields": "NCTId,EligibilityCriteria,Condition,InterventionName,"
-                  "Phase,OverallStatus,MinimumAge,MaximumAge,PrimaryOutcome"
+        "format": "json"
+        # No "fields" filter — fetch full JSON and extract in parser.py
     }
 
     fetched = 0

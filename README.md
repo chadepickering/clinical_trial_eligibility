@@ -77,14 +77,21 @@ ChromaDB                  └─────────────────
 
 | Field | Description |
 |---|---|
-| `nctId` | Trial identifier |
-| `eligibilityModule.eligibilityCriteria` | Full criteria free text |
-| `eligibilityModule.minimumAge` / `maximumAge` | Age constraints |
-| `conditionsModule.conditions` | Cancer types |
-| `interventionsModule.interventions` | Drugs and treatments |
-| `designModule.phases` | Trial phase |
-| `statusModule.overallStatus` | Recruiting status |
-| `outcomesModule.primaryOutcomes` | Primary endpoints |
+| `protocolSection.identificationModule.nctId` | Trial identifier |
+| `protocolSection.identificationModule.briefTitle` | Human-readable trial name |
+| `protocolSection.eligibilityModule.eligibilityCriteria` | Full criteria free text |
+| `protocolSection.eligibilityModule.minimumAge` / `maximumAge` | Age constraints (maximumAge nullable) |
+| `protocolSection.eligibilityModule.sex` | Sex eligibility |
+| `protocolSection.eligibilityModule.stdAges` | Age category list |
+| `protocolSection.conditionsModule.conditions` | Cancer types (list of str) |
+| `protocolSection.armsInterventionsModule.interventions[].name` | Drug/intervention names |
+| `protocolSection.armsInterventionsModule.interventions[].type` | Intervention type (DRUG, DEVICE, etc.) |
+| `protocolSection.designModule.phases` | Trial phase (list of str) |
+| `protocolSection.statusModule.overallStatus` | Recruiting status |
+| `protocolSection.outcomesModule.primaryOutcomes[].measure` | Primary endpoints |
+| `protocolSection.descriptionModule.briefSummary` | Narrative trial summary (NER source) |
+| `derivedSection.conditionBrowseModule.meshes[].term` | MeSH-normalized condition terms |
+| `derivedSection.interventionBrowseModule.meshes[].term` | MeSH-normalized drug/intervention terms |
 
 ---
 
