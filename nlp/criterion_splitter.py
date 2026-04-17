@@ -25,13 +25,14 @@ import re
 # Header patterns
 # ---------------------------------------------------------------------------
 
-# Matches "Inclusion Criteria", "INCLUSION CRITERIA:", "Inclusion Criterion", etc.
+# Matches "Inclusion Criteria", "INCLUSION CRITERIA:", "Inclusion Criterion",
+# and bullet-prefixed variants like "* INCLUSION CRITERIA:"
 _INCLUSION_RE = re.compile(
-    r'^\s*inclusion\s+criteri[ao]n?s?\s*:?',
+    r'^\s*[\*\-]?\s*inclusion\s+criteri[ao]n?s?\s*:?',
     re.IGNORECASE
 )
 _EXCLUSION_RE = re.compile(
-    r'^\s*exclusion\s+criteri[ao]n?s?\s*:?',
+    r'^\s*[\*\-]?\s*exclusion\s+criteri[ao]n?s?\s*:?',
     re.IGNORECASE
 )
 # Old-style section headers that don't map to inclusion/exclusion

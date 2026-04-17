@@ -44,22 +44,23 @@ def init_schema(conn: duckdb.DuckDBPyConnection) -> None:
         CREATE TABLE IF NOT EXISTS criteria (
             criterion_id           VARCHAR PRIMARY KEY,  -- composed as nct_id + '_' + position index
             nct_id                 VARCHAR REFERENCES trials(nct_id),
-            criterion_text         TEXT,
-            -- B1/B2/B3 classification outputs (populated by NLP layer)
-            label_inclusion        INTEGER,
-            label_objective        INTEGER,
-            label_observable       INTEGER,
-            confidence_inclusion   FLOAT,
-            confidence_objective   FLOAT,
-            confidence_observable  FLOAT,
+            text                   TEXT,
+            section                VARCHAR,      -- "inclusion", "exclusion", "unknown"
+            position               INTEGER,      -- 0-based index within trial
+            -- B1/B2/B3 weak labels (populated by NLP layer; NULL = no signal / ambiguous)
+            b1_label               INTEGER,      -- 1=inclusion, 0=exclusion
+            b2_label               INTEGER,      -- 1=objective, 0=subjective
+            b3_label               INTEGER,      -- 1=observable, 0=unobservable
+            b2_confidence          FLOAT,        -- 0.0–1.0 signal strength
+            b3_confidence          FLOAT,        -- 0.0–1.0 signal strength
             -- NER outputs (populated by NER layer)
             extracted_conditions   VARCHAR[],
             extracted_drugs        VARCHAR[],
             extracted_lab_values   VARCHAR[],
             extracted_thresholds   VARCHAR[],
             extracted_demographics VARCHAR[],
-            extracted_scales       VARCHAR[],    -- e.g. "ECOG 0-2", "CTCAE Grade 3" — feeds B2
-            extracted_timeframes   VARCHAR[],    -- e.g. "within 6 months" — feeds B3
+            extracted_scales       VARCHAR[],    -- e.g. "ECOG 0-2", "CTCAE Grade 3"
+            extracted_timeframes   VARCHAR[],    -- e.g. "within 6 months"
             processed_at           TIMESTAMP
         )
     """)
