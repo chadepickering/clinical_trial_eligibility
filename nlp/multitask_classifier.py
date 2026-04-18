@@ -158,12 +158,22 @@ def compute_loss(
     if task_weights is None:
         task_weights = {'b1': 0.30, 'b2': 0.30, 'b3': 0.40}
 
-    ce = nn.CrossEntropyLoss(reduction='none')   # per-example losses
+    # Class weights to counteract minority-class suppression.
+    # B1 is balanced (~1:1) so no correction needed.
+    # B2 subjective:objective ≈ 1:3  → upweight subjective (label=0) by 3×
+    # B3 unobservable:observable ≈ 1:8 → upweight unobservable (label=0) by 8×
+    # Weight vector order: [label=0, label=1]
     device = logits['b1'].device
+    class_weights = {
+        'b1': None,
+        'b2': torch.tensor([3.0, 1.0], dtype=torch.float, device=device),
+        'b3': torch.tensor([8.0, 1.0], dtype=torch.float, device=device),
+    }
 
     total_loss = torch.tensor(0.0, device=device)
 
     for head in ('b1', 'b2', 'b3'):
+        ce = nn.CrossEntropyLoss(reduction='none', weight=class_weights[head])
         per_example = ce(logits[head], batch[f'{head}_label'])   # [batch]
         conf = batch[f'{head}_conf'].to(device)                  # [batch]
         # Guard against all-zero confidence in a batch (would produce NaN mean)

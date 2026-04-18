@@ -26,7 +26,8 @@ import re
 # B2 patterns — Objective vs Subjective
 # ---------------------------------------------------------------------------
 
-# Objective: numeric thresholds, named clinical scales, units of measurement
+# Objective: numeric thresholds, named clinical scales, units of measurement,
+# and binary clinical states that are objectively verifiable (documented facts)
 _OBJECTIVE_PATTERNS = [
     re.compile(r'\d+\.?\d*\s*(%|mg|ml|mcl|mmol|mmhg|ng|g/dl|g/l|u/l|iu/l|mm\^3|mm3|mL/min)', re.IGNORECASE),
     re.compile(r'[≥≤<>]=?\s*\d'),                          # comparator + number e.g. "≥ 18", "> 2 cm"
@@ -37,6 +38,11 @@ _OBJECTIVE_PATTERNS = [
     re.compile(r'x\s*(upper limit of normal|ULN)', re.IGNORECASE),
     re.compile(r'(bmi|body mass index)\s*[≤≥<>]\s*\d', re.IGNORECASE),
     re.compile(r'\b(normal|within normal limits|per institutional|normal range)\b', re.IGNORECASE),
+    # Binary clinical states — objectively documented, no numeric threshold needed
+    re.compile(r'\b(positive|negative)\s+for\b', re.IGNORECASE),       # "HIV-1 positive", "HBsAg negative"
+    re.compile(r'\b(seropositive|seronegative)\b', re.IGNORECASE),
+    re.compile(r'\b(histologically|cytologically|pathologically|radiographically)\s+(confirmed|documented|proven|verified)', re.IGNORECASE),
+    re.compile(r'\b(confirmed|documented|proven)\s+(diagnosis|malignancy|cancer|tumor|disease)', re.IGNORECASE),
 ]
 
 # Subjective: judgment-dependent language, consent, willingness
@@ -76,7 +82,8 @@ _OBSERVABLE_PATTERNS = [
     re.compile(r'\b(hypersensitivity|sensitivity|allerg\w+)\b', re.IGNORECASE),
 ]
 
-# Unobservable: consent, intent, access, life expectancy, geographic constraints
+# Unobservable: consent, intent, access, life expectancy, geographic constraints,
+# and vague clinical judgment applied to organ/function without a named test
 _UNOBSERVABLE_PATTERNS = [
     re.compile(r'\b(willing|consent|assent|agrees?\s+to|agrees?\s+not\s+to)\b', re.IGNORECASE),
     re.compile(r'\b(life expectancy|expected survival|estimated survival)\b', re.IGNORECASE),
@@ -85,6 +92,13 @@ _UNOBSERVABLE_PATTERNS = [
     re.compile(r'\b(investigator.{0,15}(discretion|judgment|opinion))\b', re.IGNORECASE),
     re.compile(r'\b(planning to|intend(s|ing)? to|expecting to|anticipate)\b', re.IGNORECASE),
     re.compile(r'\b(internet|phone|telephone|device|technology)\b', re.IGNORECASE),
+    # Judgment adjectives applied to organ/function without a named test or number
+    re.compile(r'\b(adequate|sufficient|acceptable|appropriate)\s+\w*\s*(organ|function|renal|hepatic|cardiac|pulmonary|bone\s+marrow|marrow|hematologic)\b', re.IGNORECASE),
+    # Vague medical precondition phrases that require clinical judgment to evaluate
+    re.compile(r'\b(medical|health)\s+condition\s+(that|which)\s+would\b', re.IGNORECASE),
+    re.compile(r'\b(deprived of (liberty|freedom)|incarcerated|imprisoned)\b', re.IGNORECASE),
+    # Legally authorized / participant capacity language
+    re.compile(r'\b(legally\s+authorized\s+representative|mental\s+capacity|cognitive\s+impairment)\b', re.IGNORECASE),
 ]
 
 

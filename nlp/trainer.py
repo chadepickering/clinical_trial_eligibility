@@ -111,11 +111,17 @@ def evaluate(model, loader, device) -> dict[str, float]:
         labeled = [(g, p) for g, p, c in zip(golds[head], preds[head], confs[head]) if c > 0.0]
         if len(labeled) < 2:
             results[f'f1_{head}'] = 0.0
+            results[f'f1_{head}_pos'] = 0.0
+            results[f'f1_{head}_neg'] = 0.0
             continue
         g_vals, p_vals = zip(*labeled)
         results[f'f1_{head}'] = f1_score(g_vals, p_vals, average='binary', zero_division=0)
+        per_class = f1_score(g_vals, p_vals, average=None, labels=[0, 1], zero_division=0)
+        results[f'f1_{head}_neg'] = float(per_class[0])  # label=0 (exclusion/subjective/unobservable)
+        results[f'f1_{head}_pos'] = float(per_class[1])  # label=1 (inclusion/objective/observable)
 
-    results['f1_macro'] = sum(results.values()) / len(results)
+    macro_keys = ('f1_b1', 'f1_b2', 'f1_b3')
+    results['f1_macro'] = sum(results[k] for k in macro_keys) / len(macro_keys)
     return results
 
 
@@ -124,13 +130,18 @@ def evaluate(model, loader, device) -> dict[str, float]:
 # ---------------------------------------------------------------------------
 
 def train(config: dict) -> None:
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Device: {device}")
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    elif torch.backends.mps.is_available():
+        device = torch.device('mps')
+    else:
+        device = torch.device('cpu')
+    print(f"Device: {device}", flush=True)
 
     # --- Data ---
-    print(f"Loading criteria from {config['db']}...")
+    print(f"Loading criteria from {config['db']}...", flush=True)
     rows = load_criteria(config['db'])
-    print(f"  {len(rows)} criteria loaded")
+    print(f"  {len(rows)} criteria loaded", flush=True)
 
     tokenizer = load_tokenizer()
     dataset = CriterionDataset(rows, tokenizer)
@@ -148,10 +159,10 @@ def train(config: dict) -> None:
         shuffle=False,
         num_workers=0,
     )
-    print(f"  Train: {len(train_idx)} | Val: {len(val_idx)}")
+    print(f"  Train: {len(train_idx)} | Val: {len(val_idx)}", flush=True)
 
     # --- Model ---
-    print("Loading SciBERT...")
+    print("Loading SciBERT...", flush=True)
     model = CriterionClassifier().to(device)
 
     # --- Optimizer + scheduler ---
@@ -166,7 +177,7 @@ def train(config: dict) -> None:
     best_path = os.path.join(config['checkpoint_dir'], 'best_model.pt')
 
     # --- Loop ---
-    print(f"\nTraining for {config['epochs']} epochs...")
+    print(f"\nTraining for {config['epochs']} epochs...", flush=True)
     for epoch in range(1, config['epochs'] + 1):
         model.train()
         epoch_loss = 0.0
@@ -186,18 +197,17 @@ def train(config: dict) -> None:
             epoch_loss += loss.item()
 
             if step % 100 == 0:
-                print(f"  Epoch {epoch} step {step}/{len(train_loader)}  loss={epoch_loss/step:.4f}")
+                print(f"  Epoch {epoch} step {step}/{len(train_loader)}  loss={epoch_loss/step:.4f}", flush=True)
 
         avg_loss = epoch_loss / len(train_loader)
         metrics = evaluate(model, val_loader, device)
 
         print(
-            f"Epoch {epoch}/{config['epochs']}  "
-            f"loss={avg_loss:.4f}  "
-            f"f1_b1={metrics['f1_b1']:.3f}  "
-            f"f1_b2={metrics['f1_b2']:.3f}  "
-            f"f1_b3={metrics['f1_b3']:.3f}  "
-            f"macro={metrics['f1_macro']:.3f}"
+            f"Epoch {epoch}/{config['epochs']}  loss={avg_loss:.4f}  macro={metrics['f1_macro']:.3f}\n"
+            f"  B1  macro={metrics['f1_b1']:.3f}  excl={metrics['f1_b1_neg']:.3f}  incl={metrics['f1_b1_pos']:.3f}\n"
+            f"  B2  macro={metrics['f1_b2']:.3f}  subj={metrics['f1_b2_neg']:.3f}  obj={metrics['f1_b2_pos']:.3f}\n"
+            f"  B3  macro={metrics['f1_b3']:.3f}  unobs={metrics['f1_b3_neg']:.3f}  obs={metrics['f1_b3_pos']:.3f}",
+            flush=True
         )
 
         if metrics['f1_macro'] > best_f1:
@@ -209,7 +219,7 @@ def train(config: dict) -> None:
                 'metrics': metrics,
                 'config': config,
             }, best_path)
-            print(f"  Checkpoint saved (macro F1={best_f1:.3f})")
+            print(f"  Checkpoint saved (macro F1={best_f1:.3f})", flush=True)
 
     print(f"\nTraining complete. Best macro F1: {best_f1:.3f}")
     print(f"Checkpoint: {best_path}")
