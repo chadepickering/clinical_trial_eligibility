@@ -1,501 +1,501 @@
 criterion_id,nct_id,section,text,scibert_b2_label,scibert_b2_prob,scibert_b3_label,scibert_b3_prob,llm_b2_label,llm_b2_confidence,llm_b3_label,llm_b3_confidence,human_b2_label,human_b3_label,review_flag
-NCT02914899_26,NCT02914899,inclusion,20 pack year smoking history,1,1.0,1,1.0,1.0,0.9,1.0,0.8,,,ok
-NCT03085225_31,NCT03085225,exclusion,Known history of active tuberculosis,1,0.9931,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04300244_2,NCT04300244,inclusion,"Measurable disease, defined as at least 1 lesion (measurable) that can be accurately assessed at baseline by computed tomography (CT) or magnetic resonance imaging (MRI) and is suitable for repeated assessment (modified RECIST).",0,0.0006,1,0.9894,1.0,0.8,1.0,0.8,,,disagree
+NCT02914899_26,NCT02914899,inclusion,20 pack year smoking history,1,1.0,1,1.0,1.0,0.9,1.0,0.8,1.0,1.0,ok
+NCT03085225_31,NCT03085225,exclusion,Known history of active tuberculosis,1,0.9931,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04300244_2,NCT04300244,inclusion,"Measurable disease, defined as at least 1 lesion (measurable) that can be accurately assessed at baseline by computed tomography (CT) or magnetic resonance imaging (MRI) and is suitable for repeated assessment (modified RECIST).",0,0.0006,1,0.9894,1.0,0.8,1.0,0.8,1.0,1.0,disagree
 NCT00028795_24,NCT00028795,unknown,See Disease Characteristics Surgery:,1,1.0,1,0.9998,,,,,,,disagree
-NCT01969877_2,NCT01969877,inclusion,"Tumor stage III and IV , but no evidence of distant metastases beyond the regional nodes in the neck",1,0.8002,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT05379205_1,NCT05379205,inclusion,"Diagnostic of nonmetastatic colon cancer (i.e., including right, transverse, left, sigmoid, subtotal, total, and hemicolectomy)",1,0.9998,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT05848141_4,NCT05848141,inclusion,absence of contraindications to exercise or study participation,0,0.0608,1,0.9969,0.0,0.95,0.0,0.8,,,disagree
-NCT03131531_0,NCT03131531,inclusion,Male or female patients 18 years or older,1,1.0,1,0.9747,1.0,1.0,1.0,1.0,,,ok
-NCT01543763_26,NCT01543763,inclusion,"History of cerebrovascular accident, including transient ischemic attack (TIA)",1,0.9885,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT06501079_8,NCT06501079,exclusion,Distorted anatomy of the back (e.g. kyphoscoliosis),0,0.0006,1,1.0,0.0,0.6,1.0,0.75,,,low_confidence
-NCT02689427_4,NCT02689427,inclusion,AJCC 7th edition stage I-III Breast Cancer,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT00084773_21,NCT00084773,unknown,HIV negative,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT05850013_3,NCT05850013,exclusion,Children of parents/guardians/carers who are non-English speakers,1,0.9996,1,0.599,1.0,0.75,1.0,0.65,,,low_confidence
-NCT04946214_4,NCT04946214,inclusion,English or Spanish speaking patients.,0,0.023,0,0.0001,1.0,0.8,1.0,0.75,,,disagree
-NCT04250727_12,NCT04250727,exclusion,Uncontrolled asthma (<20 on the Asthma Control Test (ACT) or requiring steroids more than 1x per year),1,1.0,1,1.0,1.0,0.9,1.0,0.75,,,low_confidence
-NCT05056844_0,NCT05056844,inclusion,Women presenting to MDACC for the evaluation of PND as the main or accompanying symptom,1,1.0,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT06529575_1,NCT06529575,inclusion,Child is undergoing a cardiac catheterization procedure that typically involves direct arterial oxygen saturation measurement by co-oximeter from a location reflective of systemic saturation.,1,0.9972,1,1.0,0.0,0.6,0.0,0.55,,,disagree
-NCT05361720_19,NCT05361720,exclusion,Anti-hypertensive medications are permitted.,1,0.9999,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT03041311_8,NCT03041311,exclusion,Limited-stage SCLC,1,0.8965,1,1.0,1.0,0.8,1.0,0.9,,,ok
-NCT05714644_25,NCT05714644,exclusion,D37.4 (neoplasm of uncertain behavior of colon),1,0.8976,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT00005603_8,NCT00005603,unknown,1 to 21 Performance status:,0,0.0,1,0.9955,0.0,0.4,0.0,0.4,,,disagree
-NCT04401020_9,NCT04401020,inclusion,"lymphoplasmacytic lymphoma,",1,0.9969,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT05021237_14,NCT05021237,exclusion,"Presence of brain metastases that are not amenable to treatment with radiation or surgery, or brain metastasis leading to clinical instability.",0,0.0,1,1.0,0.0,0.75,0.0,0.65,,,disagree
-NCT04636905_1,NCT04636905,inclusion,"Treated for any kind of cancer at University of California, San Francisco, though finished with active treatments (defined as chemotherapy, radiation, or surgery) at time of enrollment, and without evidence of current active cancer",1,0.7248,1,1.0,1.0,0.75,1.0,0.75,,,low_confidence
-NCT02311959_2,NCT02311959,inclusion,Patient without preoperative indication of adjuvant radiotherapy according to regional and / or national guidelines.,1,0.9992,1,1.0,0.0,0.7,0.0,0.65,,,disagree
+NCT01969877_2,NCT01969877,inclusion,"Tumor stage III and IV , but no evidence of distant metastases beyond the regional nodes in the neck",1,0.8002,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT05379205_1,NCT05379205,inclusion,"Diagnostic of nonmetastatic colon cancer (i.e., including right, transverse, left, sigmoid, subtotal, total, and hemicolectomy)",1,0.9998,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT05848141_4,NCT05848141,inclusion,absence of contraindications to exercise or study participation,0,0.0608,1,0.9969,0.0,0.95,0.0,0.8,0.0,0.0,disagree
+NCT03131531_0,NCT03131531,inclusion,Male or female patients 18 years or older,1,1.0,1,0.9747,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01543763_26,NCT01543763,inclusion,"History of cerebrovascular accident, including transient ischemic attack (TIA)",1,0.9885,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT06501079_8,NCT06501079,exclusion,Distorted anatomy of the back (e.g. kyphoscoliosis),0,0.0006,1,1.0,0.0,0.6,1.0,0.75,0.0,1.0,low_confidence
+NCT02689427_4,NCT02689427,inclusion,AJCC 7th edition stage I-III Breast Cancer,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT00084773_21,NCT00084773,unknown,HIV negative,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT05850013_3,NCT05850013,exclusion,Children of parents/guardians/carers who are non-English speakers,1,0.9996,1,0.599,1.0,0.75,1.0,0.65,1.0,1.0,low_confidence
+NCT04946214_4,NCT04946214,inclusion,English or Spanish speaking patients.,0,0.023,0,0.0001,1.0,0.8,1.0,0.75,1.0,1.0,disagree
+NCT04250727_12,NCT04250727,exclusion,Uncontrolled asthma (<20 on the Asthma Control Test (ACT) or requiring steroids more than 1x per year),1,1.0,1,1.0,1.0,0.9,1.0,0.75,1.0,1.0,low_confidence
+NCT05056844_0,NCT05056844,inclusion,Women presenting to MDACC for the evaluation of PND as the main or accompanying symptom,1,1.0,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT06529575_1,NCT06529575,inclusion,Child is undergoing a cardiac catheterization procedure that typically involves direct arterial oxygen saturation measurement by co-oximeter from a location reflective of systemic saturation.,1,0.9972,1,1.0,0.0,0.6,0.0,0.55,0.0,0.0,disagree
+NCT05361720_19,NCT05361720,exclusion,Anti-hypertensive medications are permitted.,1,0.9999,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT03041311_8,NCT03041311,exclusion,Limited-stage SCLC,1,0.8965,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,ok
+NCT05714644_25,NCT05714644,exclusion,D37.4 (neoplasm of uncertain behavior of colon),1,0.8976,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT00005603_8,NCT00005603,unknown,1 to 21 Performance status:,0,0.0,1,0.9955,0.0,0.4,0.0,0.4,0.0,0.0,disagree
+NCT04401020_9,NCT04401020,inclusion,"lymphoplasmacytic lymphoma,",1,0.9969,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT05021237_14,NCT05021237,exclusion,"Presence of brain metastases that are not amenable to treatment with radiation or surgery, or brain metastasis leading to clinical instability.",0,0.0,1,1.0,0.0,0.75,0.0,0.65,0.0,0.0,disagree
+NCT04636905_1,NCT04636905,inclusion,"Treated for any kind of cancer at University of California, San Francisco, though finished with active treatments (defined as chemotherapy, radiation, or surgery) at time of enrollment, and without evidence of current active cancer",1,0.7248,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT02311959_2,NCT02311959,inclusion,Patient without preoperative indication of adjuvant radiotherapy according to regional and / or national guidelines.,1,0.9992,1,1.0,0.0,0.7,0.0,0.65,0.0,0.0,disagree
 NCT02171260_32,NCT02171260,exclusion,Concomitant Medications,1,0.8132,1,1.0,,,,,,,disagree
-NCT04396561_8,NCT04396561,exclusion,Significant liver or renal insufficiency.,0,0.0,1,0.9998,0.0,0.95,0.0,0.7,,,disagree
-NCT05036408_33,NCT05036408,exclusion,"Subjects, who are not be able to comply with the safety monitoring requirements of the study. Those who miss more than half the sessions will be considered to not have completed the program",0,0.0,0,0.0446,0.0,0.6,0.0,0.7,,,low_confidence
-NCT05628922_24,NCT05628922,exclusion,Positive hepatitis B surface antigen and hepatitis B virus DNA ≥ 2500 copies/ml or Positive hepatitis C RNA;,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT00053846_0,NCT00053846,unknown,Diagnosis of cancer,1,1.0,1,1.0,1.0,0.85,1.0,0.95,,,ok
-NCT04401722_1,NCT04401722,exclusion,"liver cirrhosis,",1,0.9616,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06395896_0,NCT06395896,inclusion,Being a woman between the ages of 40-69,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT02692911_15,NCT02692911,exclusion,History of previous cholecystectomy,1,0.9989,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT06863805_1,NCT06863805,inclusion,Adult (≥18 years) male or female patients,1,1.0,1,0.9988,1.0,1.0,1.0,1.0,,,ok
-NCT07018869_0,NCT07018869,inclusion,"Patient participants must have newly diagnosed surgically resected, stage II or stage III colorectal cancer per the timing described below",1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00506922_1,NCT00506922,inclusion,"Patients with AML, ALL, Hodgkin's disease, MDS (including CMML), CML in late chronic or accelerated phase or in blast crisis, and lymphoma in first or later relapses.",1,0.9999,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT01421017_17,NCT01421017,exclusion,Pregnancy or lactation.,0,0.4868,1,1.0,1.0,0.85,1.0,0.8,,,disagree
-NCT01540058_9,NCT01540058,inclusion,"Cardiac, respiratory and neurological function compatible with the administration of cisplatin chemotherapy,",0,0.0,1,1.0,0.0,0.9,0.0,0.8,,,disagree
-NCT05761171_45,NCT05761171,exclusion,Human immunodeficiency virus (HIV)-infected patients are eligible if on effective anti-retroviral therapy that does not interact with planned study agents and with undetectable viral load within 6 months of enrollment.,1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT04712097_34,NCT04712097,exclusion,Prior allogeneic stem cell transplantation,1,0.939,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT02819609_3,NCT02819609,exclusion,"Patients with a diagnosis of gynecologic cancer (ovarian, uterine, cervical)",1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT06898255_8,NCT06898255,exclusion,With other active diseases that lead to reduced food intake or seriously affect digestion and absorption,0,0.0002,1,1.0,0.0,0.85,0.0,0.65,,,disagree
-NCT01760499_13,NCT01760499,exclusion,"Patients with severe peripheral vascular disease (i.e., claudication occurring after less than 200 meters of walking, rest pain, ischemic ulceration or gangrene)",1,0.9739,1,1.0,1.0,0.85,0.0,0.65,,,disagree
-NCT06314971_5,NCT06314971,exclusion,Synchronous colorectal and non-colorectal cancer diagnosed at or before surgery.,1,0.9632,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT02086721_9,NCT02086721,inclusion,Adequate renal function: calculated creatinine clearance at least 60 ml/min;,1,0.9992,0,0.4771,1.0,1.0,1.0,1.0,,,disagree
-NCT04649372_2,NCT04649372,inclusion,"Patient has already received or been considered for surgery, and / or chemo-radiation.",1,0.9983,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT06922318_25,NCT06922318,exclusion,"Patients receiving anticoagulation therapy with warfarin, rivaroxaban, or apixaban are not eligible for study. \[Patients on enoxaparin or edoxaban are eligible for study. Patients on warfarin, rivaroxaban, or apixaban, who can be transitioned to one of these alternative agents prior to starting study treatments will be eligible\].",1,0.9294,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT02280642_5,NCT02280642,exclusion,Unable to comply with the study protocol,0,0.0001,0,0.0005,0.0,0.95,0.0,0.9,,,ok
-NCT06035731_3,NCT06035731,inclusion,"Affiliated with a social security scheme,",0,0.0,1,0.7532,1.0,0.7,1.0,0.7,,,disagree
-NCT03154190_3,NCT03154190,inclusion,Glioblastoma multiforme (brain) -- no stage,0,0.1819,1,1.0,1.0,0.95,1.0,0.95,,,disagree
-NCT05669846_76,NCT05669846,exclusion,Concurrent active Hepatitis B (defined as HBsAg positive and/or detectable HBV DNA) and Hepatitis C virus (defined as anti-HCV Ab positive and detectable HCV RNA) infection.,1,0.9975,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT01567709_8,NCT01567709,inclusion,Cystic lesions,1,0.9999,1,1.0,1.0,0.7,1.0,0.8,,,low_confidence
-NCT06867991_10,NCT06867991,exclusion,Confirmed positive hepatitis B serology (hepatitis B surface antigen and core antigen) and/or positive hepatitis C PCR at screening.,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT07495072_2,NCT07495072,inclusion,Candidates for intravesical BCG therapy,1,0.9812,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT04030195_23,NCT04030195,unknown,Presence of a pleural/peritoneal/pericardial catheter.,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04841928_9,NCT04841928,exclusion,"Other current pain condition (e.g., fibromyalgia)",0,0.0022,1,1.0,0.0,0.8,0.0,0.6,,,disagree
-NCT02958592_0,NCT02958592,inclusion,"(i) patients with a solid focal liver lesion that was pathologically proven or diagnosed by imaging methods such as conventional US, CT or MR imaging; (ii) patients scheduled to undergo a hepatectomy; (iii) patients with a lesion ≥1.0 cm in diameter.",1,1.0,1,1.0,1.0,0.95,1.0,0.92,,,ok
-NCT05239546_8,NCT05239546,inclusion,"Platelets greater than or equal to 100,000/µL",1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT02864667_12,NCT02864667,exclusion,"Subjects who have participated in a prior breast clinical trial that gave additional radiation dose, such as an additional mammogram",1,1.0,1,1.0,1.0,0.7,1.0,0.75,,,low_confidence
-NCT04067713_1,NCT04067713,inclusion,Aged 18 or over,1,1.0,1,0.9693,1.0,1.0,1.0,1.0,,,ok
-NCT06830694_7,NCT06830694,inclusion,Pulmonary function: No clinically significant pleural effusion at the timepoint of screening. Pleural effusion with no significant symptom is allowed for enrollment.,0,0.0,1,0.9937,0.0,0.6,0.0,0.6,,,disagree
-NCT04422457_5,NCT04422457,exclusion,Is Pregnant or ready to pregnant;,0,0.0008,1,1.0,0.0,0.6,0.0,0.7,,,disagree
-NCT04580121_13,NCT04580121,exclusion,Clinical evidence or history of central nervous system (CNS) leukemia,1,0.9806,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT02337491_17,NCT02337491,exclusion,Has history of known coagulopathy that increases risk of bleeding or a history of clinically significant hemorrhage within 12 months of start of study drug,1,0.9624,1,1.0,0.0,0.65,1.0,0.8,,,disagree
-NCT06598007_26,NCT06598007,exclusion,Use of any gastric acid reducing agents during the time period between 6 hours prior to and 2 hours after the administration of CT3001.,1,1.0,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT00628901_8,NCT00628901,exclusion,Presence of pedunculated serosal fibroid as the dominant fibroid(s),0,0.0011,1,1.0,1.0,0.8,1.0,0.8,,,disagree
-NCT03753399_2,NCT03753399,inclusion,3.Without tumor recurrence confirmed by image examination;,1,0.9982,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06255210_4,NCT06255210,inclusion,No distant metastasis.,0,0.4764,1,1.0,1.0,0.85,1.0,0.85,,,disagree
-NCT03532139_29,NCT03532139,exclusion,"Known Asian descent (including Filipino, Chinese, Japanese, Korean, Vietnamese or Asian-Indian origin) due to altered metabolism of statins.",0,0.0332,1,1.0,1.0,0.8,1.0,0.75,,,disagree
-NCT02422433_5,NCT02422433,exclusion,OR patients with esophageal strictures.,1,0.996,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT00077129_30,NCT00077129,unknown,Prior radiotherapy allowed provided there is measurable disease that has not been irradiated OR there is clear evidence of tumor progression in an irradiated site,1,0.9978,1,1.0,0.0,0.65,0.0,0.6,,,disagree
-NCT01182168_16,NCT01182168,inclusion,"All patients who currently live in (or have lived in) Asia, Africa, Central and South America, Eastern Europe, Spain, Portugal, or Greece",1,1.0,0,0.2106,1.0,0.85,1.0,0.75,,,disagree
-NCT02370498_5,NCT02370498,inclusion,Human epidermal growth factor receptor 2 (HER-2/neu) status known and participants with HER2/neu positive tumors show documentation of disease progression on treatment containing trastuzumab,1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00408902_30,NCT00408902,exclusion,"Myocardial infarction within 6 months of enrollment or New York Heart Association (NYHA) Class III or IV heart failure, uncontrolled angina, severe uncontrolled ventricular arrhythmias, or electrocardiographic evidence of acute ischemia or active conduction system abnormalities",0,0.0001,1,1.0,0.0,0.65,1.0,0.75,,,low_confidence
-NCT04045795_8,NCT04045795,inclusion,Male or female: Contraceptive use by men or women,1,0.999,1,0.995,0.0,0.9,0.0,0.95,,,disagree
-NCT05038839_42,NCT05038839,exclusion,Grade 2 or higher peripheral neuropathy,1,0.9958,1,1.0,1.0,0.85,1.0,0.8,,,ok
-NCT01860170_14,NCT01860170,exclusion,Poor performance status (<70%),1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT03326921_12,NCT03326921,inclusion,Chronic myelomonocytic leukemia (CMML),1,0.9888,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT05060627_11,NCT05060627,inclusion,"All prior treatment-related toxicities (defined by National Cancer Institute- Common Toxicity Criteria for Adverse Events (NCI-CTCAE), version 4.0 must be ≤ Grade 1 at the time of enrolment except for alopecia",1,1.0,1,1.0,1.0,0.9,0.0,0.7,,,disagree
-NCT03976362_18,NCT03976362,exclusion,"Has interstitial lung disease, or history of pneumonitis requiring systemic steroids for treatment.",1,0.8791,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT02697383_41,NCT02697383,exclusion,"Ongoing or active systemic infection, known human immunodeficiency virus (HIV) positive, known active hepatitis B virus hepatitis, or known active hepatitis C virus hepatitis.",1,0.9767,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT04543799_21,NCT04543799,exclusion,Unhealthy sleep hygiene,0,0.0,1,0.9972,0.0,0.9,0.0,0.75,,,disagree
-NCT01395628_5,NCT01395628,unknown,"AML expressing the fms-like tyrosine kinase 3 internal tandem duplication (FLT3-ITD), associated with a poor prognosis",0,0.0,1,0.924,1.0,0.85,1.0,0.9,,,disagree
-NCT06444477_1,NCT06444477,inclusion,Synchronous diagnosis of ITP and cancer;,0,0.0026,1,1.0,1.0,0.8,1.0,0.75,,,disagree
-NCT05458544_27,NCT05458544,exclusion,Prior systemic beta-emitting bone-seeking radioisotopes,1,0.9879,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00101686_2,NCT00101686,inclusion,An interval of greater than five years has elapsed between the primary surgery and the development of metastatic disease.,1,0.9783,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT07179341_3,NCT07179341,exclusion,The patient had two types of primary tumors concurrently including TC.,1,0.9991,1,1.0,1.0,0.7,1.0,0.8,,,low_confidence
-NCT06266026_9,NCT06266026,inclusion,"Female subjects aged 18 and above presenting for intensified aftercare after a history of breast cancer, patients with symptoms (nipple discharge, breast lump based on physician physical exam or self-breast exam), patients who were referred for additional examination (MRI, Ultrasound, fine-needle aspiration cytology (FNAC) or biopsy) based on suspicious imaging findings in either breast",1,1.0,1,1.0,1.0,0.75,1.0,0.75,,,low_confidence
-NCT04554056_20,NCT04554056,exclusion,"According to the researchers, there are serious risks to the safety of patients or concomitant diseases that affect the completion of the study.",0,0.0,0,0.0,0.0,0.95,0.0,0.9,,,ok
-NCT02950987_44,NCT02950987,exclusion,Patients with a contraindication to sedation or general anesthesia,0,0.0034,1,0.9996,0.0,0.65,1.0,0.75,,,low_confidence
-NCT05683834_44,NCT05683834,exclusion,Documented EBV infection.,1,1.0,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT00046839_27,NCT00046839,unknown,Concurrent aspirin (325 mg/day) for cardioprotection allowed,1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT07117851_18,NCT07117851,exclusion,"Have a risk of bleeding, or coagulation dysfunction, or are currently receiving -thrombolytic therapy;",1,0.6951,1,1.0,0.0,0.75,1.0,0.7,,,disagree
-NCT01269255_19,NCT01269255,exclusion,documented inoperable peritoneal seeding disease determined by exploratory laparotomy,1,1.0,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT00326599_36,NCT00326599,unknown,Unstable angina pectoris,0,0.0,1,1.0,0.0,0.7,1.0,0.75,,,low_confidence
-NCT04009876_19,NCT04009876,exclusion,Active uncontrolled infection.,0,0.0,1,1.0,0.0,0.85,0.0,0.65,,,disagree
-NCT00577993_0,NCT00577993,inclusion,Previously untreated stage IV indolent B-cell lymphoma \[Amendment May 2001: eligibility restricted to follicular lymphoma\],1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00408902_45,NCT00408902,exclusion,Inability to comply with study and/or follow-up procedures,0,0.0004,0,0.0001,0.0,0.95,0.0,0.9,,,ok
-NCT00782886_13,NCT00782886,exclusion,Patients who are currently (within the last 30 days prior to surgery) participating in another clinical trial with any investigational drug or device.,1,1.0,0,0.0004,1.0,0.8,1.0,0.75,,,disagree
-NCT06910670_3,NCT06910670,unknown,"Diagnosis of colorectal cancer, must be African American and age 65 or older at time of diagnosis",1,1.0,1,1.0,1.0,1.0,1.0,0.9,,,ok
-NCT01021072_1,NCT01021072,inclusion,measurable or non-measurable disease at baseline,1,0.833,1,0.9732,1.0,0.75,1.0,0.85,,,low_confidence
-NCT02182687_12,NCT02182687,exclusion,Known allergy to intravenous iodinated contrast agents unresponsive to prednisone pre-treatment.,1,0.99,1,1.0,0.0,0.65,1.0,0.75,,,disagree
-NCT01538563_15,NCT01538563,inclusion,All ethnic groups are eligible for this trial.,0,0.0012,1,1.0,1.0,0.9,1.0,0.9,,,disagree
-NCT01733719_2,NCT01733719,inclusion,"CT scan (thorax \& top 1/3 of abdomen): negative for evidence of locally advanced or metastatic disease (done at the discretion of the multidisciplinary team, for invasive cancer only - T1m disease); PET-CT will not usually be required but may be carried out if indicated at the discretion of the multidisciplinary team.",0,0.0,1,0.9999,0.0,0.6,1.0,0.7,,,low_confidence
-NCT01105312_12,NCT01105312,unknown,ER and PR positive or negative (phase I),1,1.0,1,1.0,1.0,0.85,1.0,0.95,,,ok
-NCT04393363_9,NCT04393363,exclusion,Pregnancy or breastfeeding,1,0.9779,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT06172088_2,NCT06172088,exclusion,Eating disorders.,1,0.7975,1,1.0,0.0,0.6,1.0,0.75,,,disagree
-NCT06326502_16,NCT06326502,exclusion,Individual who is unable to undergo contrast-enhanced CT or MRI,1,1.0,1,0.9999,0.0,0.6,0.0,0.6,,,disagree
-NCT06527781_18,NCT06527781,exclusion,Undergone surgery within 3 months before screening or plan to undergo surgery during the trial;,1,1.0,1,1.0,1.0,0.8,0.0,0.75,,,disagree
-NCT01108042_7,NCT01108042,inclusion,risks of anesthesia complications normal or minor increased,1,1.0,1,0.9999,0.0,0.85,0.0,0.7,,,disagree
-NCT05055843_11,NCT05055843,exclusion,Claustrophobia,1,0.5904,1,1.0,0.0,0.7,1.0,0.7,,,disagree
-NCT04794699_8,NCT04794699,inclusion,Recovery from acute effects of prior therapy,0,0.0027,1,1.0,0.0,0.95,0.0,0.8,,,disagree
-NCT05038826_0,NCT05038826,inclusion,patient diagnosed with lung cancer and included in a clinical trial between 2017 and 2021,1,0.9999,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT00566332_13,NCT00566332,exclusion,Transformation into large B cell lymphoma,1,0.9165,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT01019356_1,NCT01019356,inclusion,Oligomenorhea (≤ 8 menstrual cycle per year) Health volunteers :,1,1.0,1,0.9999,1.0,0.95,1.0,0.75,,,low_confidence
-NCT07356544_3,NCT07356544,inclusion,Enrolled in ATLAS project. Cohort 2 (HER2 mutations study population),1,1.0,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT04398095_7,NCT04398095,exclusion,"Predicted unacceptable high risk of reirradiation-related toxicity, in the Investigator's judgment",0,0.0097,0,0.0,0.0,1.0,0.0,1.0,,,ok
-NCT01774721_7,NCT01774721,exclusion,Any evidence of mixed histology that includes elements of small cell or carcinoid lung cancer.,1,0.8732,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT03070886_2,NCT03070886,inclusion,Baseline testosterone level obtained post-prostatectomy prior to start of androgen deprivation therapy and prior to step 1 registration,1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00398073_31,NCT00398073,unknown,See Disease Characteristics,1,1.0,1,0.9997,0.0,0.5,0.0,0.5,,,disagree
-NCT02793544_11,NCT02793544,exclusion,"HIV-positive subjects: Acquired immunodeficiency syndrome (AIDS) related syndromes or symptoms that may pose an excessive risk for transplantation-related morbidity as determined by the Treatment Review Committee (see Appendix D). Untreatable HIV infection due to multidrug ARV resistance. Subjects with a detectable or standard viral load > 750 copies/mL should be evaluated with an HIV drug resistance test (HIV-1 genotype). The results should be included as part of the ARV review (described in Appendix D). May not be currently prescribed ritonavir, cobacistat and/or zidovudine",1,1.0,1,1.0,0.0,0.75,0.0,0.65,,,disagree
-NCT00963807_15,NCT00963807,exclusion,Patients may not be receiving any other investigational agents,1,0.9999,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06271837_2,NCT06271837,inclusion,HER2 expression.,1,0.9998,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT02300298_4,NCT02300298,inclusion,Patients who are Eastern Cooperative Oncology Group (ECOG) performance status (PS) of 0 or 1 at screening,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01410656_1,NCT01410656,inclusion,at least 18 years old,1,1.0,1,0.9999,1.0,1.0,1.0,1.0,,,ok
-NCT01511913_0,NCT01511913,inclusion,Diagnosis of unresectable or metastatic melanoma,1,1.0,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT07438249_11,NCT07438249,exclusion,Intraoperative or perioperative blood transfusion,1,0.9135,1,0.9999,1.0,0.85,1.0,0.9,,,ok
-NCT00573885_21,NCT00573885,exclusion,"Known allergy to green tea and/or corn starch, gelatin, or other nonmedicinal ingredients",1,0.9781,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT01399918_4,NCT01399918,inclusion,"Platelets ≥100,000/μL",1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT05683834_25,NCT05683834,exclusion,"Allergy treatment with antigen injections, unless on a maintenance schedule of shots no more frequently than once per month.",1,0.9985,1,1.0,1.0,0.75,1.0,0.75,,,low_confidence
-NCT04068181_7,NCT04068181,unknown,"Stage IVM1d subjects must not have greater than 3 cerebral melanoma metastases, or clinically active cerebral melanoma metastases requiring therapy, and/or carcinomatous meningitis regardless of clinical stability.",0,0.0146,1,1.0,1.0,0.75,1.0,0.75,,,disagree
-NCT04370483_15,NCT04370483,inclusion,Negative for tuberculosis antigen (e.g. T-Spot test),1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT03129373_34,NCT03129373,exclusion,"Subjects must not deliberately ""sunbathe"" for the duration of the study on the studied zone in case they cannot cover the treated area from sunlight.",1,0.9546,0,0.0001,0.0,0.85,0.0,0.9,,,disagree
-NCT03597295_2,NCT03597295,inclusion,Must have received (or been intolerant to or ineligible for) at least 1 prior line of platinum-based chemotherapy and received no more than 2 prior systemic treatments.,1,0.9942,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00799110_5,NCT00799110,inclusion,"Complete clinical response after first-line chemotherapy for newly-diagnosed patients, or after second-line chemotherapy for relapsed patients who require secondary cytoreduction.\*\*",1,0.9539,1,1.0,1.0,0.75,1.0,0.75,,,low_confidence
-NCT06755450_3,NCT06755450,inclusion,Ability to swallow and retain oral medications,0,0.0,0,0.0349,0.0,0.8,0.0,0.6,,,low_confidence
-NCT04986748_3,NCT04986748,inclusion,Able to comply with study-related procedures,0,0.0,0,0.0,0.0,0.95,0.0,0.95,,,ok
-NCT00084656_33,NCT00084656,unknown,No active infection requiring therapy,1,0.8353,1,1.0,0.0,0.7,1.0,0.8,,,disagree
-NCT07313514_4,NCT07313514,exclusion,Girls who underwent preoperative MRI.,1,0.9997,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT01776372_4,NCT01776372,inclusion,Demonstrate willingness to remain on-study for the complete duration,0,0.0098,0,0.0116,0.0,1.0,0.0,1.0,,,ok
-NCT02419586_0,NCT02419586,inclusion,Patients with newly diagnosed colorectal cancer undergoing laparoscopic resection in in Queen Mary Hospital,1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06801665_19,NCT06801665,exclusion,"Severe bleeding events occur within half a year, or high bleeding risk factors such as active digestive tract ulcers and esophageal and gastric varices due to liver cirrhosis.",0,0.0144,1,1.0,0.0,0.6,1.0,0.75,,,low_confidence
-NCT07110571_18,NCT07110571,exclusion,Interstitial pneumonia or lung disease.,1,0.9729,1,1.0,1.0,0.75,1.0,0.85,,,low_confidence
-NCT05139368_0,NCT05139368,inclusion,Subjects aged >= 18 years,1,1.0,1,0.9971,1.0,1.0,1.0,1.0,,,ok
-NCT01077713_1,NCT01077713,inclusion,"inoperable, locally advanced, metastatic non-squamous non-small cell lung cancer;",1,0.9909,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06612151_15,NCT06612151,exclusion,"Presence of brain stem or meningeal metastases, spinal cord metastases or compression.",0,0.1516,1,1.0,1.0,0.85,1.0,0.9,,,disagree
-NCT03023722_54,NCT03023722,exclusion,Renal failure requiring peritoneal dialysis or hemodialysis.,1,0.9912,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04616196_8,NCT04616196,unknown,"Evidence of clinically significant interstitial lung disease or active, noninfectious pneumonitis; active infection requiring systemic therapy within 7 days prior to dosing",1,0.8203,1,1.0,0.0,0.7,1.0,0.75,,,disagree
-NCT06345365_10,NCT06345365,exclusion,Patients with active tuberculosis and HIV-positive patients;,1,0.9771,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06759610_1,NCT06759610,exclusion,"any systemic disease that interferes with bone healing,",0,0.0,1,0.9999,0.0,0.8,0.0,0.6,,,disagree
-NCT01009736_3,NCT01009736,inclusion,ECOG (Eastern Cooperative Oncology Group) performance status 0-1,1,1.0,1,1.0,1.0,1.0,1.0,0.95,,,ok
-NCT06359210_4,NCT06359210,inclusion,Participant is registered/enrolled to participate in one of three community-based exercise programs.,1,0.9997,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT06382441_5,NCT06382441,inclusion,Smartphone users.,0,0.0001,0,0.0,0.0,0.7,0.0,0.7,,,low_confidence
-NCT06450548_6,NCT06450548,exclusion,"Patients unable to undergo the examinations and/or maintain a prolonged lying position (due to back pain, etc.).",1,0.5926,1,1.0,0.0,0.85,0.0,0.75,,,disagree
-NCT02611544_0,NCT02611544,inclusion,"≥18 years old,",1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT07306273_25,NCT07306273,exclusion,"Active infection or unexplained fever \&gt; 38.5°C during the screening period or on the day of administration (subjects with fever caused by tumors can be enrolled as judged by the investigator), which, in the investigator\&#39;s judgment, would affect the subject\&#39;s participation in this trial or interfere with the evaluation of efficacy;",1,0.8488,1,0.9754,0.0,0.8,0.0,0.75,,,disagree
-NCT04168242_2,NCT04168242,inclusion,"Patients who are going to receive at least four cycles of chemotherapy that are known to induce alopecia, such as carboplatin, paclitaxel, taxotere, topotecan, etoposide, vincristine and ifosfamide.",1,0.6024,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT00386685_2,NCT00386685,inclusion,Measurable disease according to Response Evaluation Criteria In Solid Tumors (RECIST),0,0.0,1,1.0,1.0,0.85,1.0,0.85,,,disagree
-NCT00977431_25,NCT00977431,exclusion,Pregnancy or breast-feeding.,0,0.38,1,1.0,1.0,0.85,1.0,0.85,,,disagree
-NCT00458705_9,NCT00458705,unknown,"Absolute granulocyte count ≥ 1,500/mm³ (unless low granulocyte counts are due to multiple myeloma)",1,1.0,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT00426556_2,NCT00426556,inclusion,"Progressive disease on prior trastuzumab alone/or in combination with other anticancer agents, or relapsed any time after completion of this therapy (phase l)",0,0.4962,1,1.0,1.0,0.8,1.0,0.85,,,disagree
-NCT03838263_22,NCT03838263,exclusion,History of primary immunodeficiency or organ transplant requiring immunosuppressive drugs,1,0.9984,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04417062_64,NCT04417062,exclusion,Male or female patients of reproductive potential who are not employing an effective method of birth control.,1,0.6453,1,0.9998,0.0,0.7,0.0,0.85,,,disagree
-NCT04630756_43,NCT04630756,exclusion,Requires or receiving anticoagulation with warfarin or equivalent vitamin K antagonists.,1,0.9958,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04633850_5,NCT04633850,exclusion,Pregnant women.,1,0.8868,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT04767906_4,NCT04767906,inclusion,ECOG (Eastern Cooperative of Onco-logy Group) Index 0 or 1,1,1.0,1,1.0,1.0,1.0,1.0,0.9,,,ok
-NCT06303154_13,NCT06303154,exclusion,Patients unable to be followed for 12 months.,1,1.0,1,0.9805,0.0,0.7,0.0,0.85,,,disagree
-NCT01005329_11,NCT01005329,inclusion,"Has undergone hysterectomy (i.e., total abdominal, vaginal, robotic-assisted, radical, or laparoscopic-assisted vaginal hysterectomy) and bilateral salpingo-oophorectomy within the past 56 days",1,1.0,1,0.9999,1.0,0.95,1.0,0.95,,,ok
-NCT06971614_16,NCT06971614,exclusion,Unexplainable fever >38.5℃ during the screening or on the day of treatment (fever judged as tumor-induced by the investigator is eligible for enrollment) that in the investigator's opinion will affect the participation in this trial or interfere with the efficacy assessment.,1,1.0,1,1.0,0.0,0.85,0.0,0.8,,,disagree
-NCT02216786_17,NCT02216786,exclusion,Prior treatment with fulvestrant or everolimus,1,0.9999,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04574284_0,NCT04574284,inclusion,1\. Understood and signed an informed consent form. 2. Eastern Cooperative Oncology Group (ECOG) performance status of 0 to 1; Life expectancy ≥ 3 months. 3\. Histopathologically confirmed recurrent or metastatic advanced endometrial cancer. 4\. Has at least one measurable lesion. 5. Agree to provide tumor tissue samples for MSI/MMR status detection. 6. Adequate laboratory indicators. 7. Serum or urine pregnancy tests are negative within 7 days before randomization; Men and women should agree to use effective contraception during the study period and after the end of the study period within 6 months.,1,0.9998,1,1.0,0.0,0.9,0.0,0.95,,,disagree
-NCT00381862_18,NCT00381862,unknown,Not pregnant or nursing,0,0.4468,1,1.0,1.0,0.8,1.0,0.75,,,disagree
-NCT04472663_0,NCT04472663,inclusion,Primary diagnosis of aRCC (advanced Renal Cell Carcinoma) or metastatic RCC,1,1.0,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT05427136_2,NCT05427136,inclusion,treatment with any kind of chemotherapy,0,0.0001,1,1.0,1.0,0.85,1.0,0.95,,,disagree
-NCT00004059_22,NCT00004059,unknown,No diabetes,1,0.9996,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT06073821_5,NCT06073821,exclusion,Previous systemic treatment for CLL,1,0.9851,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT07020533_21,NCT07020533,inclusion,RECIPIENTS: Patients receiving myeloablative (MA) or reduced intensity conditioning (RIC) are allowed.,0,0.057,1,1.0,1.0,0.85,1.0,0.9,,,disagree
-NCT07429318_2,NCT07429318,inclusion,(3) Patients who underwent adjuvant therapy before surgery.,1,1.0,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT04574583_37,NCT04574583,exclusion,The use of corticosteroids as premedication for contrast-enhanced studies which is allowed prior to enrollment.,1,0.9961,1,1.0,1.0,0.75,1.0,0.8,,,low_confidence
-NCT06062745_11,NCT06062745,exclusion,Severe claustrophobia,0,0.0009,1,1.0,0.0,0.8,1.0,0.65,,,low_confidence
-NCT05340673_9,NCT05340673,exclusion,"Inflammatory breast cancer, skin involvement, planned use of bolus.",0,0.026,1,1.0,1.0,0.85,1.0,0.85,,,disagree
-NCT05800106_18,NCT05800106,exclusion,"Need to use tobacco, alcohol and caffeinated drinks during the clinical trial, or certain foods that may affect metabolism (including dragon fruit, mango, grapefruit, and/or xanthine diet, etc.), or have significant changes in diet or exercise habits before the clinical trial , or other factors that affect drug absorption, distribution, metabolism, excretion, etc.",0,0.0,1,1.0,0.0,0.7,0.0,0.8,,,disagree
-NCT00850200_0,NCT00850200,inclusion,"Confirmed ""classic"" Hodgkin lymphoma.",1,1.0,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT01254890_18,NCT01254890,exclusion,Patients with known impairment of gastrointestinal (GI) function or GI disease that may significantly alter the absorption of sorafenib.,0,0.0645,1,1.0,0.0,0.9,0.0,0.65,,,disagree
-NCT01198145_36,NCT01198145,unknown,"No prior abdominal-perineal resection, Hartmann procedure, or other surgical procedure leaving the patient without a functioning rectum",0,0.003,1,1.0,1.0,0.85,1.0,0.85,,,disagree
-NCT02103322_3,NCT02103322,inclusion,"Female patients of child bearing potential (except for those who have completed one year since menopause or have gone through hysterectomy or bilateral tubal ligation) must have negative serum pregnancy test at the screening, negative urine pregnancy test on check in to housing, must be non-lactating at screening and must agree to use effective contraception (barrier or hormonal) for the study period.",0,0.0,1,0.9987,0.0,0.85,0.0,0.85,,,disagree
-NCT01974804_3,NCT01974804,inclusion,Patient with metastatic brain tumors greater than or equal to 1.0 cm that will be treated with stereotactic radiosurgery and scheduled for an MRI scan as part of their routine care,1,1.0,1,1.0,1.0,0.85,1.0,0.8,,,ok
-NCT04384484_43,NCT04384484,exclusion,"Known history of hypersensitivity to oxaliplatin or other platinum-based drugs, or gemcitabine, or rituximab, or any of their excipients",1,0.9998,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT02787512_2,NCT02787512,inclusion,Expected time to operation >= 7 days,1,1.0,0,0.0,1.0,0.7,0.0,0.8,,,low_confidence
-NCT02619864_43,NCT02619864,exclusion,"Patients receiving other anti-cancer agents, or radiation therapy.",1,0.9996,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT06367010_5,NCT06367010,exclusion,(iii) Patients with severe coagulation disorders;,1,0.6369,1,1.0,0.0,0.7,1.0,0.75,,,disagree
-NCT02203903_9,NCT02203903,unknown,Pregnancy (female of childbearing potential). Recipient Inclusion Criteria for TAA-T Administration:,1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT02837029_44,NCT02837029,exclusion,Connective tissue diseases,0,0.2469,1,1.0,1.0,0.7,1.0,0.8,,,disagree
-NCT02397967_11,NCT02397967,exclusion,Mental retardation (QI T < 70),1,1.0,0,0.3601,1.0,0.9,1.0,0.85,,,disagree
+NCT04396561_8,NCT04396561,exclusion,Significant liver or renal insufficiency.,0,0.0,1,0.9998,0.0,0.95,0.0,0.7,0.0,0.0,disagree
+NCT05036408_33,NCT05036408,exclusion,"Subjects, who are not be able to comply with the safety monitoring requirements of the study. Those who miss more than half the sessions will be considered to not have completed the program",0,0.0,0,0.0446,0.0,0.6,0.0,0.7,0.0,0.0,low_confidence
+NCT05628922_24,NCT05628922,exclusion,Positive hepatitis B surface antigen and hepatitis B virus DNA ≥ 2500 copies/ml or Positive hepatitis C RNA;,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT00053846_0,NCT00053846,unknown,Diagnosis of cancer,1,1.0,1,1.0,1.0,0.85,1.0,0.95,1.0,1.0,ok
+NCT04401722_1,NCT04401722,exclusion,"liver cirrhosis,",1,0.9616,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06395896_0,NCT06395896,inclusion,Being a woman between the ages of 40-69,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT02692911_15,NCT02692911,exclusion,History of previous cholecystectomy,1,0.9989,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT06863805_1,NCT06863805,inclusion,Adult (≥18 years) male or female patients,1,1.0,1,0.9988,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT07018869_0,NCT07018869,inclusion,"Patient participants must have newly diagnosed surgically resected, stage II or stage III colorectal cancer per the timing described below",1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00506922_1,NCT00506922,inclusion,"Patients with AML, ALL, Hodgkin's disease, MDS (including CMML), CML in late chronic or accelerated phase or in blast crisis, and lymphoma in first or later relapses.",1,0.9999,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT01421017_17,NCT01421017,exclusion,Pregnancy or lactation.,0,0.4868,1,1.0,1.0,0.85,1.0,0.8,1.0,1.0,disagree
+NCT01540058_9,NCT01540058,inclusion,"Cardiac, respiratory and neurological function compatible with the administration of cisplatin chemotherapy,",0,0.0,1,1.0,0.0,0.9,0.0,0.8,0.0,0.0,disagree
+NCT05761171_45,NCT05761171,exclusion,Human immunodeficiency virus (HIV)-infected patients are eligible if on effective anti-retroviral therapy that does not interact with planned study agents and with undetectable viral load within 6 months of enrollment.,1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT04712097_34,NCT04712097,exclusion,Prior allogeneic stem cell transplantation,1,0.939,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT02819609_3,NCT02819609,exclusion,"Patients with a diagnosis of gynecologic cancer (ovarian, uterine, cervical)",1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT06898255_8,NCT06898255,exclusion,With other active diseases that lead to reduced food intake or seriously affect digestion and absorption,0,0.0002,1,1.0,0.0,0.85,0.0,0.65,0.0,0.0,disagree
+NCT01760499_13,NCT01760499,exclusion,"Patients with severe peripheral vascular disease (i.e., claudication occurring after less than 200 meters of walking, rest pain, ischemic ulceration or gangrene)",1,0.9739,1,1.0,1.0,0.85,0.0,0.65,1.0,0.0,disagree
+NCT06314971_5,NCT06314971,exclusion,Synchronous colorectal and non-colorectal cancer diagnosed at or before surgery.,1,0.9632,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT02086721_9,NCT02086721,inclusion,Adequate renal function: calculated creatinine clearance at least 60 ml/min;,1,0.9992,0,0.4771,1.0,1.0,1.0,1.0,1.0,1.0,disagree
+NCT04649372_2,NCT04649372,inclusion,"Patient has already received or been considered for surgery, and / or chemo-radiation.",1,0.9983,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT06922318_25,NCT06922318,exclusion,"Patients receiving anticoagulation therapy with warfarin, rivaroxaban, or apixaban are not eligible for study. \[Patients on enoxaparin or edoxaban are eligible for study. Patients on warfarin, rivaroxaban, or apixaban, who can be transitioned to one of these alternative agents prior to starting study treatments will be eligible\].",1,0.9294,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT02280642_5,NCT02280642,exclusion,Unable to comply with the study protocol,0,0.0001,0,0.0005,0.0,0.95,0.0,0.9,0.0,0.0,ok
+NCT06035731_3,NCT06035731,inclusion,"Affiliated with a social security scheme,",0,0.0,1,0.7532,1.0,0.7,1.0,0.7,1.0,1.0,disagree
+NCT03154190_3,NCT03154190,inclusion,Glioblastoma multiforme (brain) -- no stage,0,0.1819,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,disagree
+NCT05669846_76,NCT05669846,exclusion,Concurrent active Hepatitis B (defined as HBsAg positive and/or detectable HBV DNA) and Hepatitis C virus (defined as anti-HCV Ab positive and detectable HCV RNA) infection.,1,0.9975,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT01567709_8,NCT01567709,inclusion,Cystic lesions,1,0.9999,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,low_confidence
+NCT06867991_10,NCT06867991,exclusion,Confirmed positive hepatitis B serology (hepatitis B surface antigen and core antigen) and/or positive hepatitis C PCR at screening.,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT07495072_2,NCT07495072,inclusion,Candidates for intravesical BCG therapy,1,0.9812,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT04030195_23,NCT04030195,unknown,Presence of a pleural/peritoneal/pericardial catheter.,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04841928_9,NCT04841928,exclusion,"Other current pain condition (e.g., fibromyalgia)",0,0.0022,1,1.0,0.0,0.8,0.0,0.6,0.0,0.0,disagree
+NCT02958592_0,NCT02958592,inclusion,"(i) patients with a solid focal liver lesion that was pathologically proven or diagnosed by imaging methods such as conventional US, CT or MR imaging; (ii) patients scheduled to undergo a hepatectomy; (iii) patients with a lesion ≥1.0 cm in diameter.",1,1.0,1,1.0,1.0,0.95,1.0,0.92,1.0,1.0,ok
+NCT05239546_8,NCT05239546,inclusion,"Platelets greater than or equal to 100,000/µL",1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT02864667_12,NCT02864667,exclusion,"Subjects who have participated in a prior breast clinical trial that gave additional radiation dose, such as an additional mammogram",1,1.0,1,1.0,1.0,0.7,1.0,0.75,1.0,1.0,low_confidence
+NCT04067713_1,NCT04067713,inclusion,Aged 18 or over,1,1.0,1,0.9693,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT06830694_7,NCT06830694,inclusion,Pulmonary function: No clinically significant pleural effusion at the timepoint of screening. Pleural effusion with no significant symptom is allowed for enrollment.,0,0.0,1,0.9937,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT04422457_5,NCT04422457,exclusion,Is Pregnant or ready to pregnant;,0,0.0008,1,1.0,0.0,0.6,0.0,0.7,0.0,0.0,disagree
+NCT04580121_13,NCT04580121,exclusion,Clinical evidence or history of central nervous system (CNS) leukemia,1,0.9806,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT02337491_17,NCT02337491,exclusion,Has history of known coagulopathy that increases risk of bleeding or a history of clinically significant hemorrhage within 12 months of start of study drug,1,0.9624,1,1.0,0.0,0.65,1.0,0.8,0.0,1.0,disagree
+NCT06598007_26,NCT06598007,exclusion,Use of any gastric acid reducing agents during the time period between 6 hours prior to and 2 hours after the administration of CT3001.,1,1.0,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT00628901_8,NCT00628901,exclusion,Presence of pedunculated serosal fibroid as the dominant fibroid(s),0,0.0011,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,disagree
+NCT03753399_2,NCT03753399,inclusion,3.Without tumor recurrence confirmed by image examination;,1,0.9982,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06255210_4,NCT06255210,inclusion,No distant metastasis.,0,0.4764,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT03532139_29,NCT03532139,exclusion,"Known Asian descent (including Filipino, Chinese, Japanese, Korean, Vietnamese or Asian-Indian origin) due to altered metabolism of statins.",0,0.0332,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,disagree
+NCT02422433_5,NCT02422433,exclusion,OR patients with esophageal strictures.,1,0.996,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT00077129_30,NCT00077129,unknown,Prior radiotherapy allowed provided there is measurable disease that has not been irradiated OR there is clear evidence of tumor progression in an irradiated site,1,0.9978,1,1.0,0.0,0.65,0.0,0.6,0.0,0.0,disagree
+NCT01182168_16,NCT01182168,inclusion,"All patients who currently live in (or have lived in) Asia, Africa, Central and South America, Eastern Europe, Spain, Portugal, or Greece",1,1.0,0,0.2106,1.0,0.85,1.0,0.75,1.0,1.0,disagree
+NCT02370498_5,NCT02370498,inclusion,Human epidermal growth factor receptor 2 (HER-2/neu) status known and participants with HER2/neu positive tumors show documentation of disease progression on treatment containing trastuzumab,1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00408902_30,NCT00408902,exclusion,"Myocardial infarction within 6 months of enrollment or New York Heart Association (NYHA) Class III or IV heart failure, uncontrolled angina, severe uncontrolled ventricular arrhythmias, or electrocardiographic evidence of acute ischemia or active conduction system abnormalities",0,0.0001,1,1.0,0.0,0.65,1.0,0.75,0.0,1.0,low_confidence
+NCT04045795_8,NCT04045795,inclusion,Male or female: Contraceptive use by men or women,1,0.999,1,0.995,0.0,0.9,0.0,0.95,0.0,0.0,disagree
+NCT05038839_42,NCT05038839,exclusion,Grade 2 or higher peripheral neuropathy,1,0.9958,1,1.0,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT01860170_14,NCT01860170,exclusion,Poor performance status (<70%),1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT03326921_12,NCT03326921,inclusion,Chronic myelomonocytic leukemia (CMML),1,0.9888,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT05060627_11,NCT05060627,inclusion,"All prior treatment-related toxicities (defined by National Cancer Institute- Common Toxicity Criteria for Adverse Events (NCI-CTCAE), version 4.0 must be ≤ Grade 1 at the time of enrolment except for alopecia",1,1.0,1,1.0,1.0,0.9,0.0,0.7,1.0,0.0,disagree
+NCT03976362_18,NCT03976362,exclusion,"Has interstitial lung disease, or history of pneumonitis requiring systemic steroids for treatment.",1,0.8791,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT02697383_41,NCT02697383,exclusion,"Ongoing or active systemic infection, known human immunodeficiency virus (HIV) positive, known active hepatitis B virus hepatitis, or known active hepatitis C virus hepatitis.",1,0.9767,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT04543799_21,NCT04543799,exclusion,Unhealthy sleep hygiene,0,0.0,1,0.9972,0.0,0.9,0.0,0.75,0.0,0.0,disagree
+NCT01395628_5,NCT01395628,unknown,"AML expressing the fms-like tyrosine kinase 3 internal tandem duplication (FLT3-ITD), associated with a poor prognosis",0,0.0,1,0.924,1.0,0.85,1.0,0.9,1.0,1.0,disagree
+NCT06444477_1,NCT06444477,inclusion,Synchronous diagnosis of ITP and cancer;,0,0.0026,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,disagree
+NCT05458544_27,NCT05458544,exclusion,Prior systemic beta-emitting bone-seeking radioisotopes,1,0.9879,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00101686_2,NCT00101686,inclusion,An interval of greater than five years has elapsed between the primary surgery and the development of metastatic disease.,1,0.9783,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT07179341_3,NCT07179341,exclusion,The patient had two types of primary tumors concurrently including TC.,1,0.9991,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,low_confidence
+NCT06266026_9,NCT06266026,inclusion,"Female subjects aged 18 and above presenting for intensified aftercare after a history of breast cancer, patients with symptoms (nipple discharge, breast lump based on physician physical exam or self-breast exam), patients who were referred for additional examination (MRI, Ultrasound, fine-needle aspiration cytology (FNAC) or biopsy) based on suspicious imaging findings in either breast",1,1.0,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT04554056_20,NCT04554056,exclusion,"According to the researchers, there are serious risks to the safety of patients or concomitant diseases that affect the completion of the study.",0,0.0,0,0.0,0.0,0.95,0.0,0.9,0.0,0.0,ok
+NCT02950987_44,NCT02950987,exclusion,Patients with a contraindication to sedation or general anesthesia,0,0.0034,1,0.9996,0.0,0.65,1.0,0.75,0.0,1.0,low_confidence
+NCT05683834_44,NCT05683834,exclusion,Documented EBV infection.,1,1.0,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT00046839_27,NCT00046839,unknown,Concurrent aspirin (325 mg/day) for cardioprotection allowed,1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT07117851_18,NCT07117851,exclusion,"Have a risk of bleeding, or coagulation dysfunction, or are currently receiving -thrombolytic therapy;",1,0.6951,1,1.0,0.0,0.75,1.0,0.7,0.0,1.0,disagree
+NCT01269255_19,NCT01269255,exclusion,documented inoperable peritoneal seeding disease determined by exploratory laparotomy,1,1.0,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT00326599_36,NCT00326599,unknown,Unstable angina pectoris,0,0.0,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,low_confidence
+NCT04009876_19,NCT04009876,exclusion,Active uncontrolled infection.,0,0.0,1,1.0,0.0,0.85,0.0,0.65,0.0,0.0,disagree
+NCT00577993_0,NCT00577993,inclusion,Previously untreated stage IV indolent B-cell lymphoma \[Amendment May 2001: eligibility restricted to follicular lymphoma\],1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00408902_45,NCT00408902,exclusion,Inability to comply with study and/or follow-up procedures,0,0.0004,0,0.0001,0.0,0.95,0.0,0.9,0.0,0.0,ok
+NCT00782886_13,NCT00782886,exclusion,Patients who are currently (within the last 30 days prior to surgery) participating in another clinical trial with any investigational drug or device.,1,1.0,0,0.0004,1.0,0.8,1.0,0.75,1.0,1.0,disagree
+NCT06910670_3,NCT06910670,unknown,"Diagnosis of colorectal cancer, must be African American and age 65 or older at time of diagnosis",1,1.0,1,1.0,1.0,1.0,1.0,0.9,1.0,1.0,ok
+NCT01021072_1,NCT01021072,inclusion,measurable or non-measurable disease at baseline,1,0.833,1,0.9732,1.0,0.75,1.0,0.85,1.0,1.0,low_confidence
+NCT02182687_12,NCT02182687,exclusion,Known allergy to intravenous iodinated contrast agents unresponsive to prednisone pre-treatment.,1,0.99,1,1.0,0.0,0.65,1.0,0.75,0.0,1.0,disagree
+NCT01538563_15,NCT01538563,inclusion,All ethnic groups are eligible for this trial.,0,0.0012,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,disagree
+NCT01733719_2,NCT01733719,inclusion,"CT scan (thorax \& top 1/3 of abdomen): negative for evidence of locally advanced or metastatic disease (done at the discretion of the multidisciplinary team, for invasive cancer only - T1m disease); PET-CT will not usually be required but may be carried out if indicated at the discretion of the multidisciplinary team.",0,0.0,1,0.9999,0.0,0.6,1.0,0.7,0.0,1.0,low_confidence
+NCT01105312_12,NCT01105312,unknown,ER and PR positive or negative (phase I),1,1.0,1,1.0,1.0,0.85,1.0,0.95,1.0,1.0,ok
+NCT04393363_9,NCT04393363,exclusion,Pregnancy or breastfeeding,1,0.9779,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT06172088_2,NCT06172088,exclusion,Eating disorders.,1,0.7975,1,1.0,0.0,0.6,1.0,0.75,0.0,1.0,disagree
+NCT06326502_16,NCT06326502,exclusion,Individual who is unable to undergo contrast-enhanced CT or MRI,1,1.0,1,0.9999,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT06527781_18,NCT06527781,exclusion,Undergone surgery within 3 months before screening or plan to undergo surgery during the trial;,1,1.0,1,1.0,1.0,0.8,0.0,0.75,1.0,0.0,disagree
+NCT01108042_7,NCT01108042,inclusion,risks of anesthesia complications normal or minor increased,1,1.0,1,0.9999,0.0,0.85,0.0,0.7,0.0,0.0,disagree
+NCT05055843_11,NCT05055843,exclusion,Claustrophobia,1,0.5904,1,1.0,0.0,0.7,1.0,0.7,0.0,1.0,disagree
+NCT04794699_8,NCT04794699,inclusion,Recovery from acute effects of prior therapy,0,0.0027,1,1.0,0.0,0.95,0.0,0.8,0.0,0.0,disagree
+NCT05038826_0,NCT05038826,inclusion,patient diagnosed with lung cancer and included in a clinical trial between 2017 and 2021,1,0.9999,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT00566332_13,NCT00566332,exclusion,Transformation into large B cell lymphoma,1,0.9165,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT01019356_1,NCT01019356,inclusion,Oligomenorhea (≤ 8 menstrual cycle per year) Health volunteers :,1,1.0,1,0.9999,1.0,0.95,1.0,0.75,1.0,1.0,low_confidence
+NCT07356544_3,NCT07356544,inclusion,Enrolled in ATLAS project. Cohort 2 (HER2 mutations study population),1,1.0,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT04398095_7,NCT04398095,exclusion,"Predicted unacceptable high risk of reirradiation-related toxicity, in the Investigator's judgment",0,0.0097,0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,ok
+NCT01774721_7,NCT01774721,exclusion,Any evidence of mixed histology that includes elements of small cell or carcinoid lung cancer.,1,0.8732,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT03070886_2,NCT03070886,inclusion,Baseline testosterone level obtained post-prostatectomy prior to start of androgen deprivation therapy and prior to step 1 registration,1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00398073_31,NCT00398073,unknown,See Disease Characteristics,1,1.0,1,0.9997,0.0,0.5,0.0,0.5,0.0,0.0,disagree
+NCT02793544_11,NCT02793544,exclusion,"HIV-positive subjects: Acquired immunodeficiency syndrome (AIDS) related syndromes or symptoms that may pose an excessive risk for transplantation-related morbidity as determined by the Treatment Review Committee (see Appendix D). Untreatable HIV infection due to multidrug ARV resistance. Subjects with a detectable or standard viral load > 750 copies/mL should be evaluated with an HIV drug resistance test (HIV-1 genotype). The results should be included as part of the ARV review (described in Appendix D). May not be currently prescribed ritonavir, cobacistat and/or zidovudine",1,1.0,1,1.0,0.0,0.75,0.0,0.65,0.0,0.0,disagree
+NCT00963807_15,NCT00963807,exclusion,Patients may not be receiving any other investigational agents,1,0.9999,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06271837_2,NCT06271837,inclusion,HER2 expression.,1,0.9998,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT02300298_4,NCT02300298,inclusion,Patients who are Eastern Cooperative Oncology Group (ECOG) performance status (PS) of 0 or 1 at screening,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01410656_1,NCT01410656,inclusion,at least 18 years old,1,1.0,1,0.9999,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01511913_0,NCT01511913,inclusion,Diagnosis of unresectable or metastatic melanoma,1,1.0,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT07438249_11,NCT07438249,exclusion,Intraoperative or perioperative blood transfusion,1,0.9135,1,0.9999,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT00573885_21,NCT00573885,exclusion,"Known allergy to green tea and/or corn starch, gelatin, or other nonmedicinal ingredients",1,0.9781,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT01399918_4,NCT01399918,inclusion,"Platelets ≥100,000/μL",1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT05683834_25,NCT05683834,exclusion,"Allergy treatment with antigen injections, unless on a maintenance schedule of shots no more frequently than once per month.",1,0.9985,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT04068181_7,NCT04068181,unknown,"Stage IVM1d subjects must not have greater than 3 cerebral melanoma metastases, or clinically active cerebral melanoma metastases requiring therapy, and/or carcinomatous meningitis regardless of clinical stability.",0,0.0146,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,disagree
+NCT04370483_15,NCT04370483,inclusion,Negative for tuberculosis antigen (e.g. T-Spot test),1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT03129373_34,NCT03129373,exclusion,"Subjects must not deliberately ""sunbathe"" for the duration of the study on the studied zone in case they cannot cover the treated area from sunlight.",1,0.9546,0,0.0001,0.0,0.85,0.0,0.9,0.0,0.0,disagree
+NCT03597295_2,NCT03597295,inclusion,Must have received (or been intolerant to or ineligible for) at least 1 prior line of platinum-based chemotherapy and received no more than 2 prior systemic treatments.,1,0.9942,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00799110_5,NCT00799110,inclusion,"Complete clinical response after first-line chemotherapy for newly-diagnosed patients, or after second-line chemotherapy for relapsed patients who require secondary cytoreduction.\*\*",1,0.9539,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT06755450_3,NCT06755450,inclusion,Ability to swallow and retain oral medications,0,0.0,0,0.0349,0.0,0.8,0.0,0.6,0.0,0.0,low_confidence
+NCT04986748_3,NCT04986748,inclusion,Able to comply with study-related procedures,0,0.0,0,0.0,0.0,0.95,0.0,0.95,0.0,0.0,ok
+NCT00084656_33,NCT00084656,unknown,No active infection requiring therapy,1,0.8353,1,1.0,0.0,0.7,1.0,0.8,0.0,1.0,disagree
+NCT07313514_4,NCT07313514,exclusion,Girls who underwent preoperative MRI.,1,0.9997,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT01776372_4,NCT01776372,inclusion,Demonstrate willingness to remain on-study for the complete duration,0,0.0098,0,0.0116,0.0,1.0,0.0,1.0,0.0,0.0,ok
+NCT02419586_0,NCT02419586,inclusion,Patients with newly diagnosed colorectal cancer undergoing laparoscopic resection in in Queen Mary Hospital,1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06801665_19,NCT06801665,exclusion,"Severe bleeding events occur within half a year, or high bleeding risk factors such as active digestive tract ulcers and esophageal and gastric varices due to liver cirrhosis.",0,0.0144,1,1.0,0.0,0.6,1.0,0.75,0.0,1.0,low_confidence
+NCT07110571_18,NCT07110571,exclusion,Interstitial pneumonia or lung disease.,1,0.9729,1,1.0,1.0,0.75,1.0,0.85,1.0,1.0,low_confidence
+NCT05139368_0,NCT05139368,inclusion,Subjects aged >= 18 years,1,1.0,1,0.9971,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01077713_1,NCT01077713,inclusion,"inoperable, locally advanced, metastatic non-squamous non-small cell lung cancer;",1,0.9909,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06612151_15,NCT06612151,exclusion,"Presence of brain stem or meningeal metastases, spinal cord metastases or compression.",0,0.1516,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,disagree
+NCT03023722_54,NCT03023722,exclusion,Renal failure requiring peritoneal dialysis or hemodialysis.,1,0.9912,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04616196_8,NCT04616196,unknown,"Evidence of clinically significant interstitial lung disease or active, noninfectious pneumonitis; active infection requiring systemic therapy within 7 days prior to dosing",1,0.8203,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,disagree
+NCT06345365_10,NCT06345365,exclusion,Patients with active tuberculosis and HIV-positive patients;,1,0.9771,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06759610_1,NCT06759610,exclusion,"any systemic disease that interferes with bone healing,",0,0.0,1,0.9999,0.0,0.8,0.0,0.6,0.0,0.0,disagree
+NCT01009736_3,NCT01009736,inclusion,ECOG (Eastern Cooperative Oncology Group) performance status 0-1,1,1.0,1,1.0,1.0,1.0,1.0,0.95,1.0,1.0,ok
+NCT06359210_4,NCT06359210,inclusion,Participant is registered/enrolled to participate in one of three community-based exercise programs.,1,0.9997,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT06382441_5,NCT06382441,inclusion,Smartphone users.,0,0.0001,0,0.0,0.0,0.7,0.0,0.7,0.0,0.0,low_confidence
+NCT06450548_6,NCT06450548,exclusion,"Patients unable to undergo the examinations and/or maintain a prolonged lying position (due to back pain, etc.).",1,0.5926,1,1.0,0.0,0.85,0.0,0.75,0.0,0.0,disagree
+NCT02611544_0,NCT02611544,inclusion,"≥18 years old,",1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT07306273_25,NCT07306273,exclusion,"Active infection or unexplained fever \&gt; 38.5°C during the screening period or on the day of administration (subjects with fever caused by tumors can be enrolled as judged by the investigator), which, in the investigator\&#39;s judgment, would affect the subject\&#39;s participation in this trial or interfere with the evaluation of efficacy;",1,0.8488,1,0.9754,0.0,0.8,0.0,0.75,0.0,0.0,disagree
+NCT04168242_2,NCT04168242,inclusion,"Patients who are going to receive at least four cycles of chemotherapy that are known to induce alopecia, such as carboplatin, paclitaxel, taxotere, topotecan, etoposide, vincristine and ifosfamide.",1,0.6024,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT00386685_2,NCT00386685,inclusion,Measurable disease according to Response Evaluation Criteria In Solid Tumors (RECIST),0,0.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT00977431_25,NCT00977431,exclusion,Pregnancy or breast-feeding.,0,0.38,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT00458705_9,NCT00458705,unknown,"Absolute granulocyte count ≥ 1,500/mm³ (unless low granulocyte counts are due to multiple myeloma)",1,1.0,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT00426556_2,NCT00426556,inclusion,"Progressive disease on prior trastuzumab alone/or in combination with other anticancer agents, or relapsed any time after completion of this therapy (phase l)",0,0.4962,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,disagree
+NCT03838263_22,NCT03838263,exclusion,History of primary immunodeficiency or organ transplant requiring immunosuppressive drugs,1,0.9984,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04417062_64,NCT04417062,exclusion,Male or female patients of reproductive potential who are not employing an effective method of birth control.,1,0.6453,1,0.9998,0.0,0.7,0.0,0.85,0.0,0.0,disagree
+NCT04630756_43,NCT04630756,exclusion,Requires or receiving anticoagulation with warfarin or equivalent vitamin K antagonists.,1,0.9958,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04633850_5,NCT04633850,exclusion,Pregnant women.,1,0.8868,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT04767906_4,NCT04767906,inclusion,ECOG (Eastern Cooperative of Onco-logy Group) Index 0 or 1,1,1.0,1,1.0,1.0,1.0,1.0,0.9,1.0,1.0,ok
+NCT06303154_13,NCT06303154,exclusion,Patients unable to be followed for 12 months.,1,1.0,1,0.9805,0.0,0.7,0.0,0.85,0.0,0.0,disagree
+NCT01005329_11,NCT01005329,inclusion,"Has undergone hysterectomy (i.e., total abdominal, vaginal, robotic-assisted, radical, or laparoscopic-assisted vaginal hysterectomy) and bilateral salpingo-oophorectomy within the past 56 days",1,1.0,1,0.9999,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT06971614_16,NCT06971614,exclusion,Unexplainable fever >38.5℃ during the screening or on the day of treatment (fever judged as tumor-induced by the investigator is eligible for enrollment) that in the investigator's opinion will affect the participation in this trial or interfere with the efficacy assessment.,1,1.0,1,1.0,0.0,0.85,0.0,0.8,0.0,0.0,disagree
+NCT02216786_17,NCT02216786,exclusion,Prior treatment with fulvestrant or everolimus,1,0.9999,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04574284_0,NCT04574284,inclusion,1\. Understood and signed an informed consent form. 2. Eastern Cooperative Oncology Group (ECOG) performance status of 0 to 1; Life expectancy ≥ 3 months. 3\. Histopathologically confirmed recurrent or metastatic advanced endometrial cancer. 4\. Has at least one measurable lesion. 5. Agree to provide tumor tissue samples for MSI/MMR status detection. 6. Adequate laboratory indicators. 7. Serum or urine pregnancy tests are negative within 7 days before randomization; Men and women should agree to use effective contraception during the study period and after the end of the study period within 6 months.,1,0.9998,1,1.0,0.0,0.9,0.0,0.95,0.0,0.0,disagree
+NCT00381862_18,NCT00381862,unknown,Not pregnant or nursing,0,0.4468,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,disagree
+NCT04472663_0,NCT04472663,inclusion,Primary diagnosis of aRCC (advanced Renal Cell Carcinoma) or metastatic RCC,1,1.0,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT05427136_2,NCT05427136,inclusion,treatment with any kind of chemotherapy,0,0.0001,1,1.0,1.0,0.85,1.0,0.95,1.0,1.0,disagree
+NCT00004059_22,NCT00004059,unknown,No diabetes,1,0.9996,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT06073821_5,NCT06073821,exclusion,Previous systemic treatment for CLL,1,0.9851,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT07020533_21,NCT07020533,inclusion,RECIPIENTS: Patients receiving myeloablative (MA) or reduced intensity conditioning (RIC) are allowed.,0,0.057,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,disagree
+NCT07429318_2,NCT07429318,inclusion,(3) Patients who underwent adjuvant therapy before surgery.,1,1.0,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT04574583_37,NCT04574583,exclusion,The use of corticosteroids as premedication for contrast-enhanced studies which is allowed prior to enrollment.,1,0.9961,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,low_confidence
+NCT06062745_11,NCT06062745,exclusion,Severe claustrophobia,0,0.0009,1,1.0,0.0,0.8,1.0,0.65,0.0,1.0,low_confidence
+NCT05340673_9,NCT05340673,exclusion,"Inflammatory breast cancer, skin involvement, planned use of bolus.",0,0.026,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT05800106_18,NCT05800106,exclusion,"Need to use tobacco, alcohol and caffeinated drinks during the clinical trial, or certain foods that may affect metabolism (including dragon fruit, mango, grapefruit, and/or xanthine diet, etc.), or have significant changes in diet or exercise habits before the clinical trial , or other factors that affect drug absorption, distribution, metabolism, excretion, etc.",0,0.0,1,1.0,0.0,0.7,0.0,0.8,0.0,0.0,disagree
+NCT00850200_0,NCT00850200,inclusion,"Confirmed ""classic"" Hodgkin lymphoma.",1,1.0,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT01254890_18,NCT01254890,exclusion,Patients with known impairment of gastrointestinal (GI) function or GI disease that may significantly alter the absorption of sorafenib.,0,0.0645,1,1.0,0.0,0.9,0.0,0.65,0.0,0.0,disagree
+NCT01198145_36,NCT01198145,unknown,"No prior abdominal-perineal resection, Hartmann procedure, or other surgical procedure leaving the patient without a functioning rectum",0,0.003,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT02103322_3,NCT02103322,inclusion,"Female patients of child bearing potential (except for those who have completed one year since menopause or have gone through hysterectomy or bilateral tubal ligation) must have negative serum pregnancy test at the screening, negative urine pregnancy test on check in to housing, must be non-lactating at screening and must agree to use effective contraception (barrier or hormonal) for the study period.",0,0.0,1,0.9987,0.0,0.85,0.0,0.85,0.0,0.0,disagree
+NCT01974804_3,NCT01974804,inclusion,Patient with metastatic brain tumors greater than or equal to 1.0 cm that will be treated with stereotactic radiosurgery and scheduled for an MRI scan as part of their routine care,1,1.0,1,1.0,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT04384484_43,NCT04384484,exclusion,"Known history of hypersensitivity to oxaliplatin or other platinum-based drugs, or gemcitabine, or rituximab, or any of their excipients",1,0.9998,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT02787512_2,NCT02787512,inclusion,Expected time to operation >= 7 days,1,1.0,0,0.0,1.0,0.7,0.0,0.8,1.0,0.0,low_confidence
+NCT02619864_43,NCT02619864,exclusion,"Patients receiving other anti-cancer agents, or radiation therapy.",1,0.9996,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT06367010_5,NCT06367010,exclusion,(iii) Patients with severe coagulation disorders;,1,0.6369,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,disagree
+NCT02203903_9,NCT02203903,unknown,Pregnancy (female of childbearing potential). Recipient Inclusion Criteria for TAA-T Administration:,1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT02837029_44,NCT02837029,exclusion,Connective tissue diseases,0,0.2469,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,disagree
+NCT02397967_11,NCT02397967,exclusion,Mental retardation (QI T < 70),1,1.0,0,0.3601,1.0,0.9,1.0,0.85,1.0,1.0,disagree
 NCT03213691_39,NCT03213691,exclusion,Concomitant medications,1,0.8132,1,1.0,,,,,,,disagree
-NCT04042376_4,NCT04042376,inclusion,Measurable disease defined as serum monoclonal immunoglobulin M (IgM) >0.5 gram per deciliter (g/dL),1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT03228277_3,NCT03228277,inclusion,"Confirmation that the tumor harbours an EGFR mutation known to be associated with EGFR TKI sensitivity (including G719X, exon 19 deletion, L858R, L861Q).",1,0.9998,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT00017342_16,NCT00017342,unknown,"No active, uncontrolled, serious infection",0,0.0,1,0.9995,0.0,0.85,0.0,0.7,,,disagree
-NCT06381141_15,NCT06381141,exclusion,A serious uncontrolled medical disorder that would impair the ability of the patient to receive protocol therapy or whose control may be jeopardized by the complications of this therapy.,0,0.0,0,0.0,0.0,0.95,0.0,0.85,,,ok
-NCT00904449_3,NCT00904449,exclusion,"Experienced a serious, adverse experience during study EN3202-018 that was possible or probably related to study medication.",1,0.9999,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT04472910_28,NCT04472910,exclusion,"Uncontrolled inter-current illness including, but not limited to, ongoing or active infection, symptomatic congestive heart failure, unstable angina pectoris, or psychiatric illness/social situations that would limit compliance with study requirements",0,0.0,1,0.9994,0.0,0.95,0.0,0.85,,,disagree
-NCT04079296_3,NCT04079296,inclusion,Subject has an Eastern Cooperative Oncology Group performance status of ≤ 2.,1,1.0,1,1.0,1.0,1.0,1.0,0.95,,,ok
-NCT04121260_12,NCT04121260,exclusion,Monoclonal antibody treatment for multiple myeloma within 21 days;,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT00413036_3,NCT00413036,unknown,Mantle cell lymphoma.,1,0.9993,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT01244750_6,NCT01244750,inclusion,"Patients are also eligible when they have already switched to a subsequent therapy (TKI or other) at the time of enrollment, as long as their first-line and subsequent CML treatment information is available at site for data entry into the study Electronic Case Report Form (eCRF)",1,0.9956,1,0.9996,0.0,0.6,0.0,0.6,,,disagree
-NCT05244213_13,NCT05244213,exclusion,Pregnant or lactating women; those who have fertility are unwilling or unable to take effective contraceptive measures;,0,0.0166,1,1.0,0.0,0.7,0.0,0.85,,,disagree
-NCT05060783_4,NCT05060783,exclusion,Non-clear cell Renal cell carcinoma,1,1.0,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT01213758_3,NCT01213758,exclusion,Impaired kidney function,1,0.9947,1,1.0,0.0,0.95,0.0,0.7,,,disagree
-NCT05444933_4,NCT05444933,exclusion,Participant medical file without documented follow-up visits (post-cabozantinib initiation).,1,1.0,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT06149286_12,NCT06149286,unknown,Active infection as defined in the protocol. Note: Other protocol-defined Inclusion/Exclusion criteria apply,1,0.9712,1,0.9999,0.0,0.6,0.0,0.6,,,disagree
-NCT06463249_13,NCT06463249,exclusion,self-identification of uncontrolled concurrent medical condition likely to limit compliance with the program as determined by investigators.,0,0.0,0,0.0,0.0,0.95,0.0,0.9,,,ok
-NCT05455918_27,NCT05455918,exclusion,Mature teratoma,0,0.2654,1,1.0,1.0,0.85,1.0,0.9,,,disagree
-NCT06178549_3,NCT06178549,exclusion,"self-reported history of cervical cancer,",1,0.9999,1,1.0,0.0,0.7,0.0,0.75,,,disagree
-NCT03790488_19,NCT03790488,exclusion,Women who are pregnant or breastfeeding or who plan to become pregnant/breastfeed while on study; men who plan to father children during the study;,1,0.9998,1,1.0,1.0,0.7,0.0,0.85,,,disagree
-NCT04137289_10,NCT04137289,inclusion,"Availability and willingness to provide an archived tumor tissue specimen and undergo tumor biopsy before treatment. Pre-treatment fresh tumor biopsy collections for biomarker analyses are considered optional in phase Ia and mandatory in phase Ib. Only nonsignificant risk procedures per the investigator's judgment will be used to obtain any biopsies specified in this study. In case a fresh tumor biopsy cannot be obtained due to before mentioned reasons an archived tumor tissue specimen obtained within ≤6 months of screening must be submitted. In case the patient undergoes baseline tumor biopsy, an archived tumor tissue specimen must be submitted regardless of the date of collection.",1,1.0,1,1.0,0.0,0.75,0.0,0.85,,,disagree
-NCT00701766_20,NCT00701766,exclusion,Patient unable to comply with the protocol,0,0.0001,0,0.0,0.0,0.95,0.0,0.85,,,ok
-NCT05925491_25,NCT05925491,exclusion,Has a known history of Hepatitis B (defined as Hepatitis B surface antigen \[HBsAg\] reactive) or known active Hepatitis C virus (defined as HCV RNA qualitative is detected) infection. Note: no testing for Hepatitis B and Hepatitis C is required unless mandated by local health authority.,1,0.962,1,1.0,1.0,0.95,1.0,0.9,,,ok
-NCT04040569_8,NCT04040569,inclusion,Estrogen receptor positive or Progesterone receptor positive and Her2neu negative,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT07183878_7,NCT07183878,inclusion,High-risk AML as defined by at least one of the following:,1,0.9961,1,0.9996,0.0,0.5,0.0,0.5,,,disagree
-NCT00098436_13,NCT00098436,unknown,Chronic hepatitis allowed Renal,1,0.9922,1,1.0,1.0,0.6,1.0,0.7,,,low_confidence
-NCT01557101_9,NCT01557101,exclusion,Renal failure.,1,0.9922,1,1.0,0.0,0.6,1.0,0.8,,,disagree
-NCT00380029_16,NCT00380029,unknown,No contraindication to erlotinib hydrochloride or other tyrosine kinase inhibitors,1,0.994,1,1.0,0.0,0.85,0.0,0.65,,,disagree
-NCT04169672_16,NCT04169672,inclusion,"Male or females patients with reproductive potential must agree to use an effective contraceptive method, for example, double-barrier device, condom, oral or injected birth control medication or intrauterine device, during the study and within 90 days after study treatment discontinuation. All female patients are considered to be fertile, unless the patient had natural menopause or artificial menopause or sterilization (such as hysterectomy, bilateral oophorectomy or ovarian irradiation).",1,0.921,0,0.0,0.0,0.85,0.0,0.9,,,disagree
-NCT02054052_2,NCT02054052,inclusion,Symptomatic MPE evaluated by researchers,1,0.8366,0,0.0,0.0,0.7,0.0,0.65,,,disagree
-NCT04491123_10,NCT04491123,exclusion,refusal of patient to receive intrathecal analgesia,1,0.9988,1,0.9999,1.0,0.85,0.0,0.9,,,disagree
-NCT01152645_14,NCT01152645,exclusion,Pregnant or lactating,1,0.8057,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00634426_9,NCT00634426,exclusion,Patients with a tumor that has compressed only the cauda equina or spinal roots,1,0.9587,1,1.0,1.0,0.7,1.0,0.75,,,low_confidence
-NCT06754501_22,NCT06754501,inclusion,"Negative hepatitis C virus (HCV) antibody test at screening, or positive HCV antibody test followed by a negative HCV RNA test at screening \- The HCV RNA test will be performed only for patients who have a positive HCV antibody test.",1,1.0,1,0.9999,1.0,1.0,1.0,1.0,,,ok
-NCT01481129_21,NCT01481129,inclusion,Nasogastric or G-tube administration is not allowed,1,1.0,1,0.9999,1.0,0.85,1.0,0.8,,,ok
-NCT00499122_29,NCT00499122,exclusion,Known hypersensitivity to any of the components of NOV-002 or to any of the study drugs.,1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT03317119_32,NCT03317119,exclusion,History of Gilbert's syndrome,1,0.8619,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT05278039_18,NCT05278039,exclusion,Indwelling tracheostomy tube,1,0.9987,1,0.9983,1.0,0.95,1.0,0.95,,,ok
-NCT03276702_4,NCT03276702,exclusion,Diagnosis of a non-solid tumor malignancy.,1,0.9263,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT00951496_4,NCT00951496,inclusion,"Absolute neutrophil count (ANC) greater than or equal to 1,500/mcl, equivalent to Common Terminology Criteria for Adverse Events v3.0 (CTCAE) grade 1; this ANC cannot have been induced or supported by granulocyte colony stimulating factors",1,1.0,1,1.0,1.0,0.95,1.0,0.9,,,ok
-NCT00017394_27,NCT00017394,inclusion,Urine protein less than 500 mg by 24-hour urine collection,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01030536_17,NCT01030536,exclusion,"Any history of prior pseudomonas-exotoxin immunotoxin administration including CAT-8015, CAT-3888, or LMB-2",1,0.9997,1,1.0,1.0,0.95,1.0,0.9,,,ok
-NCT02110706_10,NCT02110706,exclusion,"A history of chronic degenerative, psychiatric, or neurologic disorder other than MG that can produce weakness or fatigue.",0,0.0698,1,1.0,0.0,0.75,1.0,0.75,,,low_confidence
-NCT05453799_33,NCT05453799,inclusion,Subjects with a prior or concurrent malignancy whose natural history or treatment does not have the potential to interfere with the safety or efficacy assessment of the investigational regimen for this trial are eligible,1,0.998,1,1.0,0.0,0.95,0.0,0.85,,,disagree
-NCT03049618_17,NCT03049618,inclusion,Female subjects of childbearing potential must be willing to use an adequate method of contraception for the course of the study through 120 days after the last dose of study medication,0,0.0,0,0.1544,0.0,0.7,0.0,0.95,,,low_confidence
-NCT03465527_2,NCT03465527,inclusion,Patients planning R-CHOP chemotherapy,1,1.0,1,1.0,1.0,0.85,0.0,0.8,,,disagree
-NCT03044977_16,NCT03044977,exclusion,"Patients for whom, in the opinion of their physician, a 24-hour discontinuation of somatostatin analogue therapy represents a health risk.",1,1.0,1,0.9978,0.0,0.95,0.0,0.9,,,disagree
-NCT04217473_19,NCT04217473,exclusion,"History of hepatic dysfunction, hepatitis or HIV.",1,0.9547,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT02849366_6,NCT02849366,exclusion,"Patients with grade 3 hypertension or diabetic complication, severe cardiac and pulmonary dysfunction",1,0.9999,1,1.0,0.0,0.65,1.0,0.75,,,disagree
-NCT05051722_72,NCT05051722,exclusion,Known current synchronous endometrial cancer or hyperplasia,0,0.0016,1,1.0,1.0,0.9,1.0,0.9,,,disagree
-NCT00869570_15,NCT00869570,unknown,Is compliant and geographic proximity allows for proper staging and follow-up,0,0.0,0,0.0,0.0,0.95,0.0,0.95,,,ok
-NCT04439188_2,NCT04439188,inclusion,"Patients must have complete loss of cytoplasmic and nuclear PTEN staining on immunohistochemistry as determined by the MATCH PTEN immunohistochemistry (IHC) assay performed at MD Anderson. Patients can have any PTEN mutation or deletion status, but MUST have PTEN loss by IHC",1,0.9758,1,0.9986,1.0,0.95,1.0,0.9,,,ok
-NCT05116709_17,NCT05116709,exclusion,active hepatitis B;,1,0.8487,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT04418089_0,NCT04418089,inclusion,LABC IIIA-IIIC TNM / AJCC 2018 with histopathological examination.,1,0.9955,1,1.0,1.0,0.9,1.0,0.9,,,ok
+NCT04042376_4,NCT04042376,inclusion,Measurable disease defined as serum monoclonal immunoglobulin M (IgM) >0.5 gram per deciliter (g/dL),1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT03228277_3,NCT03228277,inclusion,"Confirmation that the tumor harbours an EGFR mutation known to be associated with EGFR TKI sensitivity (including G719X, exon 19 deletion, L858R, L861Q).",1,0.9998,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT00017342_16,NCT00017342,unknown,"No active, uncontrolled, serious infection",0,0.0,1,0.9995,0.0,0.85,0.0,0.7,0.0,0.0,disagree
+NCT06381141_15,NCT06381141,exclusion,A serious uncontrolled medical disorder that would impair the ability of the patient to receive protocol therapy or whose control may be jeopardized by the complications of this therapy.,0,0.0,0,0.0,0.0,0.95,0.0,0.85,0.0,0.0,ok
+NCT00904449_3,NCT00904449,exclusion,"Experienced a serious, adverse experience during study EN3202-018 that was possible or probably related to study medication.",1,0.9999,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT04472910_28,NCT04472910,exclusion,"Uncontrolled inter-current illness including, but not limited to, ongoing or active infection, symptomatic congestive heart failure, unstable angina pectoris, or psychiatric illness/social situations that would limit compliance with study requirements",0,0.0,1,0.9994,0.0,0.95,0.0,0.85,0.0,0.0,disagree
+NCT04079296_3,NCT04079296,inclusion,Subject has an Eastern Cooperative Oncology Group performance status of ≤ 2.,1,1.0,1,1.0,1.0,1.0,1.0,0.95,1.0,1.0,ok
+NCT04121260_12,NCT04121260,exclusion,Monoclonal antibody treatment for multiple myeloma within 21 days;,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT00413036_3,NCT00413036,unknown,Mantle cell lymphoma.,1,0.9993,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT01244750_6,NCT01244750,inclusion,"Patients are also eligible when they have already switched to a subsequent therapy (TKI or other) at the time of enrollment, as long as their first-line and subsequent CML treatment information is available at site for data entry into the study Electronic Case Report Form (eCRF)",1,0.9956,1,0.9996,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT05244213_13,NCT05244213,exclusion,Pregnant or lactating women; those who have fertility are unwilling or unable to take effective contraceptive measures;,0,0.0166,1,1.0,0.0,0.7,0.0,0.85,0.0,0.0,disagree
+NCT05060783_4,NCT05060783,exclusion,Non-clear cell Renal cell carcinoma,1,1.0,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT01213758_3,NCT01213758,exclusion,Impaired kidney function,1,0.9947,1,1.0,0.0,0.95,0.0,0.7,0.0,0.0,disagree
+NCT05444933_4,NCT05444933,exclusion,Participant medical file without documented follow-up visits (post-cabozantinib initiation).,1,1.0,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT06149286_12,NCT06149286,unknown,Active infection as defined in the protocol. Note: Other protocol-defined Inclusion/Exclusion criteria apply,1,0.9712,1,0.9999,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT06463249_13,NCT06463249,exclusion,self-identification of uncontrolled concurrent medical condition likely to limit compliance with the program as determined by investigators.,0,0.0,0,0.0,0.0,0.95,0.0,0.9,0.0,0.0,ok
+NCT05455918_27,NCT05455918,exclusion,Mature teratoma,0,0.2654,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,disagree
+NCT06178549_3,NCT06178549,exclusion,"self-reported history of cervical cancer,",1,0.9999,1,1.0,0.0,0.7,0.0,0.75,0.0,0.0,disagree
+NCT03790488_19,NCT03790488,exclusion,Women who are pregnant or breastfeeding or who plan to become pregnant/breastfeed while on study; men who plan to father children during the study;,1,0.9998,1,1.0,1.0,0.7,0.0,0.85,1.0,0.0,disagree
+NCT04137289_10,NCT04137289,inclusion,"Availability and willingness to provide an archived tumor tissue specimen and undergo tumor biopsy before treatment. Pre-treatment fresh tumor biopsy collections for biomarker analyses are considered optional in phase Ia and mandatory in phase Ib. Only nonsignificant risk procedures per the investigator's judgment will be used to obtain any biopsies specified in this study. In case a fresh tumor biopsy cannot be obtained due to before mentioned reasons an archived tumor tissue specimen obtained within ≤6 months of screening must be submitted. In case the patient undergoes baseline tumor biopsy, an archived tumor tissue specimen must be submitted regardless of the date of collection.",1,1.0,1,1.0,0.0,0.75,0.0,0.85,0.0,0.0,disagree
+NCT00701766_20,NCT00701766,exclusion,Patient unable to comply with the protocol,0,0.0001,0,0.0,0.0,0.95,0.0,0.85,0.0,0.0,ok
+NCT05925491_25,NCT05925491,exclusion,Has a known history of Hepatitis B (defined as Hepatitis B surface antigen \[HBsAg\] reactive) or known active Hepatitis C virus (defined as HCV RNA qualitative is detected) infection. Note: no testing for Hepatitis B and Hepatitis C is required unless mandated by local health authority.,1,0.962,1,1.0,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT04040569_8,NCT04040569,inclusion,Estrogen receptor positive or Progesterone receptor positive and Her2neu negative,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT07183878_7,NCT07183878,inclusion,High-risk AML as defined by at least one of the following:,1,0.9961,1,0.9996,0.0,0.5,0.0,0.5,0.0,0.0,disagree
+NCT00098436_13,NCT00098436,unknown,Chronic hepatitis allowed Renal,1,0.9922,1,1.0,1.0,0.6,1.0,0.7,1.0,1.0,low_confidence
+NCT01557101_9,NCT01557101,exclusion,Renal failure.,1,0.9922,1,1.0,0.0,0.6,1.0,0.8,0.0,1.0,disagree
+NCT00380029_16,NCT00380029,unknown,No contraindication to erlotinib hydrochloride or other tyrosine kinase inhibitors,1,0.994,1,1.0,0.0,0.85,0.0,0.65,0.0,0.0,disagree
+NCT04169672_16,NCT04169672,inclusion,"Male or females patients with reproductive potential must agree to use an effective contraceptive method, for example, double-barrier device, condom, oral or injected birth control medication or intrauterine device, during the study and within 90 days after study treatment discontinuation. All female patients are considered to be fertile, unless the patient had natural menopause or artificial menopause or sterilization (such as hysterectomy, bilateral oophorectomy or ovarian irradiation).",1,0.921,0,0.0,0.0,0.85,0.0,0.9,0.0,0.0,disagree
+NCT02054052_2,NCT02054052,inclusion,Symptomatic MPE evaluated by researchers,1,0.8366,0,0.0,0.0,0.7,0.0,0.65,0.0,0.0,disagree
+NCT04491123_10,NCT04491123,exclusion,refusal of patient to receive intrathecal analgesia,1,0.9988,1,0.9999,1.0,0.85,0.0,0.9,1.0,0.0,disagree
+NCT01152645_14,NCT01152645,exclusion,Pregnant or lactating,1,0.8057,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00634426_9,NCT00634426,exclusion,Patients with a tumor that has compressed only the cauda equina or spinal roots,1,0.9587,1,1.0,1.0,0.7,1.0,0.75,1.0,1.0,low_confidence
+NCT06754501_22,NCT06754501,inclusion,"Negative hepatitis C virus (HCV) antibody test at screening, or positive HCV antibody test followed by a negative HCV RNA test at screening \- The HCV RNA test will be performed only for patients who have a positive HCV antibody test.",1,1.0,1,0.9999,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01481129_21,NCT01481129,inclusion,Nasogastric or G-tube administration is not allowed,1,1.0,1,0.9999,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT00499122_29,NCT00499122,exclusion,Known hypersensitivity to any of the components of NOV-002 or to any of the study drugs.,1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT03317119_32,NCT03317119,exclusion,History of Gilbert's syndrome,1,0.8619,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT05278039_18,NCT05278039,exclusion,Indwelling tracheostomy tube,1,0.9987,1,0.9983,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT03276702_4,NCT03276702,exclusion,Diagnosis of a non-solid tumor malignancy.,1,0.9263,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT00951496_4,NCT00951496,inclusion,"Absolute neutrophil count (ANC) greater than or equal to 1,500/mcl, equivalent to Common Terminology Criteria for Adverse Events v3.0 (CTCAE) grade 1; this ANC cannot have been induced or supported by granulocyte colony stimulating factors",1,1.0,1,1.0,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT00017394_27,NCT00017394,inclusion,Urine protein less than 500 mg by 24-hour urine collection,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01030536_17,NCT01030536,exclusion,"Any history of prior pseudomonas-exotoxin immunotoxin administration including CAT-8015, CAT-3888, or LMB-2",1,0.9997,1,1.0,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT02110706_10,NCT02110706,exclusion,"A history of chronic degenerative, psychiatric, or neurologic disorder other than MG that can produce weakness or fatigue.",0,0.0698,1,1.0,0.0,0.75,1.0,0.75,0.0,1.0,low_confidence
+NCT05453799_33,NCT05453799,inclusion,Subjects with a prior or concurrent malignancy whose natural history or treatment does not have the potential to interfere with the safety or efficacy assessment of the investigational regimen for this trial are eligible,1,0.998,1,1.0,0.0,0.95,0.0,0.85,0.0,0.0,disagree
+NCT03049618_17,NCT03049618,inclusion,Female subjects of childbearing potential must be willing to use an adequate method of contraception for the course of the study through 120 days after the last dose of study medication,0,0.0,0,0.1544,0.0,0.7,0.0,0.95,0.0,0.0,low_confidence
+NCT03465527_2,NCT03465527,inclusion,Patients planning R-CHOP chemotherapy,1,1.0,1,1.0,1.0,0.85,0.0,0.8,1.0,0.0,disagree
+NCT03044977_16,NCT03044977,exclusion,"Patients for whom, in the opinion of their physician, a 24-hour discontinuation of somatostatin analogue therapy represents a health risk.",1,1.0,1,0.9978,0.0,0.95,0.0,0.9,0.0,0.0,disagree
+NCT04217473_19,NCT04217473,exclusion,"History of hepatic dysfunction, hepatitis or HIV.",1,0.9547,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT02849366_6,NCT02849366,exclusion,"Patients with grade 3 hypertension or diabetic complication, severe cardiac and pulmonary dysfunction",1,0.9999,1,1.0,0.0,0.65,1.0,0.75,0.0,1.0,disagree
+NCT05051722_72,NCT05051722,exclusion,Known current synchronous endometrial cancer or hyperplasia,0,0.0016,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,disagree
+NCT00869570_15,NCT00869570,unknown,Is compliant and geographic proximity allows for proper staging and follow-up,0,0.0,0,0.0,0.0,0.95,0.0,0.95,0.0,0.0,ok
+NCT04439188_2,NCT04439188,inclusion,"Patients must have complete loss of cytoplasmic and nuclear PTEN staining on immunohistochemistry as determined by the MATCH PTEN immunohistochemistry (IHC) assay performed at MD Anderson. Patients can have any PTEN mutation or deletion status, but MUST have PTEN loss by IHC",1,0.9758,1,0.9986,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT05116709_17,NCT05116709,exclusion,active hepatitis B;,1,0.8487,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT04418089_0,NCT04418089,inclusion,LABC IIIA-IIIC TNM / AJCC 2018 with histopathological examination.,1,0.9955,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
 NCT05561387_13,NCT05561387,inclusion,"For Participants Meeting ""Frail"" Status:",1,0.8271,1,0.9999,,,,,,,disagree
-NCT02843074_8,NCT02843074,inclusion,Serum free light chain assay: involved free light chain level ≥10 mg/dL (≥100 mg/L) provided the serum free light chain ratio is abnormal.,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT00227539_23,NCT00227539,unknown,Able to take folic acid or vitamin B\_12 supplements,0,0.0,0,0.1156,0.0,0.8,0.0,0.85,,,ok
-NCT05677919_59,NCT05677919,exclusion,New York Heart Association (NYHA) Class III or IV or symptomatic congestive heart failure.,1,0.9957,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00634426_7,NCT00634426,exclusion,Primary cancer site in CNS or spine,1,0.9981,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT00128297_4,NCT00128297,inclusion,"Performance status 0, I or II in World Health Organization (WHO) scale.",1,0.8838,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT02584309_35,NCT02584309,exclusion,"Uncontrolled intercurrent illness including, but not limited to, ongoing or active infection, symptomatic congestive heart failure, or psychiatric illness/social situations that would limit compliance with study requirements.",0,0.0,1,0.5562,0.0,0.95,0.0,0.85,,,disagree
-NCT02058953_7,NCT02058953,inclusion,FFPE tissue block containing a biopsy from the primary site available for retrieval.,0,0.0123,1,1.0,1.0,0.9,1.0,0.85,,,disagree
-NCT05007652_8,NCT05007652,exclusion,Patients with hypersensitivity to G-CSF or plerixafor,1,0.998,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT03784755_18,NCT03784755,exclusion,Previously diagnosed recurrent/metastatic disease which has been already treated with any systemic therapy or radiotherapy with palliative intent.,1,0.9999,1,1.0,1.0,0.8,1.0,0.9,,,ok
-NCT00642954_8,NCT00642954,exclusion,Has prior treatment with a histone deacetylase (HDAC) inhibitor,1,0.9998,1,1.0,1.0,0.95,1.0,0.9,,,ok
-NCT04625907_106,NCT04625907,inclusion,Active inflammation of the urinary bladder (cystitis),1,0.6519,1,0.9744,1.0,0.8,1.0,0.8,,,ok
-NCT02360839_1,NCT02360839,exclusion,Referral for an interventional EUS,0,0.4644,1,0.8921,1.0,0.85,1.0,0.85,,,disagree
-NCT00091039_27,NCT00091039,unknown,Systemic lupus erythematosus,1,0.5677,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT04435444_11,NCT04435444,exclusion,"currently in psychotherapeutic treatment. Symptoms of anxiety and depression are common among patients with stage III or IV cancer. Antidepressants, anxiolytics, and other psychotropic medications do not diminish the effects of psychotherapy; thus we will not exclude patients who are being treated with these medications, as long as they are not in psychotherapy.",1,0.9388,1,1.0,1.0,0.8,1.0,0.7,,,low_confidence
-NCT06558604_56,NCT06558604,exclusion,"Pregnant, planning to become pregnant or lactating WOCBP.",0,0.2354,1,1.0,1.0,0.75,0.0,0.8,,,disagree
-NCT04722575_11,NCT04722575,exclusion,"Currently receiving cancer therapy (chemotherapy, radiation therapy, immunotherapy, or biologic therapy) or investigational anti-cancer drug; \*",1,0.9999,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT05275777_29,NCT05275777,exclusion,"History of life-threatening hypersensitivity or known to be allergic to protein drugs or recombinant proteins or any ingredients contained in the ADG106 drug formulation (succinic acid, arginine, polysorbate 80 and hydrochloric acid).",1,0.9998,1,1.0,1.0,0.85,1.0,0.82,,,ok
-NCT06341907_17,NCT06341907,exclusion,Patients who are participating in or have participated in other clinical trials within 1 month;,1,1.0,1,0.9999,1.0,0.85,1.0,0.8,,,ok
-NCT05726864_2,NCT05726864,inclusion,Screening CT is negative for recurrent disease,1,1.0,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT04245839_12,NCT04245839,exclusion,History of or active human immunodeficiency virus (HIV),1,0.9941,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT03363399_5,NCT03363399,exclusion,"Suspicion of hematological disease other than MDS requiring bone marrow aspirate and/or biopsy (i.e., acute leukemia,…);",1,0.722,1,1.0,0.0,0.65,0.0,0.65,,,disagree
-NCT05816252_19,NCT05816252,exclusion,Subjects with a history of interstitial lung disease (ILD)/non-infectious pneumonitis that required steroids;,1,0.9993,1,1.0,1.0,0.85,1.0,0.85,,,ok
+NCT02843074_8,NCT02843074,inclusion,Serum free light chain assay: involved free light chain level ≥10 mg/dL (≥100 mg/L) provided the serum free light chain ratio is abnormal.,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT00227539_23,NCT00227539,unknown,Able to take folic acid or vitamin B\_12 supplements,0,0.0,0,0.1156,0.0,0.8,0.0,0.85,0.0,0.0,ok
+NCT05677919_59,NCT05677919,exclusion,New York Heart Association (NYHA) Class III or IV or symptomatic congestive heart failure.,1,0.9957,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00634426_7,NCT00634426,exclusion,Primary cancer site in CNS or spine,1,0.9981,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT00128297_4,NCT00128297,inclusion,"Performance status 0, I or II in World Health Organization (WHO) scale.",1,0.8838,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT02584309_35,NCT02584309,exclusion,"Uncontrolled intercurrent illness including, but not limited to, ongoing or active infection, symptomatic congestive heart failure, or psychiatric illness/social situations that would limit compliance with study requirements.",0,0.0,1,0.5562,0.0,0.95,0.0,0.85,0.0,0.0,disagree
+NCT02058953_7,NCT02058953,inclusion,FFPE tissue block containing a biopsy from the primary site available for retrieval.,0,0.0123,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,disagree
+NCT05007652_8,NCT05007652,exclusion,Patients with hypersensitivity to G-CSF or plerixafor,1,0.998,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT03784755_18,NCT03784755,exclusion,Previously diagnosed recurrent/metastatic disease which has been already treated with any systemic therapy or radiotherapy with palliative intent.,1,0.9999,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,ok
+NCT00642954_8,NCT00642954,exclusion,Has prior treatment with a histone deacetylase (HDAC) inhibitor,1,0.9998,1,1.0,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT04625907_106,NCT04625907,inclusion,Active inflammation of the urinary bladder (cystitis),1,0.6519,1,0.9744,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT02360839_1,NCT02360839,exclusion,Referral for an interventional EUS,0,0.4644,1,0.8921,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT00091039_27,NCT00091039,unknown,Systemic lupus erythematosus,1,0.5677,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT04435444_11,NCT04435444,exclusion,"currently in psychotherapeutic treatment. Symptoms of anxiety and depression are common among patients with stage III or IV cancer. Antidepressants, anxiolytics, and other psychotropic medications do not diminish the effects of psychotherapy; thus we will not exclude patients who are being treated with these medications, as long as they are not in psychotherapy.",1,0.9388,1,1.0,1.0,0.8,1.0,0.7,1.0,1.0,low_confidence
+NCT06558604_56,NCT06558604,exclusion,"Pregnant, planning to become pregnant or lactating WOCBP.",0,0.2354,1,1.0,1.0,0.75,0.0,0.8,1.0,0.0,disagree
+NCT04722575_11,NCT04722575,exclusion,"Currently receiving cancer therapy (chemotherapy, radiation therapy, immunotherapy, or biologic therapy) or investigational anti-cancer drug; \*",1,0.9999,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT05275777_29,NCT05275777,exclusion,"History of life-threatening hypersensitivity or known to be allergic to protein drugs or recombinant proteins or any ingredients contained in the ADG106 drug formulation (succinic acid, arginine, polysorbate 80 and hydrochloric acid).",1,0.9998,1,1.0,1.0,0.85,1.0,0.82,1.0,1.0,ok
+NCT06341907_17,NCT06341907,exclusion,Patients who are participating in or have participated in other clinical trials within 1 month;,1,1.0,1,0.9999,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT05726864_2,NCT05726864,inclusion,Screening CT is negative for recurrent disease,1,1.0,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT04245839_12,NCT04245839,exclusion,History of or active human immunodeficiency virus (HIV),1,0.9941,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT03363399_5,NCT03363399,exclusion,"Suspicion of hematological disease other than MDS requiring bone marrow aspirate and/or biopsy (i.e., acute leukemia,…);",1,0.722,1,1.0,0.0,0.65,0.0,0.65,0.0,0.0,disagree
+NCT05816252_19,NCT05816252,exclusion,Subjects with a history of interstitial lung disease (ILD)/non-infectious pneumonitis that required steroids;,1,0.9993,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
 NCT02080052_2,NCT02080052,inclusion,"must have one of the following ""high risk"" features:",1,0.9834,1,1.0,,,,,,,disagree
-NCT01967043_9,NCT01967043,inclusion,Subjects who are not currently taking prohibited medication,1,1.0,1,1.0,0.0,0.5,1.0,0.7,,,disagree
-NCT02750202_2,NCT02750202,inclusion,HIV negative or HIV infected and CD4 ≥ 300 cells/mm3 OR viral load controlled OR anti retro-viral (ARV) compliant > 6 months,1,1.0,1,0.9981,1.0,0.8,1.0,0.8,,,ok
-NCT05455918_3,NCT05455918,inclusion,Higher than stage II (stage I should be excluded),0,0.0032,1,1.0,1.0,0.85,1.0,0.9,,,disagree
-NCT06235983_9,NCT06235983,exclusion,"Have an active fungal, bacterial, and/or active untreated viral infection,",0,0.0015,1,1.0,0.0,0.65,1.0,0.75,,,low_confidence
-NCT04689945_7,NCT04689945,exclusion,Presence of a malignancy history on the other breast,0,0.2426,1,1.0,1.0,0.85,1.0,0.9,,,disagree
-NCT00773448_3,NCT00773448,inclusion,Pulmonary embolism is defined as: patients with a high/intermediate pre-test probability (Wells' model > 4) + high probability V/Q scan; positive pulmonary angiogram; or spiral CT demonstrating intraluminal filling defect in a vessel larger than a segmental artery,1,1.0,1,0.9987,1.0,0.85,1.0,0.85,,,ok
-NCT06137144_8,NCT06137144,exclusion,Any significant laboratory finding or any severe and uncontrolled medical condition.,0,0.0,0,0.1539,0.0,0.95,0.0,0.7,,,low_confidence
-NCT05483166_2,NCT05483166,inclusion,Not terminally ill,1,0.991,1,0.992,0.0,0.6,0.0,0.7,,,disagree
-NCT06906237_0,NCT06906237,inclusion,Patients treated with BCS combined with CWPFs for primary stage I-III invasive cancer (IC) or ductal carcinoma in situ (DCIS);,1,0.9999,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT00492544_20,NCT00492544,exclusion,Subject planning to become pregnant or planning to discontinue contraceptive precautions.,0,0.0035,0,0.0006,0.0,0.95,0.0,0.99,,,ok
-NCT04890171_6,NCT04890171,exclusion,Multiple gastric cancers,0,0.0,1,1.0,1.0,0.75,1.0,0.85,,,disagree
-NCT05990738_7,NCT05990738,exclusion,Previous treatment in this trial.,1,0.9982,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT01130142_2,NCT01130142,inclusion,At least 1 radiologically evaluable metastatic lesion (RECIST 1.1).,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT01850524_22,NCT01850524,exclusion,"Comorbid systemic illnesses or other severe concurrent disease which, in the judgment of the investigator, would make the participant inappropriate for entry into this study or interfere significantly with the proper assessment of safety and toxicity of the prescribed regimens (e.g., peripheral neuropathy that is Grade 1 with pain or Grade 2 or higher of any cause).",1,0.5307,1,1.0,0.0,0.85,0.0,0.8,,,disagree
-NCT05182164_5,NCT05182164,inclusion,"No more of three previous lines of systemic therapy for advanced disease,",1,0.7627,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT01404156_0,NCT01404156,inclusion,adenocarcinoma of esophagus or gastroesophageal junction; -cT1N1-3 or T2-4Nx; M0 by American Joint Committee on Cancer (AJCC) 7th Edition staging classification,1,1.0,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT00748891_4,NCT00748891,exclusion,Patients with hormone refractory prostate cancer (HRPC),1,0.6339,1,1.0,1.0,0.75,1.0,0.8,,,low_confidence
-NCT00199043_1,NCT00199043,inclusion,patients of the GMALL-Study 07/2003,1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT02854644_1,NCT02854644,inclusion,breast cancer or glioma,1,0.9988,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT01334502_28,NCT01334502,unknown,Symptomatic congestive heart failure,1,0.806,1,1.0,0.0,0.8,0.0,0.6,,,disagree
-NCT06121700_42,NCT06121700,exclusion,"Patients with central nervous system (CNS) disorders or tumors, including brain metastases, peripheral nervous system disorders or psychiatric diseases.",0,0.111,1,1.0,0.0,0.6,1.0,0.8,,,low_confidence
-NCT04630756_47,NCT04630756,exclusion,Active CMV infection.,1,0.9501,1,1.0,1.0,0.75,1.0,0.8,,,low_confidence
-NCT00975182_4,NCT00975182,inclusion,Agreement to use an effective form of contraception for the duration of the study,0,0.0,0,0.0055,0.0,0.9,0.0,0.95,,,ok
-NCT06431490_5,NCT06431490,inclusion,"Non-operable locally advanced, recurrent and/or metastatic disease with at least one measurable lesion according to Evaluation criteria for the efficacy of solid tumors (RECIST) 1.1 criteria;",0,0.0,1,0.9999,1.0,0.85,1.0,0.85,,,disagree
-NCT03494400_9,NCT03494400,exclusion,Accumulate three consecutive absences or four non-consecutive absences in presential training during the month;,1,1.0,1,1.0,1.0,0.85,0.0,0.75,,,disagree
-NCT00936741_14,NCT00936741,exclusion,Thickened endometrium on the Entry Visit transvaginal ultrasound that has not resolved after induction of menstrual bleeding with progesterone.,1,0.9998,1,1.0,0.0,0.6,1.0,0.8,,,disagree
-NCT00423930_8,NCT00423930,exclusion,Prior chemotherapy or radiation therapy for HNSCC,1,0.999,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT01239381_4,NCT01239381,inclusion,Expected survival must be greater than three months,0,0.0,0,0.0,0.0,0.95,0.0,1.0,,,ok
-NCT01048762_5,NCT01048762,exclusion,cannot perform walking test due to physical impairment,1,0.5954,1,0.681,1.0,0.7,0.0,0.6,,,disagree
-NCT01536054_0,NCT01536054,inclusion,"Eligible patients will be women with stages II-IV epithelial ovarian, fallopian tube, or primary peritoneal carcinoma who have completed standard therapy for primary or recurrent disease (i.e., patients who would normally be observed); eligible patients may have asymptomatic residual measurable disease on physical examination and/or computed tomography (CT) scan, and/or may have an elevated cancer antigen 125 (CA-125); or may be in complete clinical remission after treatment for primary or recurrent disease; these patients would normally enter a period of observation after standard management",1,1.0,1,1.0,1.0,0.75,1.0,0.85,,,low_confidence
-NCT00002561_11,NCT00002561,unknown,"Cardiac disease defined as symptomatic congestive heart failure or coronary artery disease, known valvular (other than asymptomatic mitral valve prolapse) or congenital heart disease (other than asymptomatic atrial septal defects) or need for cardiac medications. Hypertension controlled with drug therapy is not an exclusion criterion.",0,0.0003,1,1.0,1.0,0.75,1.0,0.75,,,disagree
-NCT00475085_1,NCT00475085,inclusion,"Must be scheduled to receive a chemotherapy treatment containing doxorubicin hydrochloride, epirubicin hydrochloride, cisplatin, carboplatin, or oxaliplatin (any dose or schedule) without concurrent radiotherapy or interferon treatment",0,0.0008,1,1.0,1.0,0.95,1.0,0.85,,,disagree
-NCT07254091_3,NCT07254091,inclusion,Patients must be a candidate for pancreatoduodenectomy or pancreatectomy,0,0.118,1,0.9963,0.0,0.7,0.0,0.65,,,disagree
-NCT05355987_10,NCT05355987,exclusion,History of psychological or sensorial disorder or anomaly that can prevent the patient from understanding the conditions for study participation,1,0.8052,1,1.0,0.0,0.85,0.0,0.65,,,disagree
-NCT06863259_12,NCT06863259,inclusion,"Adequate Renal Function Defined As: • An estimated GFR of 50 mL/min/1.73m2 as determined by the Levey formula (see appendix C), cystatin C, or radioisotope determination.",1,0.9723,0,0.0022,1.0,0.95,1.0,0.95,,,disagree
-NCT03210337_12,NCT03210337,exclusion,"Subject has any current skin disease (e.g., psoriasis, atopic dermatitis, eczema, sun damage), or condition (e.g., sunburn, excessive hair, open wounds) that, in the opinion of the investigator, might put the subject at undue risk by study participation or interfere with the study conduct or evaluations.",0,0.0009,1,1.0,0.0,0.95,0.0,0.8,,,disagree
-NCT01639820_7,NCT01639820,exclusion,"Neuroendocrine carcinoma,",0,0.0,1,1.0,1.0,0.95,1.0,0.95,,,disagree
-NCT07311577_30,NCT07311577,exclusion,PR interval > 0.24 s or 2nd/3rd-degree AV block.,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT02843074_1,NCT02843074,inclusion,"Ideally, no prior therapy, or",0,0.4544,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT00035165_17,NCT00035165,exclusion,HIV+ patients,1,0.9942,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT03704662_17,NCT03704662,exclusion,Prior radiotherapy to the region of the study cancer that would result in overlap of radiation therapy fields.,1,0.9445,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT00364195_10,NCT00364195,exclusion,Pregnant and breast-feeding females.,1,0.8298,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT04936997_11,NCT04936997,exclusion,Speaks a language other than English.,1,0.9846,1,0.9997,1.0,0.75,1.0,0.75,,,low_confidence
-NCT02639546_14,NCT02639546,exclusion,Impaired gastrointestinal absorption,0,0.3605,1,1.0,0.0,0.85,0.0,0.6,,,disagree
-NCT00392769_20,NCT00392769,exclusion,Presence of clinically apparent untreated central nervous system metastases.,0,0.0002,1,1.0,0.0,0.7,1.0,0.75,,,low_confidence
-NCT00002720_2,NCT00002720,unknown,Estrogen receptor positive,1,1.0,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT00759928_29,NCT00759928,unknown,Use of ketoconazole and other potent inhibitors of CYP3A4 are not permitted from Day -14 through Day 15 of the study (see Appendix C).,1,1.0,1,0.9999,1.0,0.9,1.0,0.85,,,ok
-NCT05083338_6,NCT05083338,exclusion,Patients cognitive or neurologically unable to complete questionnaires preoperatively,1,0.9646,0,0.1826,0.0,0.7,0.0,0.6,,,disagree
-NCT06838273_33,NCT06838273,exclusion,Had autologous or allogeneic stem cell transplantation history;,1,0.9999,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT06551051_6,NCT06551051,exclusion,"peripheral neurotoxicity of grade 2 or higher has occurred with platinum-containing paclitaxel chemotherapy prior to prior ADC class administration, and the toxicity has not significantly worsened before or after ADC administration;",1,0.9304,1,1.0,0.0,0.6,1.0,0.6,,,disagree
-NCT05785754_23,NCT05785754,unknown,"Major surgery within 4 weeks and minor surgery within 2 weeks of the first dose of study drug; following surgeries, all surgical wounds must be healed and free of infection or dehiscence. Patients must have recovered and not have ongoing surgical complications.",1,1.0,1,1.0,0.0,0.7,1.0,0.7,,,disagree
-NCT02621879_1,NCT02621879,inclusion,Patients included presented with recurrence of pilonidal disease at least six months after the first operation.,0,0.4392,1,0.9999,1.0,0.9,1.0,0.85,,,disagree
-NCT02109926_7,NCT02109926,exclusion,Who has a legal guardian,1,1.0,1,0.9996,1.0,0.8,1.0,0.8,,,ok
-NCT04827953_19,NCT04827953,exclusion,History of interstitial lung disease,1,0.9177,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT02491957_1,NCT02491957,inclusion,Must have completed local therapy for their breast cancer,0,0.2882,1,1.0,1.0,0.7,1.0,0.8,,,disagree
-NCT03375515_7,NCT03375515,inclusion,Without a history of anaphylaxis of narcotic drugs.,1,0.687,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT01641562_5,NCT01641562,exclusion,Diabetes mellitus,0,0.0512,1,1.0,1.0,0.8,1.0,0.9,,,disagree
-NCT00103363_12,NCT00103363,unknown,Not specified Endocrine therapy,1,0.9996,1,1.0,1.0,0.7,1.0,0.8,,,low_confidence
-NCT04987788_2,NCT04987788,inclusion,Received a physician referral for a screening colonoscopy;,1,1.0,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT00003538_13,NCT00003538,unknown,Chronic myelogenous leukemia,1,0.9996,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT05681650_10,NCT05681650,exclusion,"1\. Active, known or suspected autoimmune diseases.",1,0.995,1,1.0,0.0,0.7,1.0,0.75,,,disagree
-NCT00074737_13,NCT00074737,exclusion,"Subjects receiving other anti-leukemia investigational agents (i.e., unapproved drugs). However, individual cases will be considered on a case-by-case basis for other investigational agents (e.g., antibiotics, antifungals).",1,0.9115,1,1.0,0.0,0.7,1.0,0.75,,,disagree
-NCT00817518_2,NCT00817518,inclusion,any solid tumor type (Part 1); malignant melanoma or other responsive tumor type (Part 2);,0,0.0055,1,1.0,1.0,0.75,1.0,0.8,,,disagree
-NCT00066729_14,NCT00066729,inclusion,Lack of availability for immunological and clinical follow-up assessments.,1,0.9999,1,0.9999,0.0,0.85,0.0,0.9,,,disagree
-NCT07283822_3,NCT07283822,inclusion,Arm 3: exploratory cohort Classic HL PMBCL GZL,1,0.9999,1,1.0,1.0,0.75,1.0,0.75,,,low_confidence
-NCT00314977_14,NCT00314977,exclusion,"Serious other diseases as recent myocardial infarction, clinical signs of cardiac failure or clinically significant arrythmias",0,0.0,1,1.0,0.0,0.85,0.0,0.7,,,disagree
-NCT06536413_11,NCT06536413,exclusion,Plasma Cell Leukemia (Previously treated Plasma Cell Leukemia can be included per PI discretion),0,0.0013,1,1.0,1.0,0.75,1.0,0.8,,,disagree
-NCT03223428_5,NCT03223428,exclusion,Unable to access the internet,0,0.1035,0,0.0,0.0,0.6,0.0,0.9,,,low_confidence
-NCT05749900_32,NCT05749900,exclusion,Patients who have undergone surgery involving local or topical anesthesia within 14 days before enrollment,1,1.0,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT00839722_18,NCT00839722,exclusion,diffuse adenomyosis as the dominant disease,0,0.0001,1,0.9999,0.0,0.6,0.0,0.6,,,disagree
-NCT00301730_3,NCT00301730,unknown,Pulmonary metastases progressed after prior allogeneic SCT,1,0.8434,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT04739813_50,NCT04739813,exclusion,"Known allergy to both xanthine oxidase inhibitors and rasburicase; or, known hypersensitivity to any of the study drugs",1,0.9979,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00027898_7,NCT00027898,inclusion,"Absolute neutrophil count at least 1,500/mm\^3",1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01440088_39,NCT01440088,exclusion,Females who are pregnant or breast-feeding,1,0.9999,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT00778167_20,NCT00778167,inclusion,No poorly controlled diabetes mellitus,0,0.0,1,1.0,0.0,0.85,0.0,0.6,,,disagree
-NCT03550391_28,NCT03550391,exclusion,"Current use of NMDA antagonists, such as amantadine, ketamine, or dextromethorphan.",1,0.9924,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT00004232_6,NCT00004232,unknown,Not specified Renal:,1,0.9996,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT00003890_32,NCT00003890,unknown,No other concurrent investigational drug or anticancer therapy,1,0.9913,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT04629326_8,NCT04629326,exclusion,5\. Suffering from claustrophobia or other mental diseases;,1,0.754,1,1.0,0.0,0.7,1.0,0.65,,,disagree
-NCT01064635_17,NCT01064635,exclusion,"Patients with other non-malignant systemic diseases (cardiovascular, renal, hepatic, lung embolism, etc.) which would prevent prolonged follow-up.",0,0.004,1,1.0,0.0,0.95,0.0,0.8,,,disagree
-NCT05796089_15,NCT05796089,inclusion,have a negative pregnancy test prior at registration if of child bearing potential or have evidence of non-child bearing potential by fulfilling the criteria as stated in the Protocol at screening,1,0.9999,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT05554367_22,NCT05554367,inclusion,"COHORT 2: If patient has previously received binimetinib, they cannot have required dose reduction or discontinuation of binimetinib due to adverse events",1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT01596790_13,NCT01596790,exclusion,refusal to participate,1,0.8223,1,0.593,1.0,0.8,0.0,0.95,,,disagree
-NCT06828224_25,NCT06828224,exclusion,Hypersensitivity to gram positive bacterial proteins as hyaluronic acid is produced by Streptococcus type bacteria.,1,0.9806,1,1.0,0.0,0.6,1.0,0.7,,,disagree
-NCT03635892_47,NCT03635892,exclusion,Other clinically significant disorders that would preclude safe study participation,0,0.0,0,0.0,0.0,1.0,0.0,0.9,,,ok
-NCT00545766_6,NCT00545766,inclusion,"Adequate bone marrow function, defined by: white blood cells >=3,500/uL, hemoglobin >=8 g/dL, platelet count >=100,000/uL.",1,1.0,1,0.993,1.0,1.0,1.0,1.0,,,ok
-NCT01621854_10,NCT01621854,inclusion,"Female participants must be postmenopausal (12 months of amenorrhea), surgically sterile or they must agree to use a physical method of contraception. Oral or injectable contraceptive agents cannot be the sole method of contraception. Male participants must be surgically sterile or agree to use a barrier method of contraception.",0,0.0003,0,0.0,0.0,0.85,0.0,0.85,,,ok
-NCT05070403_3,NCT05070403,inclusion,ANC ≥ 1.0 × 109/L;,1,1.0,1,0.9995,1.0,1.0,1.0,1.0,,,ok
-NCT00496509_26,NCT00496509,exclusion,Involvement in the planning or conduct of the study.,1,0.9838,0,0.0002,0.0,0.7,0.0,0.75,,,disagree
-NCT02835391_7,NCT02835391,exclusion,Subject has a medical history of abnormal coagulopathy or bleeding,1,0.7418,1,1.0,1.0,0.75,1.0,0.85,,,low_confidence
-NCT04440267_7,NCT04440267,exclusion,Patients who are: (a) pregnant and (b) breast feeding.,1,0.9996,1,1.0,1.0,0.85,1.0,0.8,,,ok
-NCT02243267_18,NCT02243267,inclusion,"Not prepped for colonoscopy or surgery at the time of blood draw 5.3.4 New Diagnosis of Rectal Adenocarcinoma (untreated, new rectal CA)",1,1.0,1,1.0,1.0,0.75,0.0,0.65,,,disagree
-NCT06959563_6,NCT06959563,exclusion,TB positive participant is positive IGRA blood test with TB antigens,1,1.0,1,0.9999,1.0,0.95,1.0,0.95,,,ok
-NCT02324998_2,NCT02324998,inclusion,Patients suitable for radical prostatectomy,0,0.0,1,0.9979,0.0,0.8,0.0,0.7,,,disagree
-NCT07034495_7,NCT07034495,exclusion,Patients who underwent combined or staged surgical procedures unrelated to the HPB domain,1,1.0,1,1.0,1.0,0.7,1.0,0.8,,,low_confidence
-NCT04169672_47,NCT04169672,exclusion,"Previously allergic to any of the JS001 or Surufatinib ingredients, or monoclonal antibody;",1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT06888921_18,NCT06888921,exclusion,Is currently participating in or have participated in a clinical study and received an investigational agent or used an investigational device within 4 weeks prior to the first dose of study treatment.,1,1.0,0,0.0058,1.0,0.85,1.0,0.8,,,disagree
-NCT06056752_25,NCT06056752,exclusion,Other reasons deemed by the investigator to be unsuitable for the clinical trial.,0,0.0071,0,0.0124,0.0,1.0,0.0,1.0,,,ok
-NCT00427765_11,NCT00427765,exclusion,Patients with active Central Nervous System (CNS) disease.,1,0.6553,1,1.0,0.0,0.6,1.0,0.75,,,disagree
-NCT02393859_15,NCT02393859,exclusion,Known hypersensitivity to immunoglobulins or any of the products or components to be administered during dosing (excluding asparaginase),1,0.9994,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT04883125_5,NCT04883125,exclusion,Patients with severe organ dysfunction,0,0.0036,1,1.0,0.0,0.95,0.0,0.8,,,disagree
-NCT00063388_3,NCT00063388,inclusion,Subjects with tumor tissue available for EGFR assessment,1,0.9998,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT03420742_1,NCT03420742,inclusion,Eastern cooperative Oncology Group (ECOG) performance status of 0 or 1.,1,1.0,1,1.0,1.0,1.0,1.0,0.9,,,ok
-NCT01708954_24,NCT01708954,inclusion,Patients must have recovered to baseline (pre-Step 1) or CTCAE version 4.0 <= grade 1 from toxicity due to all prior therapies except alopecia and other non-clinically significant AEs,1,0.9945,1,1.0,0.0,0.6,0.0,0.65,,,disagree
-NCT01627041_21,NCT01627041,exclusion,Cumulative lifetime dose of anthracycline chemotherapeutic > 80 mg/m\^2,1,1.0,1,1.0,1.0,0.9,1.0,0.8,,,ok
-NCT05232084_1,NCT05232084,inclusion,Scheduled for mastectomy and axillary dissection surgery under general anesthesia,0,0.1412,1,0.9999,1.0,0.9,1.0,0.85,,,disagree
-NCT05980481_7,NCT05980481,inclusion,"HER2-expressing status determined by laboratory to be IHC 1+, 2+ or 3+ or IHC0.",1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT03370432_3,NCT03370432,exclusion,Previous or present cancer(s) at study entry,1,0.9999,1,1.0,1.0,0.8,1.0,0.9,,,ok
-NCT04622228_18,NCT04622228,exclusion,Active or history of autoimmune disease or immune deficiency,1,0.9936,1,1.0,1.0,0.75,1.0,0.85,,,low_confidence
-NCT01440088_17,NCT01440088,inclusion,Eastern Cooperative Oncology Group (ECOG) performance status of 0 or 1,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT02451215_14,NCT02451215,inclusion,"Teratoma, or",1,0.997,1,0.998,1.0,0.85,1.0,0.85,,,ok
-NCT06251115_31,NCT06251115,exclusion,Those who have a history of psychotropic drug abuse and cannot abstain or have a history of mental disorders,1,0.9999,1,1.0,0.0,0.6,1.0,0.7,,,disagree
-NCT00543504_18,NCT00543504,exclusion,"(For erlotinib and cetuximab treatment arm only) History of hypersensitivity to cetuximab, murine products, or any component of the formulation.",1,0.9999,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT02382653_3,NCT02382653,inclusion,who had breakthrough pain which met the criteria described by Portenoy.,1,1.0,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT06787053_12,NCT06787053,exclusion,Any contraindications to MRI identified after MRI safety screening including completion of an MRI Safety Screening Form.,0,0.0258,1,0.936,0.0,0.65,0.0,0.6,,,disagree
-NCT05005429_29,NCT05005429,exclusion,Patients with any serious underlying medical condition that might impair patient's capacity to participate in the trial.,0,0.0,0,0.0,0.0,0.95,0.0,0.85,,,ok
-NCT04510636_19,NCT04510636,exclusion,Patient has undergone prior allogeneic hematopoietic stem cell transplant.,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01339052_27,NCT01339052,exclusion,"Participants who have received anti-angiogenic or anti-VEGF targeted agents (e.g. bevacizumab, cediranib, aflibercept, vandetanib, XL184, sunitinib etc).",1,0.9999,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT06253520_11,NCT06253520,inclusion,Participants must have serology results as follows:,1,1.0,1,1.0,0.0,0.5,0.0,0.5,,,disagree
-NCT05320198_58,NCT05320198,exclusion,"Other medical or psychiatric condition or laboratory finding not specifically noted above that, in the judgment of the Investigator or Sponsor, would put the participant at unacceptable risk or otherwise preclude the participant from participating in the study",0,0.0012,0,0.0,0.0,1.0,0.0,1.0,,,ok
-NCT02503969_0,NCT02503969,inclusion,Participants in the South Yorkshire Cohort,1,1.0,1,0.9996,1.0,0.75,1.0,0.75,,,low_confidence
-NCT00613080_1,NCT00613080,unknown,Located up to 12 cm from the anal verge with no extension of malignant disease into the anal canal,1,0.9998,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00307086_8,NCT00307086,inclusion,Patients must have undergone a complete psychosocial evaluation and have been considered capable of compliance.,0,0.0,0,0.0,0.0,0.9,0.0,0.75,,,low_confidence
-NCT00310167_1,NCT00310167,unknown,Radiotherapy is indicated for curative treatment of stage IA or IIA disease OR palliation due to tumor bulk or anatomical position,1,0.9977,1,1.0,0.0,0.65,0.0,0.6,,,disagree
-NCT01041443_4,NCT01041443,inclusion,Newly diagnosed,1,1.0,1,1.0,1.0,0.7,1.0,0.8,,,low_confidence
-NCT02647476_5,NCT02647476,exclusion,severe malnutrition which required parenteral nutrition,0,0.0505,1,1.0,1.0,0.75,1.0,0.8,,,disagree
-NCT00499408_18,NCT00499408,unknown,Concurrent chemotherapy with nonstudy drugs,1,0.9014,1,1.0,1.0,0.8,1.0,0.9,,,ok
-NCT02546531_38,NCT02546531,exclusion,Gastrointestinal condition that could interfere with the swallowing or absorption of study medication.,1,0.8814,1,1.0,0.0,0.9,0.0,0.6,,,disagree
-NCT00273546_1,NCT00273546,inclusion,"2.Primary tumor sites eligible: oral cavity, oropharynx, hypopharynx, larynx. Although they are admittedly of squamous cell types, the following tumors will be excluded because their responsiveness to chemotherapy may differ: nasal, paranasal cavities; nasopharynx.",0,0.0024,1,1.0,1.0,0.9,1.0,0.9,,,disagree
-NCT03793361_3,NCT03793361,inclusion,Metastatic/locally advanced disease not amenable to surgical resection with curative intent,0,0.048,1,1.0,0.0,0.65,0.0,0.6,,,disagree
-NCT06151197_11,NCT06151197,unknown,"Has concurrent diseases that might interfere with the conduct of the study, confound the interpretation of the study results or endanger the participant's well-being, or any significant hematological, endocrine, cardiovascular, respiratory, renal, hepatic, or gastrointestinal disease. If there is a history of such disease but the condition has been stable for greater than 1 year and is judged by the investigator not to interfere with participation in the study, the participant may be included, with the documented approval of the medical monitor.",0,0.065,1,1.0,0.0,0.95,0.0,0.85,,,disagree
-NCT07439757_1,NCT07439757,inclusion,Scheduled to undergo contrast-enhanced CT.,1,0.9989,1,1.0,1.0,0.85,1.0,0.8,,,ok
-NCT00761696_4,NCT00761696,inclusion,Ability to follow the study and all protocol requirements.,0,0.0005,0,0.0001,0.0,0.95,0.0,0.9,,,ok
-NCT00861783_15,NCT00861783,exclusion,Use of any investigational agents within 4 weeks of study enrollment.,1,1.0,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT03638141_25,NCT03638141,exclusion,History of active primary immunodeficiency.,1,0.9992,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT05125016_4,NCT05125016,unknown,"Has received any previous systemic biologic or immune-modulating therapy (except for Sipuleucel-T) within 5 half-lives of first dose of study therapy, as described in the protocol",1,1.0,1,1.0,0.0,0.6,1.0,0.7,,,disagree
-NCT00198276_9,NCT00198276,exclusion,Subjects with tumors suspected of involving a 50% or greater encasement of a blood vessel as measured by magnetic resonance imaging (MRI) or computed tomography (CT) scan.,1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT01478373_5,NCT01478373,exclusion,Patients who have received any other tyrosine-kinase inhibitor but imatinib for GIST,1,0.9999,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT01153282_6,NCT01153282,exclusion,Pregnancy during chemotherapy treatment,0,0.0423,1,1.0,1.0,0.8,1.0,0.75,,,disagree
-NCT00574977_19,NCT00574977,exclusion,"Clinically significant and/or rapidly accumulating ascites, peri-cardial and/or pleural effusions",0,0.0,1,0.9999,0.0,0.85,1.0,0.75,,,low_confidence
-NCT07042581_6,NCT07042581,inclusion,"Reporting being bothered by vaginal symptoms of estrogen deprivation (i.e., vaginal dryness, dyspareunia, or discomfort \[pain with intercourse or examination\])",1,0.9162,1,0.9766,0.0,0.85,0.0,0.9,,,disagree
-NCT03213678_34,NCT03213678,inclusion,Patients with seizure disorder may be enrolled if on anticonvulsants and well controlled,0,0.0,1,0.9841,0.0,0.85,0.0,0.7,,,disagree
-NCT00070486_40,NCT00070486,unknown,No other concurrent chemotherapy Endocrine therapy,1,0.7643,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT01136824_1,NCT01136824,exclusion,There is no exclusion criteria,0,0.2244,1,0.9992,1.0,0.7,1.0,0.7,,,disagree
-NCT00376480_19,NCT00376480,unknown,Fertile patients must use effective contraception,0,0.0,1,0.9982,0.0,0.85,0.0,0.95,,,disagree
-NCT05965531_8,NCT05965531,exclusion,Complete obstruction or perforation,0,0.0089,1,1.0,1.0,0.8,1.0,0.8,,,disagree
-NCT00000994_0,NCT00000994,inclusion,"Acute treatment for mucocutaneous candidiasis, localized cutaneous herpes simplex, or localized or disseminated zoster infections. Concurrent Treatment: Allowed:",1,0.9999,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT04367675_48,NCT04367675,unknown,HIV infection.,1,0.9887,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT00423865_38,NCT00423865,unknown,No concurrent immunosuppressive agents,1,0.697,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT03801083_29,NCT03801083,exclusion,History of active coronary or ischemic symptoms.,1,0.8223,1,1.0,0.0,0.75,1.0,0.75,,,disagree
-NCT01460940_5,NCT01460940,inclusion,Nodular Lymphocyte-predominant Hodgkin's lymphoma,1,0.9997,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT06867588_9,NCT06867588,exclusion,Low quality of MRI defined by a PI-QUAL score of 1 or 2,1,0.9999,1,0.9991,1.0,0.95,1.0,0.9,,,ok
-NCT05962905_11,NCT05962905,exclusion,"An emergent, life threatening condition impacting study conduct",0,0.0,0,0.0,0.0,0.95,0.0,0.7,,,low_confidence
-NCT00331552_10,NCT00331552,inclusion,Be informed of the investigational nature of this study and provide written informed consent in accordance with institutional and federal guidelines prior to study specific screening procedures,0,0.0,0,0.0009,0.0,0.95,0.0,0.95,,,ok
-NCT06519708_1,NCT06519708,inclusion,Both sexes.,1,0.9999,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT03667443_1,NCT03667443,exclusion,Amenorrhea (3 months),1,1.0,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT06517901_8,NCT06517901,exclusion,Previous diagnosis of prostate cancer,1,0.9998,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01885637_6,NCT01885637,exclusion,Patients who have already been referred to an SPT,1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT01123811_28,NCT01123811,exclusion,"Previous exposure to monoclonal antibodies, signal transduction inhibitors or EGFR pathway targeting therapy;",1,0.998,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT01246843_23,NCT01246843,exclusion,systemic chemotherapy,0,0.2957,1,1.0,1.0,0.8,1.0,0.9,,,disagree
-NCT02049593_25,NCT02049593,exclusion,"Concurrent disease or condition that would interfere with study participation or safety, such as:",0,0.0034,0,0.0,0.0,0.95,0.0,0.9,,,ok
-NCT06758011_7,NCT06758011,exclusion,Not for use in power injectors.,1,0.9963,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT02067507_15,NCT02067507,inclusion,Adolescent male or female (12-13 years),1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT06278493_16,NCT06278493,exclusion,"Individuals who have experienced arterial/venous thrombosis events within 6 months, such as cerebrovascular accidents (including temporary ischemic attacks), deep vein thrombosis, and pulmonary embolism.",1,1.0,1,1.0,1.0,0.85,1.0,0.9,,,ok
-NCT01626352_11,NCT01626352,exclusion,Known anaphylaxis or sensitivity to ofatumumab.,1,0.9948,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT04513028_9,NCT04513028,exclusion,"Uncontrolled intercurrent illness including, but not limited to, autoimmune diseases, ongoing or active infection, symptomatic congestive heart failure, unstable angina pectoris, cardiac arrhythmia, or psychiatric illness/social situations that would limit compliance with study requirements",0,0.0,1,0.9988,0.0,0.95,0.0,0.85,,,disagree
-NCT02845908_11,NCT02845908,exclusion,Patients who have received previous chemotherapy for the treatment of metastatic or unresectable gastric or GEJ adenocarcinoma are ineligible;,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT05677919_5,NCT05677919,inclusion,"No prior CLL/SLL-directed therapy such as chemotherapy, immunotherapy, targeted therapy with small molecule inhibitors, radiation therapy, or cellular therapy.",1,0.5878,1,1.0,1.0,0.9,1.0,0.9,,,ok
-NCT00028600_8,NCT00028600,unknown,Not specified Hematopoietic:,0,0.3572,1,1.0,0.0,0.5,0.0,0.5,,,disagree
-NCT03184571_28,NCT03184571,exclusion,"Active autoimmune disease that had required systemic treatment in the past 2 years (ie, with use of disease modifying agents, corticosteroids, or immunosuppressive drugs);",1,1.0,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT00005985_8,NCT00005985,unknown,"No active ischemic or degenerative CNS disease NOTE: A new classification scheme for adult non-Hodgkin's lymphoma has been adopted by PDQ. The terminology of ""indolent"" or ""aggressive"" lymphoma will replace the former terminology of ""low"", ""intermediate"", or ""high"" grade lymphoma. However, this protocol uses the former terminology.",1,0.9999,1,1.0,0.0,0.7,0.0,0.6,,,disagree
-NCT00152906_1,NCT00152906,inclusion,"Liver metastases from colorectal cancer or other solid malignancy, confirmed pathologically",1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01074697_12,NCT01074697,exclusion,"The patient has been previously treated with radiotherapy, and/or chemotherapy, with exception of treatment with low voltage RT or electron RT for non-melanoma skin cancers .",1,0.9997,1,1.0,1.0,0.8,1.0,0.9,,,ok
-NCT00416494_9,NCT00416494,unknown,No unstable or poorly controlled hypertension (> 150/100 mm Hg),1,0.9999,1,1.0,1.0,0.85,1.0,0.8,,,ok
-NCT02868112_3,NCT02868112,inclusion,Planning to receive care at Massachusetts General Hospital (MGH),0,0.0022,0,0.0,0.0,0.7,0.0,0.95,,,low_confidence
-NCT00354549_3,NCT00354549,unknown,"Stage IIIB disease, meeting both of the following criteria: Proven malignant effusion or supraclavicular node involvement (i.e., N3 supraclavicular nodes) Not a candidate for curative multimodality treatment or surgery",1,1.0,1,1.0,0.0,0.75,0.0,0.7,,,disagree
-NCT02069561_15,NCT02069561,exclusion,Patients receiving systemic steroid in the two months prior to study entry,0,0.0188,1,1.0,1.0,0.85,1.0,0.85,,,disagree
-NCT02202252_2,NCT02202252,exclusion,Distant metastasis,0,0.0009,1,1.0,1.0,0.8,1.0,0.8,,,disagree
-NCT02156557_8,NCT02156557,exclusion,Subjects on active chemotherapy or radiation treatment,1,1.0,1,1.0,1.0,0.8,1.0,0.9,,,ok
-NCT02029430_16,NCT02029430,exclusion,Evidence of central nervous system (CNS) hemorrhage National Cancer Institute Common Terminology Criteria for Adverse Events (NCI CTCAE) version 4.0 (published 28 May 2009) grade 2 or greater on baseline MRI.,1,1.0,1,1.0,1.0,0.9,1.0,0.95,,,ok
-NCT00046852_14,NCT00046852,unknown,Mild to moderate pulmonary impairment (lower DLCO) allowed but patients would not receive study carmustine,1,0.9997,0,0.0166,0.0,0.6,0.0,0.6,,,disagree
-NCT00952731_7,NCT00952731,inclusion,Willingness to avoid exposing breast skin to natural or artificial sunlight (i.e. tanning beds) for the 4-10 weeks of study agent dosing.,1,1.0,1,0.9951,0.0,0.95,0.0,0.99,,,disagree
-NCT05727176_2,NCT05727176,inclusion,Received at least one prior systemic gemcitabine and platinum-based regimen for CCA,1,0.9784,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT00556049_25,NCT00556049,exclusion,Pregnancy or breastfeeding or inadequate contraception,0,0.0002,1,1.0,0.0,0.6,0.0,0.6,,,disagree
-NCT02968810_17,NCT02968810,exclusion,"History of adverse effects, intolerance, or allergic reactions attributed to compounds of similar chemical or biologic composition to simvastatin (i.e., other statin medications)",1,0.9542,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT00195533_3,NCT00195533,exclusion,Known allergy to any of the antibiotics used in this trial,1,0.9936,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT04454723_1,NCT04454723,inclusion,Patients wanting to enroll in hospice.,1,0.8261,1,0.5625,1.0,0.8,0.0,0.95,,,disagree
-NCT00038168_7,NCT00038168,inclusion,"Patients must have adequate bone marrow function defined as an absolute peripheral granulocyte count of > 1,500/mm3 and platelet count of > 100,000/mm3; adequate hepatic function defined with a bilirubin of < 1.5 mg% and SGOT (AST) < 2X the upper limits of normal; adequate renal function defined as serum creatinine clearance > 40 cc/min (measured or calculated).",1,1.0,1,0.9995,1.0,1.0,1.0,1.0,,,ok
-NCT04887506_30,NCT04887506,exclusion,"Receipt of another investigational agent within 4 weeks or 5 x the treatment half-life, whichever is longer, of treatment start.",1,1.0,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT05649683_5,NCT05649683,exclusion,"previous checkpoint inhibitor treatment,",1,0.9989,1,1.0,1.0,0.9,1.0,0.9,,,ok
+NCT01967043_9,NCT01967043,inclusion,Subjects who are not currently taking prohibited medication,1,1.0,1,1.0,0.0,0.5,1.0,0.7,0.0,1.0,disagree
+NCT02750202_2,NCT02750202,inclusion,HIV negative or HIV infected and CD4 ≥ 300 cells/mm3 OR viral load controlled OR anti retro-viral (ARV) compliant > 6 months,1,1.0,1,0.9981,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT05455918_3,NCT05455918,inclusion,Higher than stage II (stage I should be excluded),0,0.0032,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,disagree
+NCT06235983_9,NCT06235983,exclusion,"Have an active fungal, bacterial, and/or active untreated viral infection,",0,0.0015,1,1.0,0.0,0.65,1.0,0.75,0.0,1.0,low_confidence
+NCT04689945_7,NCT04689945,exclusion,Presence of a malignancy history on the other breast,0,0.2426,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,disagree
+NCT00773448_3,NCT00773448,inclusion,Pulmonary embolism is defined as: patients with a high/intermediate pre-test probability (Wells' model > 4) + high probability V/Q scan; positive pulmonary angiogram; or spiral CT demonstrating intraluminal filling defect in a vessel larger than a segmental artery,1,1.0,1,0.9987,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06137144_8,NCT06137144,exclusion,Any significant laboratory finding or any severe and uncontrolled medical condition.,0,0.0,0,0.1539,0.0,0.95,0.0,0.7,0.0,0.0,low_confidence
+NCT05483166_2,NCT05483166,inclusion,Not terminally ill,1,0.991,1,0.992,0.0,0.6,0.0,0.7,0.0,0.0,disagree
+NCT06906237_0,NCT06906237,inclusion,Patients treated with BCS combined with CWPFs for primary stage I-III invasive cancer (IC) or ductal carcinoma in situ (DCIS);,1,0.9999,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT00492544_20,NCT00492544,exclusion,Subject planning to become pregnant or planning to discontinue contraceptive precautions.,0,0.0035,0,0.0006,0.0,0.95,0.0,0.99,0.0,0.0,ok
+NCT04890171_6,NCT04890171,exclusion,Multiple gastric cancers,0,0.0,1,1.0,1.0,0.75,1.0,0.85,1.0,1.0,disagree
+NCT05990738_7,NCT05990738,exclusion,Previous treatment in this trial.,1,0.9982,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT01130142_2,NCT01130142,inclusion,At least 1 radiologically evaluable metastatic lesion (RECIST 1.1).,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT01850524_22,NCT01850524,exclusion,"Comorbid systemic illnesses or other severe concurrent disease which, in the judgment of the investigator, would make the participant inappropriate for entry into this study or interfere significantly with the proper assessment of safety and toxicity of the prescribed regimens (e.g., peripheral neuropathy that is Grade 1 with pain or Grade 2 or higher of any cause).",1,0.5307,1,1.0,0.0,0.85,0.0,0.8,0.0,0.0,disagree
+NCT05182164_5,NCT05182164,inclusion,"No more of three previous lines of systemic therapy for advanced disease,",1,0.7627,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT01404156_0,NCT01404156,inclusion,adenocarcinoma of esophagus or gastroesophageal junction; -cT1N1-3 or T2-4Nx; M0 by American Joint Committee on Cancer (AJCC) 7th Edition staging classification,1,1.0,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT00748891_4,NCT00748891,exclusion,Patients with hormone refractory prostate cancer (HRPC),1,0.6339,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,low_confidence
+NCT00199043_1,NCT00199043,inclusion,patients of the GMALL-Study 07/2003,1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT02854644_1,NCT02854644,inclusion,breast cancer or glioma,1,0.9988,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT01334502_28,NCT01334502,unknown,Symptomatic congestive heart failure,1,0.806,1,1.0,0.0,0.8,0.0,0.6,0.0,0.0,disagree
+NCT06121700_42,NCT06121700,exclusion,"Patients with central nervous system (CNS) disorders or tumors, including brain metastases, peripheral nervous system disorders or psychiatric diseases.",0,0.111,1,1.0,0.0,0.6,1.0,0.8,0.0,1.0,low_confidence
+NCT04630756_47,NCT04630756,exclusion,Active CMV infection.,1,0.9501,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,low_confidence
+NCT00975182_4,NCT00975182,inclusion,Agreement to use an effective form of contraception for the duration of the study,0,0.0,0,0.0055,0.0,0.9,0.0,0.95,0.0,0.0,ok
+NCT06431490_5,NCT06431490,inclusion,"Non-operable locally advanced, recurrent and/or metastatic disease with at least one measurable lesion according to Evaluation criteria for the efficacy of solid tumors (RECIST) 1.1 criteria;",0,0.0,1,0.9999,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT03494400_9,NCT03494400,exclusion,Accumulate three consecutive absences or four non-consecutive absences in presential training during the month;,1,1.0,1,1.0,1.0,0.85,0.0,0.75,1.0,0.0,disagree
+NCT00936741_14,NCT00936741,exclusion,Thickened endometrium on the Entry Visit transvaginal ultrasound that has not resolved after induction of menstrual bleeding with progesterone.,1,0.9998,1,1.0,0.0,0.6,1.0,0.8,0.0,1.0,disagree
+NCT00423930_8,NCT00423930,exclusion,Prior chemotherapy or radiation therapy for HNSCC,1,0.999,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT01239381_4,NCT01239381,inclusion,Expected survival must be greater than three months,0,0.0,0,0.0,0.0,0.95,0.0,1.0,0.0,0.0,ok
+NCT01048762_5,NCT01048762,exclusion,cannot perform walking test due to physical impairment,1,0.5954,1,0.681,1.0,0.7,0.0,0.6,1.0,0.0,disagree
+NCT01536054_0,NCT01536054,inclusion,"Eligible patients will be women with stages II-IV epithelial ovarian, fallopian tube, or primary peritoneal carcinoma who have completed standard therapy for primary or recurrent disease (i.e., patients who would normally be observed); eligible patients may have asymptomatic residual measurable disease on physical examination and/or computed tomography (CT) scan, and/or may have an elevated cancer antigen 125 (CA-125); or may be in complete clinical remission after treatment for primary or recurrent disease; these patients would normally enter a period of observation after standard management",1,1.0,1,1.0,1.0,0.75,1.0,0.85,1.0,1.0,low_confidence
+NCT00002561_11,NCT00002561,unknown,"Cardiac disease defined as symptomatic congestive heart failure or coronary artery disease, known valvular (other than asymptomatic mitral valve prolapse) or congenital heart disease (other than asymptomatic atrial septal defects) or need for cardiac medications. Hypertension controlled with drug therapy is not an exclusion criterion.",0,0.0003,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,disagree
+NCT00475085_1,NCT00475085,inclusion,"Must be scheduled to receive a chemotherapy treatment containing doxorubicin hydrochloride, epirubicin hydrochloride, cisplatin, carboplatin, or oxaliplatin (any dose or schedule) without concurrent radiotherapy or interferon treatment",0,0.0008,1,1.0,1.0,0.95,1.0,0.85,1.0,1.0,disagree
+NCT07254091_3,NCT07254091,inclusion,Patients must be a candidate for pancreatoduodenectomy or pancreatectomy,0,0.118,1,0.9963,0.0,0.7,0.0,0.65,0.0,0.0,disagree
+NCT05355987_10,NCT05355987,exclusion,History of psychological or sensorial disorder or anomaly that can prevent the patient from understanding the conditions for study participation,1,0.8052,1,1.0,0.0,0.85,0.0,0.65,0.0,0.0,disagree
+NCT06863259_12,NCT06863259,inclusion,"Adequate Renal Function Defined As: • An estimated GFR of 50 mL/min/1.73m2 as determined by the Levey formula (see appendix C), cystatin C, or radioisotope determination.",1,0.9723,0,0.0022,1.0,0.95,1.0,0.95,1.0,1.0,disagree
+NCT03210337_12,NCT03210337,exclusion,"Subject has any current skin disease (e.g., psoriasis, atopic dermatitis, eczema, sun damage), or condition (e.g., sunburn, excessive hair, open wounds) that, in the opinion of the investigator, might put the subject at undue risk by study participation or interfere with the study conduct or evaluations.",0,0.0009,1,1.0,0.0,0.95,0.0,0.8,0.0,0.0,disagree
+NCT01639820_7,NCT01639820,exclusion,"Neuroendocrine carcinoma,",0,0.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,disagree
+NCT07311577_30,NCT07311577,exclusion,PR interval > 0.24 s or 2nd/3rd-degree AV block.,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT02843074_1,NCT02843074,inclusion,"Ideally, no prior therapy, or",0,0.4544,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT00035165_17,NCT00035165,exclusion,HIV+ patients,1,0.9942,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT03704662_17,NCT03704662,exclusion,Prior radiotherapy to the region of the study cancer that would result in overlap of radiation therapy fields.,1,0.9445,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT00364195_10,NCT00364195,exclusion,Pregnant and breast-feeding females.,1,0.8298,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT04936997_11,NCT04936997,exclusion,Speaks a language other than English.,1,0.9846,1,0.9997,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT02639546_14,NCT02639546,exclusion,Impaired gastrointestinal absorption,0,0.3605,1,1.0,0.0,0.85,0.0,0.6,0.0,0.0,disagree
+NCT00392769_20,NCT00392769,exclusion,Presence of clinically apparent untreated central nervous system metastases.,0,0.0002,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,low_confidence
+NCT00002720_2,NCT00002720,unknown,Estrogen receptor positive,1,1.0,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT00759928_29,NCT00759928,unknown,Use of ketoconazole and other potent inhibitors of CYP3A4 are not permitted from Day -14 through Day 15 of the study (see Appendix C).,1,1.0,1,0.9999,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT05083338_6,NCT05083338,exclusion,Patients cognitive or neurologically unable to complete questionnaires preoperatively,1,0.9646,0,0.1826,0.0,0.7,0.0,0.6,0.0,0.0,disagree
+NCT06838273_33,NCT06838273,exclusion,Had autologous or allogeneic stem cell transplantation history;,1,0.9999,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT06551051_6,NCT06551051,exclusion,"peripheral neurotoxicity of grade 2 or higher has occurred with platinum-containing paclitaxel chemotherapy prior to prior ADC class administration, and the toxicity has not significantly worsened before or after ADC administration;",1,0.9304,1,1.0,0.0,0.6,1.0,0.6,0.0,1.0,disagree
+NCT05785754_23,NCT05785754,unknown,"Major surgery within 4 weeks and minor surgery within 2 weeks of the first dose of study drug; following surgeries, all surgical wounds must be healed and free of infection or dehiscence. Patients must have recovered and not have ongoing surgical complications.",1,1.0,1,1.0,0.0,0.7,1.0,0.7,0.0,1.0,disagree
+NCT02621879_1,NCT02621879,inclusion,Patients included presented with recurrence of pilonidal disease at least six months after the first operation.,0,0.4392,1,0.9999,1.0,0.9,1.0,0.85,1.0,1.0,disagree
+NCT02109926_7,NCT02109926,exclusion,Who has a legal guardian,1,1.0,1,0.9996,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT04827953_19,NCT04827953,exclusion,History of interstitial lung disease,1,0.9177,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT02491957_1,NCT02491957,inclusion,Must have completed local therapy for their breast cancer,0,0.2882,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,disagree
+NCT03375515_7,NCT03375515,inclusion,Without a history of anaphylaxis of narcotic drugs.,1,0.687,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT01641562_5,NCT01641562,exclusion,Diabetes mellitus,0,0.0512,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,disagree
+NCT00103363_12,NCT00103363,unknown,Not specified Endocrine therapy,1,0.9996,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,low_confidence
+NCT04987788_2,NCT04987788,inclusion,Received a physician referral for a screening colonoscopy;,1,1.0,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT00003538_13,NCT00003538,unknown,Chronic myelogenous leukemia,1,0.9996,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT05681650_10,NCT05681650,exclusion,"1\. Active, known or suspected autoimmune diseases.",1,0.995,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,disagree
+NCT00074737_13,NCT00074737,exclusion,"Subjects receiving other anti-leukemia investigational agents (i.e., unapproved drugs). However, individual cases will be considered on a case-by-case basis for other investigational agents (e.g., antibiotics, antifungals).",1,0.9115,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,disagree
+NCT00817518_2,NCT00817518,inclusion,any solid tumor type (Part 1); malignant melanoma or other responsive tumor type (Part 2);,0,0.0055,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,disagree
+NCT00066729_14,NCT00066729,inclusion,Lack of availability for immunological and clinical follow-up assessments.,1,0.9999,1,0.9999,0.0,0.85,0.0,0.9,0.0,0.0,disagree
+NCT07283822_3,NCT07283822,inclusion,Arm 3: exploratory cohort Classic HL PMBCL GZL,1,0.9999,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT00314977_14,NCT00314977,exclusion,"Serious other diseases as recent myocardial infarction, clinical signs of cardiac failure or clinically significant arrythmias",0,0.0,1,1.0,0.0,0.85,0.0,0.7,0.0,0.0,disagree
+NCT06536413_11,NCT06536413,exclusion,Plasma Cell Leukemia (Previously treated Plasma Cell Leukemia can be included per PI discretion),0,0.0013,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,disagree
+NCT03223428_5,NCT03223428,exclusion,Unable to access the internet,0,0.1035,0,0.0,0.0,0.6,0.0,0.9,0.0,0.0,low_confidence
+NCT05749900_32,NCT05749900,exclusion,Patients who have undergone surgery involving local or topical anesthesia within 14 days before enrollment,1,1.0,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT00839722_18,NCT00839722,exclusion,diffuse adenomyosis as the dominant disease,0,0.0001,1,0.9999,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT00301730_3,NCT00301730,unknown,Pulmonary metastases progressed after prior allogeneic SCT,1,0.8434,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT04739813_50,NCT04739813,exclusion,"Known allergy to both xanthine oxidase inhibitors and rasburicase; or, known hypersensitivity to any of the study drugs",1,0.9979,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00027898_7,NCT00027898,inclusion,"Absolute neutrophil count at least 1,500/mm\^3",1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01440088_39,NCT01440088,exclusion,Females who are pregnant or breast-feeding,1,0.9999,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT00778167_20,NCT00778167,inclusion,No poorly controlled diabetes mellitus,0,0.0,1,1.0,0.0,0.85,0.0,0.6,0.0,0.0,disagree
+NCT03550391_28,NCT03550391,exclusion,"Current use of NMDA antagonists, such as amantadine, ketamine, or dextromethorphan.",1,0.9924,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT00004232_6,NCT00004232,unknown,Not specified Renal:,1,0.9996,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT00003890_32,NCT00003890,unknown,No other concurrent investigational drug or anticancer therapy,1,0.9913,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT04629326_8,NCT04629326,exclusion,5\. Suffering from claustrophobia or other mental diseases;,1,0.754,1,1.0,0.0,0.7,1.0,0.65,0.0,1.0,disagree
+NCT01064635_17,NCT01064635,exclusion,"Patients with other non-malignant systemic diseases (cardiovascular, renal, hepatic, lung embolism, etc.) which would prevent prolonged follow-up.",0,0.004,1,1.0,0.0,0.95,0.0,0.8,0.0,0.0,disagree
+NCT05796089_15,NCT05796089,inclusion,have a negative pregnancy test prior at registration if of child bearing potential or have evidence of non-child bearing potential by fulfilling the criteria as stated in the Protocol at screening,1,0.9999,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT05554367_22,NCT05554367,inclusion,"COHORT 2: If patient has previously received binimetinib, they cannot have required dose reduction or discontinuation of binimetinib due to adverse events",1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT01596790_13,NCT01596790,exclusion,refusal to participate,1,0.8223,1,0.593,1.0,0.8,0.0,0.95,1.0,0.0,disagree
+NCT06828224_25,NCT06828224,exclusion,Hypersensitivity to gram positive bacterial proteins as hyaluronic acid is produced by Streptococcus type bacteria.,1,0.9806,1,1.0,0.0,0.6,1.0,0.7,0.0,1.0,disagree
+NCT03635892_47,NCT03635892,exclusion,Other clinically significant disorders that would preclude safe study participation,0,0.0,0,0.0,0.0,1.0,0.0,0.9,0.0,0.0,ok
+NCT00545766_6,NCT00545766,inclusion,"Adequate bone marrow function, defined by: white blood cells >=3,500/uL, hemoglobin >=8 g/dL, platelet count >=100,000/uL.",1,1.0,1,0.993,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01621854_10,NCT01621854,inclusion,"Female participants must be postmenopausal (12 months of amenorrhea), surgically sterile or they must agree to use a physical method of contraception. Oral or injectable contraceptive agents cannot be the sole method of contraception. Male participants must be surgically sterile or agree to use a barrier method of contraception.",0,0.0003,0,0.0,0.0,0.85,0.0,0.85,0.0,0.0,ok
+NCT05070403_3,NCT05070403,inclusion,ANC ≥ 1.0 × 109/L;,1,1.0,1,0.9995,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT00496509_26,NCT00496509,exclusion,Involvement in the planning or conduct of the study.,1,0.9838,0,0.0002,0.0,0.7,0.0,0.75,0.0,0.0,disagree
+NCT02835391_7,NCT02835391,exclusion,Subject has a medical history of abnormal coagulopathy or bleeding,1,0.7418,1,1.0,1.0,0.75,1.0,0.85,1.0,1.0,low_confidence
+NCT04440267_7,NCT04440267,exclusion,Patients who are: (a) pregnant and (b) breast feeding.,1,0.9996,1,1.0,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT02243267_18,NCT02243267,inclusion,"Not prepped for colonoscopy or surgery at the time of blood draw 5.3.4 New Diagnosis of Rectal Adenocarcinoma (untreated, new rectal CA)",1,1.0,1,1.0,1.0,0.75,0.0,0.65,1.0,0.0,disagree
+NCT06959563_6,NCT06959563,exclusion,TB positive participant is positive IGRA blood test with TB antigens,1,1.0,1,0.9999,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT02324998_2,NCT02324998,inclusion,Patients suitable for radical prostatectomy,0,0.0,1,0.9979,0.0,0.8,0.0,0.7,0.0,0.0,disagree
+NCT07034495_7,NCT07034495,exclusion,Patients who underwent combined or staged surgical procedures unrelated to the HPB domain,1,1.0,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,low_confidence
+NCT04169672_47,NCT04169672,exclusion,"Previously allergic to any of the JS001 or Surufatinib ingredients, or monoclonal antibody;",1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT06888921_18,NCT06888921,exclusion,Is currently participating in or have participated in a clinical study and received an investigational agent or used an investigational device within 4 weeks prior to the first dose of study treatment.,1,1.0,0,0.0058,1.0,0.85,1.0,0.8,1.0,1.0,disagree
+NCT06056752_25,NCT06056752,exclusion,Other reasons deemed by the investigator to be unsuitable for the clinical trial.,0,0.0071,0,0.0124,0.0,1.0,0.0,1.0,0.0,0.0,ok
+NCT00427765_11,NCT00427765,exclusion,Patients with active Central Nervous System (CNS) disease.,1,0.6553,1,1.0,0.0,0.6,1.0,0.75,0.0,1.0,disagree
+NCT02393859_15,NCT02393859,exclusion,Known hypersensitivity to immunoglobulins or any of the products or components to be administered during dosing (excluding asparaginase),1,0.9994,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT04883125_5,NCT04883125,exclusion,Patients with severe organ dysfunction,0,0.0036,1,1.0,0.0,0.95,0.0,0.8,0.0,0.0,disagree
+NCT00063388_3,NCT00063388,inclusion,Subjects with tumor tissue available for EGFR assessment,1,0.9998,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT03420742_1,NCT03420742,inclusion,Eastern cooperative Oncology Group (ECOG) performance status of 0 or 1.,1,1.0,1,1.0,1.0,1.0,1.0,0.9,1.0,1.0,ok
+NCT01708954_24,NCT01708954,inclusion,Patients must have recovered to baseline (pre-Step 1) or CTCAE version 4.0 <= grade 1 from toxicity due to all prior therapies except alopecia and other non-clinically significant AEs,1,0.9945,1,1.0,0.0,0.6,0.0,0.65,0.0,0.0,disagree
+NCT01627041_21,NCT01627041,exclusion,Cumulative lifetime dose of anthracycline chemotherapeutic > 80 mg/m\^2,1,1.0,1,1.0,1.0,0.9,1.0,0.8,1.0,1.0,ok
+NCT05232084_1,NCT05232084,inclusion,Scheduled for mastectomy and axillary dissection surgery under general anesthesia,0,0.1412,1,0.9999,1.0,0.9,1.0,0.85,1.0,1.0,disagree
+NCT05980481_7,NCT05980481,inclusion,"HER2-expressing status determined by laboratory to be IHC 1+, 2+ or 3+ or IHC0.",1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT03370432_3,NCT03370432,exclusion,Previous or present cancer(s) at study entry,1,0.9999,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,ok
+NCT04622228_18,NCT04622228,exclusion,Active or history of autoimmune disease or immune deficiency,1,0.9936,1,1.0,1.0,0.75,1.0,0.85,1.0,1.0,low_confidence
+NCT01440088_17,NCT01440088,inclusion,Eastern Cooperative Oncology Group (ECOG) performance status of 0 or 1,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT02451215_14,NCT02451215,inclusion,"Teratoma, or",1,0.997,1,0.998,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06251115_31,NCT06251115,exclusion,Those who have a history of psychotropic drug abuse and cannot abstain or have a history of mental disorders,1,0.9999,1,1.0,0.0,0.6,1.0,0.7,0.0,1.0,disagree
+NCT00543504_18,NCT00543504,exclusion,"(For erlotinib and cetuximab treatment arm only) History of hypersensitivity to cetuximab, murine products, or any component of the formulation.",1,0.9999,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT02382653_3,NCT02382653,inclusion,who had breakthrough pain which met the criteria described by Portenoy.,1,1.0,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT06787053_12,NCT06787053,exclusion,Any contraindications to MRI identified after MRI safety screening including completion of an MRI Safety Screening Form.,0,0.0258,1,0.936,0.0,0.65,0.0,0.6,0.0,0.0,disagree
+NCT05005429_29,NCT05005429,exclusion,Patients with any serious underlying medical condition that might impair patient's capacity to participate in the trial.,0,0.0,0,0.0,0.0,0.95,0.0,0.85,0.0,0.0,ok
+NCT04510636_19,NCT04510636,exclusion,Patient has undergone prior allogeneic hematopoietic stem cell transplant.,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01339052_27,NCT01339052,exclusion,"Participants who have received anti-angiogenic or anti-VEGF targeted agents (e.g. bevacizumab, cediranib, aflibercept, vandetanib, XL184, sunitinib etc).",1,0.9999,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT06253520_11,NCT06253520,inclusion,Participants must have serology results as follows:,1,1.0,1,1.0,0.0,0.5,0.0,0.5,0.0,0.0,disagree
+NCT05320198_58,NCT05320198,exclusion,"Other medical or psychiatric condition or laboratory finding not specifically noted above that, in the judgment of the Investigator or Sponsor, would put the participant at unacceptable risk or otherwise preclude the participant from participating in the study",0,0.0012,0,0.0,0.0,1.0,0.0,1.0,0.0,0.0,ok
+NCT02503969_0,NCT02503969,inclusion,Participants in the South Yorkshire Cohort,1,1.0,1,0.9996,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT00613080_1,NCT00613080,unknown,Located up to 12 cm from the anal verge with no extension of malignant disease into the anal canal,1,0.9998,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00307086_8,NCT00307086,inclusion,Patients must have undergone a complete psychosocial evaluation and have been considered capable of compliance.,0,0.0,0,0.0,0.0,0.9,0.0,0.75,0.0,0.0,low_confidence
+NCT00310167_1,NCT00310167,unknown,Radiotherapy is indicated for curative treatment of stage IA or IIA disease OR palliation due to tumor bulk or anatomical position,1,0.9977,1,1.0,0.0,0.65,0.0,0.6,0.0,0.0,disagree
+NCT01041443_4,NCT01041443,inclusion,Newly diagnosed,1,1.0,1,1.0,1.0,0.7,1.0,0.8,1.0,1.0,low_confidence
+NCT02647476_5,NCT02647476,exclusion,severe malnutrition which required parenteral nutrition,0,0.0505,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,disagree
+NCT00499408_18,NCT00499408,unknown,Concurrent chemotherapy with nonstudy drugs,1,0.9014,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,ok
+NCT02546531_38,NCT02546531,exclusion,Gastrointestinal condition that could interfere with the swallowing or absorption of study medication.,1,0.8814,1,1.0,0.0,0.9,0.0,0.6,0.0,0.0,disagree
+NCT00273546_1,NCT00273546,inclusion,"2.Primary tumor sites eligible: oral cavity, oropharynx, hypopharynx, larynx. Although they are admittedly of squamous cell types, the following tumors will be excluded because their responsiveness to chemotherapy may differ: nasal, paranasal cavities; nasopharynx.",0,0.0024,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,disagree
+NCT03793361_3,NCT03793361,inclusion,Metastatic/locally advanced disease not amenable to surgical resection with curative intent,0,0.048,1,1.0,0.0,0.65,0.0,0.6,0.0,0.0,disagree
+NCT06151197_11,NCT06151197,unknown,"Has concurrent diseases that might interfere with the conduct of the study, confound the interpretation of the study results or endanger the participant's well-being, or any significant hematological, endocrine, cardiovascular, respiratory, renal, hepatic, or gastrointestinal disease. If there is a history of such disease but the condition has been stable for greater than 1 year and is judged by the investigator not to interfere with participation in the study, the participant may be included, with the documented approval of the medical monitor.",0,0.065,1,1.0,0.0,0.95,0.0,0.85,0.0,0.0,disagree
+NCT07439757_1,NCT07439757,inclusion,Scheduled to undergo contrast-enhanced CT.,1,0.9989,1,1.0,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT00761696_4,NCT00761696,inclusion,Ability to follow the study and all protocol requirements.,0,0.0005,0,0.0001,0.0,0.95,0.0,0.9,0.0,0.0,ok
+NCT00861783_15,NCT00861783,exclusion,Use of any investigational agents within 4 weeks of study enrollment.,1,1.0,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT03638141_25,NCT03638141,exclusion,History of active primary immunodeficiency.,1,0.9992,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT05125016_4,NCT05125016,unknown,"Has received any previous systemic biologic or immune-modulating therapy (except for Sipuleucel-T) within 5 half-lives of first dose of study therapy, as described in the protocol",1,1.0,1,1.0,0.0,0.6,1.0,0.7,0.0,1.0,disagree
+NCT00198276_9,NCT00198276,exclusion,Subjects with tumors suspected of involving a 50% or greater encasement of a blood vessel as measured by magnetic resonance imaging (MRI) or computed tomography (CT) scan.,1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT01478373_5,NCT01478373,exclusion,Patients who have received any other tyrosine-kinase inhibitor but imatinib for GIST,1,0.9999,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT01153282_6,NCT01153282,exclusion,Pregnancy during chemotherapy treatment,0,0.0423,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,disagree
+NCT00574977_19,NCT00574977,exclusion,"Clinically significant and/or rapidly accumulating ascites, peri-cardial and/or pleural effusions",0,0.0,1,0.9999,0.0,0.85,1.0,0.75,0.0,1.0,low_confidence
+NCT07042581_6,NCT07042581,inclusion,"Reporting being bothered by vaginal symptoms of estrogen deprivation (i.e., vaginal dryness, dyspareunia, or discomfort \[pain with intercourse or examination\])",1,0.9162,1,0.9766,0.0,0.85,0.0,0.9,0.0,0.0,disagree
+NCT03213678_34,NCT03213678,inclusion,Patients with seizure disorder may be enrolled if on anticonvulsants and well controlled,0,0.0,1,0.9841,0.0,0.85,0.0,0.7,0.0,0.0,disagree
+NCT00070486_40,NCT00070486,unknown,No other concurrent chemotherapy Endocrine therapy,1,0.7643,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT01136824_1,NCT01136824,exclusion,There is no exclusion criteria,0,0.2244,1,0.9992,1.0,0.7,1.0,0.7,1.0,1.0,disagree
+NCT00376480_19,NCT00376480,unknown,Fertile patients must use effective contraception,0,0.0,1,0.9982,0.0,0.85,0.0,0.95,0.0,0.0,disagree
+NCT05965531_8,NCT05965531,exclusion,Complete obstruction or perforation,0,0.0089,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,disagree
+NCT00000994_0,NCT00000994,inclusion,"Acute treatment for mucocutaneous candidiasis, localized cutaneous herpes simplex, or localized or disseminated zoster infections. Concurrent Treatment: Allowed:",1,0.9999,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT04367675_48,NCT04367675,unknown,HIV infection.,1,0.9887,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT00423865_38,NCT00423865,unknown,No concurrent immunosuppressive agents,1,0.697,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT03801083_29,NCT03801083,exclusion,History of active coronary or ischemic symptoms.,1,0.8223,1,1.0,0.0,0.75,1.0,0.75,0.0,1.0,disagree
+NCT01460940_5,NCT01460940,inclusion,Nodular Lymphocyte-predominant Hodgkin's lymphoma,1,0.9997,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT06867588_9,NCT06867588,exclusion,Low quality of MRI defined by a PI-QUAL score of 1 or 2,1,0.9999,1,0.9991,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT05962905_11,NCT05962905,exclusion,"An emergent, life threatening condition impacting study conduct",0,0.0,0,0.0,0.0,0.95,0.0,0.7,0.0,0.0,low_confidence
+NCT00331552_10,NCT00331552,inclusion,Be informed of the investigational nature of this study and provide written informed consent in accordance with institutional and federal guidelines prior to study specific screening procedures,0,0.0,0,0.0009,0.0,0.95,0.0,0.95,0.0,0.0,ok
+NCT06519708_1,NCT06519708,inclusion,Both sexes.,1,0.9999,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT03667443_1,NCT03667443,exclusion,Amenorrhea (3 months),1,1.0,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT06517901_8,NCT06517901,exclusion,Previous diagnosis of prostate cancer,1,0.9998,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01885637_6,NCT01885637,exclusion,Patients who have already been referred to an SPT,1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT01123811_28,NCT01123811,exclusion,"Previous exposure to monoclonal antibodies, signal transduction inhibitors or EGFR pathway targeting therapy;",1,0.998,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT01246843_23,NCT01246843,exclusion,systemic chemotherapy,0,0.2957,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,disagree
+NCT02049593_25,NCT02049593,exclusion,"Concurrent disease or condition that would interfere with study participation or safety, such as:",0,0.0034,0,0.0,0.0,0.95,0.0,0.9,0.0,0.0,ok
+NCT06758011_7,NCT06758011,exclusion,Not for use in power injectors.,1,0.9963,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT02067507_15,NCT02067507,inclusion,Adolescent male or female (12-13 years),1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT06278493_16,NCT06278493,exclusion,"Individuals who have experienced arterial/venous thrombosis events within 6 months, such as cerebrovascular accidents (including temporary ischemic attacks), deep vein thrombosis, and pulmonary embolism.",1,1.0,1,1.0,1.0,0.85,1.0,0.9,1.0,1.0,ok
+NCT01626352_11,NCT01626352,exclusion,Known anaphylaxis or sensitivity to ofatumumab.,1,0.9948,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT04513028_9,NCT04513028,exclusion,"Uncontrolled intercurrent illness including, but not limited to, autoimmune diseases, ongoing or active infection, symptomatic congestive heart failure, unstable angina pectoris, cardiac arrhythmia, or psychiatric illness/social situations that would limit compliance with study requirements",0,0.0,1,0.9988,0.0,0.95,0.0,0.85,0.0,0.0,disagree
+NCT02845908_11,NCT02845908,exclusion,Patients who have received previous chemotherapy for the treatment of metastatic or unresectable gastric or GEJ adenocarcinoma are ineligible;,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT05677919_5,NCT05677919,inclusion,"No prior CLL/SLL-directed therapy such as chemotherapy, immunotherapy, targeted therapy with small molecule inhibitors, radiation therapy, or cellular therapy.",1,0.5878,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
+NCT00028600_8,NCT00028600,unknown,Not specified Hematopoietic:,0,0.3572,1,1.0,0.0,0.5,0.0,0.5,0.0,0.0,disagree
+NCT03184571_28,NCT03184571,exclusion,"Active autoimmune disease that had required systemic treatment in the past 2 years (ie, with use of disease modifying agents, corticosteroids, or immunosuppressive drugs);",1,1.0,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT00005985_8,NCT00005985,unknown,"No active ischemic or degenerative CNS disease NOTE: A new classification scheme for adult non-Hodgkin's lymphoma has been adopted by PDQ. The terminology of ""indolent"" or ""aggressive"" lymphoma will replace the former terminology of ""low"", ""intermediate"", or ""high"" grade lymphoma. However, this protocol uses the former terminology.",1,0.9999,1,1.0,0.0,0.7,0.0,0.6,0.0,0.0,disagree
+NCT00152906_1,NCT00152906,inclusion,"Liver metastases from colorectal cancer or other solid malignancy, confirmed pathologically",1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01074697_12,NCT01074697,exclusion,"The patient has been previously treated with radiotherapy, and/or chemotherapy, with exception of treatment with low voltage RT or electron RT for non-melanoma skin cancers .",1,0.9997,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,ok
+NCT00416494_9,NCT00416494,unknown,No unstable or poorly controlled hypertension (> 150/100 mm Hg),1,0.9999,1,1.0,1.0,0.85,1.0,0.8,1.0,1.0,ok
+NCT02868112_3,NCT02868112,inclusion,Planning to receive care at Massachusetts General Hospital (MGH),0,0.0022,0,0.0,0.0,0.7,0.0,0.95,0.0,0.0,low_confidence
+NCT00354549_3,NCT00354549,unknown,"Stage IIIB disease, meeting both of the following criteria: Proven malignant effusion or supraclavicular node involvement (i.e., N3 supraclavicular nodes) Not a candidate for curative multimodality treatment or surgery",1,1.0,1,1.0,0.0,0.75,0.0,0.7,0.0,0.0,disagree
+NCT02069561_15,NCT02069561,exclusion,Patients receiving systemic steroid in the two months prior to study entry,0,0.0188,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,disagree
+NCT02202252_2,NCT02202252,exclusion,Distant metastasis,0,0.0009,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,disagree
+NCT02156557_8,NCT02156557,exclusion,Subjects on active chemotherapy or radiation treatment,1,1.0,1,1.0,1.0,0.8,1.0,0.9,1.0,1.0,ok
+NCT02029430_16,NCT02029430,exclusion,Evidence of central nervous system (CNS) hemorrhage National Cancer Institute Common Terminology Criteria for Adverse Events (NCI CTCAE) version 4.0 (published 28 May 2009) grade 2 or greater on baseline MRI.,1,1.0,1,1.0,1.0,0.9,1.0,0.95,1.0,1.0,ok
+NCT00046852_14,NCT00046852,unknown,Mild to moderate pulmonary impairment (lower DLCO) allowed but patients would not receive study carmustine,1,0.9997,0,0.0166,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT00952731_7,NCT00952731,inclusion,Willingness to avoid exposing breast skin to natural or artificial sunlight (i.e. tanning beds) for the 4-10 weeks of study agent dosing.,1,1.0,1,0.9951,0.0,0.95,0.0,0.99,0.0,0.0,disagree
+NCT05727176_2,NCT05727176,inclusion,Received at least one prior systemic gemcitabine and platinum-based regimen for CCA,1,0.9784,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT00556049_25,NCT00556049,exclusion,Pregnancy or breastfeeding or inadequate contraception,0,0.0002,1,1.0,0.0,0.6,0.0,0.6,0.0,0.0,disagree
+NCT02968810_17,NCT02968810,exclusion,"History of adverse effects, intolerance, or allergic reactions attributed to compounds of similar chemical or biologic composition to simvastatin (i.e., other statin medications)",1,0.9542,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT00195533_3,NCT00195533,exclusion,Known allergy to any of the antibiotics used in this trial,1,0.9936,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT04454723_1,NCT04454723,inclusion,Patients wanting to enroll in hospice.,1,0.8261,1,0.5625,1.0,0.8,0.0,0.95,1.0,0.0,disagree
+NCT00038168_7,NCT00038168,inclusion,"Patients must have adequate bone marrow function defined as an absolute peripheral granulocyte count of > 1,500/mm3 and platelet count of > 100,000/mm3; adequate hepatic function defined with a bilirubin of < 1.5 mg% and SGOT (AST) < 2X the upper limits of normal; adequate renal function defined as serum creatinine clearance > 40 cc/min (measured or calculated).",1,1.0,1,0.9995,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT04887506_30,NCT04887506,exclusion,"Receipt of another investigational agent within 4 weeks or 5 x the treatment half-life, whichever is longer, of treatment start.",1,1.0,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT05649683_5,NCT05649683,exclusion,"previous checkpoint inhibitor treatment,",1,0.9989,1,1.0,1.0,0.9,1.0,0.9,1.0,1.0,ok
 NCT03515512_10,NCT03515512,inclusion,Participants must have normal organ and marrow function as defined below:,1,1.0,1,0.9795,,,,,,,disagree
-NCT04895020_16,NCT04895020,exclusion,"Asplenic, functionally asplenic, or splenectomy caused by any condition;",0,0.0001,1,0.9373,1.0,0.85,1.0,0.9,,,disagree
+NCT04895020_16,NCT04895020,exclusion,"Asplenic, functionally asplenic, or splenectomy caused by any condition;",0,0.0001,1,0.9373,1.0,0.85,1.0,0.9,1.0,1.0,disagree
 NCT06172283_0,NCT06172283,inclusion,"In order to be eligible for participation in this trial, the subject must:",1,0.9991,1,0.988,,,,,,,disagree
-NCT02756845_3,NCT02756845,inclusion,at least 1 injectable lesion ≥ 10 mm in longest diameter,1,1.0,1,0.9998,1.0,1.0,1.0,0.9,,,ok
-NCT06039709_22,NCT06039709,exclusion,Hypersensitivity against porphyrins,1,0.9969,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT02640053_5,NCT02640053,exclusion,Previous diagnosis of diabetic neuropathy or peripheral neuropathy from any cause,0,0.4754,1,1.0,1.0,0.95,1.0,0.95,,,disagree
-NCT00258232_6,NCT00258232,unknown,Not specified Hematopoietic,1,0.9745,1,1.0,0.0,0.5,0.0,0.5,,,disagree
-NCT03980977_3,NCT03980977,inclusion,Unusual toxicity in progress or after radiotherapy,1,0.6048,1,1.0,0.0,0.85,0.0,0.65,,,disagree
-NCT07046195_2,NCT07046195,inclusion,"Patients who had surgery after neoadjuvant immunotherapy, and required a hypofractionated radiotherapy regimen of whole breast/chest wall ± regional lymph nodes ±tumor bed: whole breast/chest wall ± regional lymph nodes DT 40.05Gy/15F; Sequential dose increase of DT 2.9 Gy\*3F for tumor bed in breast conserving patients; For patients with a stage of T4 or N3c, it is up to the radiation oncologist to decide whether to proceed with sequential bolsing of locoregional lesions;",1,1.0,1,1.0,1.0,0.75,1.0,0.75,,,low_confidence
-NCT00010192_14,NCT00010192,inclusion,Bilirubin no greater than 1.5 times ULN,1,1.0,1,1.0,1.0,1.0,1.0,1.0,,,ok
-NCT01440920_1,NCT01440920,unknown,Patients who achieved the first complete remission after the induction regimen and finished a standard consolidation therapy.,1,1.0,1,1.0,1.0,0.8,1.0,0.85,,,ok
-NCT06627530_10,NCT06627530,exclusion,Unresectable prostate cancer;,0,0.0,1,1.0,1.0,0.75,1.0,0.8,,,disagree
-NCT03759431_0,NCT03759431,inclusion,Stage T1a-b N0 of the true vocal cords planned for definitive RT,1,0.9971,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT06815172_2,NCT06815172,inclusion,Ability to complete the questionnaire,0,0.0164,0,0.012,0.0,0.85,0.0,0.85,,,ok
-NCT01738646_10,NCT01738646,exclusion,More than 2 prior episodes of disease progression,1,0.9999,1,1.0,1.0,0.8,1.0,0.8,,,ok
-NCT00679354_44,NCT00679354,inclusion,Patients who have undergone prior allogeneic SCT and who have graft-versus-host disease (GVHD) must have controlled GVHD that is =< grade 2,1,0.9998,1,1.0,1.0,0.82,1.0,0.82,,,ok
-NCT00005823_18,NCT00005823,unknown,Not specified Radiotherapy:,1,0.9992,1,1.0,1.0,0.6,1.0,0.6,,,low_confidence
-NCT07337811_14,NCT07337811,exclusion,Pregnant or lactating women.,1,0.9719,1,1.0,1.0,0.9,1.0,0.85,,,ok
-NCT00795782_3,NCT00795782,inclusion,Tumor confined to the one lobe of the thyroid gland,1,0.9999,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT05842902_8,NCT05842902,exclusion,Cognitively or physically unable to participate in mHealth psychosocial intervention and surveys,0,0.3826,0,0.0,0.0,0.85,0.0,0.7,,,low_confidence
-NCT06151223_3,NCT06151223,exclusion,Individual who has a personal history of pancreatic ductal adenocarcinoma (PDAC),1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT07237256_0,NCT07237256,inclusion,"Patient must have signed a written informed consent prior to any trial-specific screening procedure. Note: When the patient is physically unable to give their written consent, an impartial witness of their choice, independent from the investigator or the sponsor, can confirm in writing the patient's consent.",0,0.0,0,0.0002,0.0,0.9,0.0,0.95,,,ok
-NCT06617923_40,NCT06617923,exclusion,"Patients with known human immunodeficiency virus (HIV) infection are ineligible because the treatments involved in this protocol may be immunosuppressive, increasing the risk of lethal infections in this patient population.",0,0.0813,1,1.0,1.0,0.95,1.0,0.95,,,disagree
-NCT00611962_17,NCT00611962,exclusion,Prior treatment with oxaliplatin or taxanes,1,0.9998,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT04625907_134,NCT04625907,inclusion,Prior regorafenib or temozolomide,1,1.0,1,1.0,1.0,0.95,1.0,0.95,,,ok
-NCT05867966_2,NCT05867966,unknown,"No history of cancer, and not currently in relapse.",1,0.7924,1,1.0,1.0,0.75,1.0,0.85,,,low_confidence
-NCT03329742_36,NCT03329742,exclusion,A requirement for systemic immunosuppressive therapy for any reason,0,0.0025,1,0.9999,1.0,0.8,1.0,0.9,,,disagree
-NCT00500110_12,NCT00500110,exclusion,"Uncontrolled severe hypertension, uncontrolled diabetes mellitus, oxygen-dependent lung disease, chronic liver disease or human immunodeficiency virus (HIV) infection.",0,0.0,1,1.0,0.0,0.7,1.0,0.75,,,low_confidence
-NCT07107594_9,NCT07107594,exclusion,Personal history of a previous malignancy treated with chemotherapy.,1,0.9996,1,1.0,1.0,0.85,1.0,0.95,,,ok
-NCT00104845_32,NCT00104845,unknown,"No prior immunization with any class of vaccine containing gp100, including whole cell, shed antigen, or cell lysate vaccines Chemotherapy",1,0.9985,1,1.0,1.0,0.8,1.0,0.75,,,low_confidence
-NCT06461819_8,NCT06461819,exclusion,Biodegradable material Patients who failed infusion,1,1.0,1,1.0,0.0,0.5,0.0,0.5,,,disagree
-NCT03511235_1,NCT03511235,inclusion,Have undergone Prolaris testing and have a CCR score with estimated DSM risk ≤3.2%.,1,1.0,1,0.9913,1.0,0.95,1.0,0.9,,,ok
-NCT03798106_29,NCT03798106,exclusion,"No history of any of the following in the past 6 months: cardiac angioplasty or stenting, myocardial infarction, unstable angina, coronary artery bypass graft surgery, symptomatic peripheral vascular disease class III or IV congestive heart failure, as defined by the New York Heart Association), thromboembolic events",1,0.866,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT06251115_21,NCT06251115,exclusion,"Clinically significant bleeding symptoms or definite bleeding tendency, such as gastrointestinal bleeding, hemorrhagic gastric ulcer, hereditary or acquired bleeding and thrombosis tendency (such as hemophilia, coagulation disorder, thrombocytopenia, hypersplenism, etc.) within 2 weeks prior to the study, and more serious arteriovenous thrombosis events occurring within the previous 6 months,Such as cerebrovascular diseases (including cerebral hemorrhage, cerebral infarction), pulmonary embolism, etc.",1,0.999,1,1.0,0.0,0.6,1.0,0.7,,,disagree
-NCT05968690_0,NCT05968690,inclusion,Age of 18 years or older and able to understand and sign the informed consent form.,1,0.9996,0,0.0,0.0,0.7,0.0,0.8,,,disagree
-NCT02022761_29,NCT02022761,exclusion,Female subjects who are pregnant or lactating or who are planning to become pregnant within 30 days of study drug administration,1,1.0,1,0.9996,1.0,0.75,0.0,0.85,,,disagree
-NCT03010722_6,NCT03010722,exclusion,"Have had a major surgical procedure, open biopsy, or significant traumatic injury within 28 days prior to initiation of study treatment",1,1.0,1,1.0,1.0,0.85,1.0,0.85,,,ok
-NCT01790204_20,NCT01790204,exclusion,"H2 acid blocker (Zantac, Pepcid, Axid, Tagamet)",1,0.9947,1,1.0,1.0,0.85,1.0,0.85,,,ok
+NCT02756845_3,NCT02756845,inclusion,at least 1 injectable lesion ≥ 10 mm in longest diameter,1,1.0,1,0.9998,1.0,1.0,1.0,0.9,1.0,1.0,ok
+NCT06039709_22,NCT06039709,exclusion,Hypersensitivity against porphyrins,1,0.9969,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT02640053_5,NCT02640053,exclusion,Previous diagnosis of diabetic neuropathy or peripheral neuropathy from any cause,0,0.4754,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,disagree
+NCT00258232_6,NCT00258232,unknown,Not specified Hematopoietic,1,0.9745,1,1.0,0.0,0.5,0.0,0.5,0.0,0.0,disagree
+NCT03980977_3,NCT03980977,inclusion,Unusual toxicity in progress or after radiotherapy,1,0.6048,1,1.0,0.0,0.85,0.0,0.65,0.0,0.0,disagree
+NCT07046195_2,NCT07046195,inclusion,"Patients who had surgery after neoadjuvant immunotherapy, and required a hypofractionated radiotherapy regimen of whole breast/chest wall ± regional lymph nodes ±tumor bed: whole breast/chest wall ± regional lymph nodes DT 40.05Gy/15F; Sequential dose increase of DT 2.9 Gy\*3F for tumor bed in breast conserving patients; For patients with a stage of T4 or N3c, it is up to the radiation oncologist to decide whether to proceed with sequential bolsing of locoregional lesions;",1,1.0,1,1.0,1.0,0.75,1.0,0.75,1.0,1.0,low_confidence
+NCT00010192_14,NCT00010192,inclusion,Bilirubin no greater than 1.5 times ULN,1,1.0,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,ok
+NCT01440920_1,NCT01440920,unknown,Patients who achieved the first complete remission after the induction regimen and finished a standard consolidation therapy.,1,1.0,1,1.0,1.0,0.8,1.0,0.85,1.0,1.0,ok
+NCT06627530_10,NCT06627530,exclusion,Unresectable prostate cancer;,0,0.0,1,1.0,1.0,0.75,1.0,0.8,1.0,1.0,disagree
+NCT03759431_0,NCT03759431,inclusion,Stage T1a-b N0 of the true vocal cords planned for definitive RT,1,0.9971,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT06815172_2,NCT06815172,inclusion,Ability to complete the questionnaire,0,0.0164,0,0.012,0.0,0.85,0.0,0.85,0.0,0.0,ok
+NCT01738646_10,NCT01738646,exclusion,More than 2 prior episodes of disease progression,1,0.9999,1,1.0,1.0,0.8,1.0,0.8,1.0,1.0,ok
+NCT00679354_44,NCT00679354,inclusion,Patients who have undergone prior allogeneic SCT and who have graft-versus-host disease (GVHD) must have controlled GVHD that is =< grade 2,1,0.9998,1,1.0,1.0,0.82,1.0,0.82,1.0,1.0,ok
+NCT00005823_18,NCT00005823,unknown,Not specified Radiotherapy:,1,0.9992,1,1.0,1.0,0.6,1.0,0.6,1.0,1.0,low_confidence
+NCT07337811_14,NCT07337811,exclusion,Pregnant or lactating women.,1,0.9719,1,1.0,1.0,0.9,1.0,0.85,1.0,1.0,ok
+NCT00795782_3,NCT00795782,inclusion,Tumor confined to the one lobe of the thyroid gland,1,0.9999,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT05842902_8,NCT05842902,exclusion,Cognitively or physically unable to participate in mHealth psychosocial intervention and surveys,0,0.3826,0,0.0,0.0,0.85,0.0,0.7,0.0,0.0,low_confidence
+NCT06151223_3,NCT06151223,exclusion,Individual who has a personal history of pancreatic ductal adenocarcinoma (PDAC),1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT07237256_0,NCT07237256,inclusion,"Patient must have signed a written informed consent prior to any trial-specific screening procedure. Note: When the patient is physically unable to give their written consent, an impartial witness of their choice, independent from the investigator or the sponsor, can confirm in writing the patient's consent.",0,0.0,0,0.0002,0.0,0.9,0.0,0.95,0.0,0.0,ok
+NCT06617923_40,NCT06617923,exclusion,"Patients with known human immunodeficiency virus (HIV) infection are ineligible because the treatments involved in this protocol may be immunosuppressive, increasing the risk of lethal infections in this patient population.",0,0.0813,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,disagree
+NCT00611962_17,NCT00611962,exclusion,Prior treatment with oxaliplatin or taxanes,1,0.9998,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT04625907_134,NCT04625907,inclusion,Prior regorafenib or temozolomide,1,1.0,1,1.0,1.0,0.95,1.0,0.95,1.0,1.0,ok
+NCT05867966_2,NCT05867966,unknown,"No history of cancer, and not currently in relapse.",1,0.7924,1,1.0,1.0,0.75,1.0,0.85,1.0,1.0,low_confidence
+NCT03329742_36,NCT03329742,exclusion,A requirement for systemic immunosuppressive therapy for any reason,0,0.0025,1,0.9999,1.0,0.8,1.0,0.9,1.0,1.0,disagree
+NCT00500110_12,NCT00500110,exclusion,"Uncontrolled severe hypertension, uncontrolled diabetes mellitus, oxygen-dependent lung disease, chronic liver disease or human immunodeficiency virus (HIV) infection.",0,0.0,1,1.0,0.0,0.7,1.0,0.75,0.0,1.0,low_confidence
+NCT07107594_9,NCT07107594,exclusion,Personal history of a previous malignancy treated with chemotherapy.,1,0.9996,1,1.0,1.0,0.85,1.0,0.95,1.0,1.0,ok
+NCT00104845_32,NCT00104845,unknown,"No prior immunization with any class of vaccine containing gp100, including whole cell, shed antigen, or cell lysate vaccines Chemotherapy",1,0.9985,1,1.0,1.0,0.8,1.0,0.75,1.0,1.0,low_confidence
+NCT06461819_8,NCT06461819,exclusion,Biodegradable material Patients who failed infusion,1,1.0,1,1.0,0.0,0.5,0.0,0.5,0.0,0.0,disagree
+NCT03511235_1,NCT03511235,inclusion,Have undergone Prolaris testing and have a CCR score with estimated DSM risk ≤3.2%.,1,1.0,1,0.9913,1.0,0.95,1.0,0.9,1.0,1.0,ok
+NCT03798106_29,NCT03798106,exclusion,"No history of any of the following in the past 6 months: cardiac angioplasty or stenting, myocardial infarction, unstable angina, coronary artery bypass graft surgery, symptomatic peripheral vascular disease class III or IV congestive heart failure, as defined by the New York Heart Association), thromboembolic events",1,0.866,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT06251115_21,NCT06251115,exclusion,"Clinically significant bleeding symptoms or definite bleeding tendency, such as gastrointestinal bleeding, hemorrhagic gastric ulcer, hereditary or acquired bleeding and thrombosis tendency (such as hemophilia, coagulation disorder, thrombocytopenia, hypersplenism, etc.) within 2 weeks prior to the study, and more serious arteriovenous thrombosis events occurring within the previous 6 months,Such as cerebrovascular diseases (including cerebral hemorrhage, cerebral infarction), pulmonary embolism, etc.",1,0.999,1,1.0,0.0,0.6,1.0,0.7,0.0,1.0,disagree
+NCT05968690_0,NCT05968690,inclusion,Age of 18 years or older and able to understand and sign the informed consent form.,1,0.9996,0,0.0,0.0,0.7,0.0,0.8,0.0,0.0,disagree
+NCT02022761_29,NCT02022761,exclusion,Female subjects who are pregnant or lactating or who are planning to become pregnant within 30 days of study drug administration,1,1.0,1,0.9996,1.0,0.75,0.0,0.85,1.0,0.0,disagree
+NCT03010722_6,NCT03010722,exclusion,"Have had a major surgical procedure, open biopsy, or significant traumatic injury within 28 days prior to initiation of study treatment",1,1.0,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
+NCT01790204_20,NCT01790204,exclusion,"H2 acid blocker (Zantac, Pepcid, Axid, Tagamet)",1,0.9947,1,1.0,1.0,0.85,1.0,0.85,1.0,1.0,ok
