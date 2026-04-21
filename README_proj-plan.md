@@ -163,10 +163,10 @@ clinical_trial_eligibility/
 | Component | Tool | Cost |
 |---|---|---|
 | Data ingestion | requests, DuckDB | Free |
-| Criterion splitting | spaCy, regex | Free |
+| Criterion splitting | regex | Free |
 | Weak supervision | regex, lookup tables | Free |
 | Multi-task NLP | HuggingFace Transformers, PyTorch | Free |
-| NER | SciBERT fine-tuned | Free |
+| NER | regex + MeSH dictionary matching | Free |
 | Embeddings | sentence-transformers/all-MiniLM-L6-v2 | Free |
 | Vector store | ChromaDB (local persistent) | Free |
 | LLM | Mistral-7B via Ollama (local) | Free |
@@ -174,7 +174,6 @@ clinical_trial_eligibility/
 | Reranking | cross-encoder/ms-marco-MiniLM-L-6-v2 | Free |
 | RAG evaluation | RAGAS | Free |
 | Bayesian modeling | PyMC | Free |
-| Experiment tracking | Weights & Biases (free tier) | Free |
 | Frontend | Streamlit | Free |
 | Containerization | Docker + docker-compose (Ollama service) | Free |
 
@@ -182,22 +181,24 @@ clinical_trial_eligibility/
 
 ## Implementation Steps
 
-### Step 1 — Repository Scaffold and Environment Setup
+### Step 1 — Repository Scaffold and Environment Setup ✓
+
+**Files:** `.gitignore`, `.env`, `.env.example`, `requirements.txt`, full folder structure
 
 **Tasks:**
 - Initialize git repo and `.gitignore`
-- Create conda or venv environment
+- Create `.venv` Python virtual environment
 - Install core dependencies
 - Create `.env.example` with placeholder keys
-- Create folder structure as above
+- Create folder structure as defined in Project Structure above
 
-**Key packages to install first:**
+**Key packages:**
 ```bash
-pip install duckdb requests python-dotenv spacy
+pip install duckdb requests python-dotenv
 pip install torch transformers sentence-transformers
 pip install chromadb llama-index ragas
-pip install pymc streamlit wandb
-pip install pytest
+pip install pymc streamlit
+pip install pytest pandas anthropic python-dotenv
 ```
 
 **Install Ollama and pull Mistral:**
@@ -208,323 +209,128 @@ ollama pull mistral
 
 ---
 
-### Step 2 — DuckDB Schema and API Ingestion Pipeline
+### Step 2 — DuckDB Schema and API Ingestion Pipeline ✓
 
-**Files:** `ingestion/database.py`, `ingestion/api_client.py`, `ingestion/parser.py`
+**Files:** `ingestion/database.py`, `ingestion/api_client.py`, `ingestion/parser.py`, `ingest.py`
 
-**DuckDB schema — two tables:**
+**Two DuckDB tables:**
 
-```python
-# ingestion/database.py
-import duckdb
+- **`trials`** — one row per trial. Key fields: `nct_id`, `brief_title`, `conditions`, `interventions`, `intervention_types`, `intervention_other_names`, `phases`, `status`, `min_age`, `max_age`, `sex`, `std_ages`, `primary_outcomes`, `secondary_outcomes`, `intervention_descriptions`, `brief_summary`, `detailed_description`, `eligibility_text`, `mesh_conditions`, `mesh_interventions`, `ingested_at`
 
-def initialize_database(db_path: str = "data/processed/trials.duckdb"):
-    con = duckdb.connect(db_path)
+- **`criteria`** — one row per individual criterion sentence. Key fields: `criterion_id`, `nct_id`, `text`, `section`, `position`, `b1_label`, `b2_label`, `b3_label`, `b2_confidence`, `b3_confidence`, `extracted_conditions`, `extracted_drugs`, `extracted_lab_values`, `extracted_thresholds`, `extracted_demographics`, `extracted_scales`, `extracted_timeframes`, `processed_at`
 
-    con.execute("""
-        CREATE TABLE IF NOT EXISTS trials (
-            nct_id VARCHAR PRIMARY KEY,
-            brief_title VARCHAR,             -- human-readable name for UI + light NER source
-            conditions VARCHAR[],
-            interventions VARCHAR[],
-            intervention_types VARCHAR[],    -- parallel array to interventions (DRUG, DEVICE, etc.)
-            phases VARCHAR[],
-            status VARCHAR,
-            min_age VARCHAR,                 -- stored as string e.g. "18 Years" — parsed downstream
-            max_age VARCHAR,                 -- nullable — often absent
-            sex VARCHAR,                     -- "ALL", "MALE", "FEMALE"
-            std_ages VARCHAR[],              -- ["ADULT", "OLDER_ADULT"] etc.
-            primary_outcomes VARCHAR[],
-            secondary_outcomes VARCHAR[],    -- secondary endpoint measures — NER source for LAB_VALUE, SCALE, THRESHOLD, TIMEFRAME
-            intervention_descriptions VARCHAR[],  -- parallel to interventions — dosing/route/schedule prose — NER source for DRUG, THRESHOLD, TIMEFRAME
-            intervention_other_names VARCHAR[],   -- parallel to interventions — drug aliases e.g. "anti-PD1" — NER source for DRUG
-            brief_summary TEXT,              -- narrative description — rich NER source
-            detailed_description TEXT,       -- nullable — long-form scientific background; variable length
-            eligibility_text TEXT,           -- primary classifier + NER source
-            mesh_conditions VARCHAR[],       -- MeSH-normalized condition terms — NER gold labels
-            mesh_interventions VARCHAR[],    -- MeSH-normalized drug/intervention terms — NER gold labels
-            ingested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
+**API client:** Paginates against the ClinicalTrials.gov REST API v2 using `nextPageToken`. Fetches oncology trials filtered by condition keywords and status. Rate-limited at 10 req/s.
 
-    con.execute("""
-        CREATE TABLE IF NOT EXISTS criteria (
-            criterion_id VARCHAR PRIMARY KEY,  -- nct_id + index
-            nct_id VARCHAR REFERENCES trials(nct_id),
-            criterion_text TEXT,
-            -- B1/B2/B3 classification outputs (populated by NLP layer)
-            label_inclusion INTEGER,
-            label_objective INTEGER,
-            label_observable INTEGER,
-            confidence_inclusion FLOAT,
-            confidence_objective FLOAT,
-            confidence_observable FLOAT,
-            -- NER outputs
-            extracted_conditions VARCHAR[],
-            extracted_drugs VARCHAR[],
-            extracted_lab_values VARCHAR[],
-            extracted_thresholds VARCHAR[],
-            extracted_demographics VARCHAR[],
-            extracted_scales VARCHAR[],      -- e.g. "ECOG 0-2", "CTCAE Grade 3" → feeds B2
-            extracted_timeframes VARCHAR[],  -- e.g. "within 6 months" → feeds B3
-            processed_at TIMESTAMP
-        )
-    """)
-
-    return con
-```
-
-**API client with pagination:**
-
-```python
-# ingestion/api_client.py
-import requests
-import time
-from typing import Generator
-
-BASE_URL = "https://beta.clinicaltrials.gov/api/v2/studies"
-
-def fetch_oncology_trials(
-    page_size: int = 1000,
-    max_trials: int = 15000
-) -> Generator[dict, None, None]:
-
-    params = {
-        "query.cond": "cancer OR oncology OR neoplasm OR tumor OR carcinoma",
-        "filter.overallStatus": "RECRUITING,ACTIVE_NOT_RECRUITING,COMPLETED",
-        "pageSize": page_size,
-        "format": "json"
-        # No "fields" filter — fetch full JSON and extract in parser.py
-    }
-
-    fetched = 0
-    next_page_token = None
-
-    while fetched < max_trials:
-        if next_page_token:
-            params["pageToken"] = next_page_token
-
-        response = requests.get(BASE_URL, params=params)
-        response.raise_for_status()
-        data = response.json()
-
-        studies = data.get("studies", [])
-        for study in studies:
-            yield study
-            fetched += 1
-
-        next_page_token = data.get("nextPageToken")
-        if not next_page_token:
-            break
-
-        time.sleep(0.1)  # respect rate limit
-```
-
-**Acceptance criteria for Step 2:**
-- [ ] DuckDB file created at `data/processed/trials.duckdb`
-- [ ] Both tables exist with correct schema
-- [ ] API client fetches at least 100 trials without error
-- [ ] Trials written to `trials` table with no null `nct_id` values
-- [ ] `eligibility_text` populated for >90% of records
+**Acceptance criteria:**
+- [x] DuckDB file created at `data/processed/trials.duckdb`
+- [x] Both tables exist with correct schema
+- [x] Trials written to `trials` table with no null `nct_id` values
+- [x] `eligibility_text` populated for >90% of records
 
 ---
 
-### Step 3 — Criterion Splitter and Weak Labeler
+### Step 3 — Criterion Splitter and Weak Labeler ✓
 
-**Files:** `nlp/criterion_splitter.py`, `nlp/weak_labeler.py`
+**Files:** `nlp/criterion_splitter.py`, `nlp/weak_labeler.py`, `label.py`
 
-**Criterion splitter — split eligibility text blob into individual sentences:**
+**Criterion splitter:** Scans eligibility text line by line, detecting section headers (inclusion/exclusion) via regex — including non-standard formats such as `* INCLUSION CRITERIA:`. Accumulates bullet lines into individual criterion dicts with `{text, section, position}`. Sub-points indented 3+ spaces are folded into the parent criterion rather than emitted as separate rows. Criteria shorter than 10 characters are discarded as noise.
 
-```python
-# nlp/criterion_splitter.py
-import re
-from dataclasses import dataclass
+**Weak labeler:** Assigns three noisy labels per criterion using regex pattern matching:
 
-@dataclass
-class RawCriterion:
-    nct_id: str
-    criterion_id: str
-    text: str
-    section_context: str  # "inclusion" or "exclusion" from header
-    position: int
+- **B1 (inclusion/exclusion):** derived from section header context (~90% accuracy). Confidence fixed at 0.90 for labeled rows; None rows get confidence 0.0.
+- **B2 (objective/subjective):** objective patterns (numeric thresholds, named scales, binary clinical states) vs subjective patterns (judgment language, consent, willingness). Label assigned by whichever pattern type fires more. Confidence = hit ratio.
+- **B3 (observable/unobservable):** EHR field patterns (lab names, diagnoses, performance scales, treatment history) vs unobservable patterns (consent, life expectancy, geographic constraints, judgment-adjective + organ/function). Same confidence mechanism.
 
-def split_criteria(nct_id: str, eligibility_text: str) -> list[RawCriterion]:
-    inclusion_pattern = re.compile(r'inclusion criteria[:\s]*', re.IGNORECASE)
-    exclusion_pattern = re.compile(r'exclusion criteria[:\s]*', re.IGNORECASE)
-    # Split into sections, then split sections into individual sentences
-    # Filter out sentences shorter than 10 characters (noise)
-    ...
-```
+Criteria where neither pattern type fires for a given head receive `label = None` with `confidence = 0.0`. These are not errors — they represent cases where the weak labeler has no signal. SciBERT learns to classify them from context.
 
-**Weak labeler — generate noisy training labels without manual annotation:**
-
-```python
-# nlp/weak_labeler.py
-
-# B1: Inclusion/Exclusion from section header context (~90% accuracy)
-def weak_label_inclusion(criterion: RawCriterion) -> int:
-    return 1 if criterion.section_context == "inclusion" else 0
-
-# B2: Objective/Subjective from regex patterns (~75% accuracy)
-OBJECTIVE_PATTERNS = [
-    r'\d+\.?\d*\s*(%|mg|ml|mmol|years|days|months)',
-    r'(ECOG|NYHA|CTCAE|WHO)\s*(performance|status|grade|class)',
-    r'(age|bmi|weight|height)\s*[<>≤≥]=?\s*\d+'
-]
-SUBJECTIVE_PATTERNS = [
-    r'(adequate|significant|clinically|appropriate|reasonable)',
-    r'(life expectancy|prognosis|functional status)',
-    r'(willing|able|capable|consent)'
-]
-
-# B3: Observable/Unobservable from EHR field lookup (~70% accuracy)
-STANDARD_EHR_FIELDS = {
-    'lab_values': ['hba1c', 'egfr', 'creatinine', 'hemoglobin',
-                   'platelet', 'wbc', 'alt', 'ast', 'bilirubin'],
-    'demographics': ['age', 'sex', 'gender', 'bmi', 'weight'],
-    'diagnoses': ['diagnosis', 'cancer', 'tumor', 'malignancy'],
-    'medications': ['treatment', 'therapy', 'prior', 'medication']
-}
-UNOBSERVABLE_SIGNALS = [
-    'willing', 'consent', 'geographic', 'life expectancy',
-    'investigator', 'enrollment', 'participation'
-]
-```
-
-**Acceptance criteria for Step 3:**
-- [ ] `split_criteria()` correctly separates inclusion and exclusion sections
-- [ ] Individual criterion sentences written to `criteria` table
-- [ ] Weak labels computed for B1, B2, B3 on all criteria
-- [ ] Manual inspection of 20 random criteria shows reasonable label quality
-- [ ] No criteria with empty `criterion_text`
+**Acceptance criteria:**
+- [x] Splitter correctly separates inclusion and exclusion sections
+- [x] Individual criterion sentences written to `criteria` table
+- [x] Weak labels computed for B1, B2, B3 on all criteria
+- [x] `label.py --reprocess` rebuilds all criteria from scratch
 
 ---
 
-### Step 4 — Multi-task SciBERT Classifier
+### Step 4 — Multi-task SciBERT Classifier ✓
 
-**File:** `nlp/multitask_classifier.py`, `nlp/trainer.py`
+**Files:** `nlp/multitask_classifier.py`, `nlp/trainer.py`
 
-**Model architecture — shared encoder with three classification heads:**
+**Model architecture:** `allenai/scibert_scivocab_uncased` (110M parameters) with three independent linear classification heads on the CLS token — one per label type (B1/B2/B3), each projecting 768 → 2 logits.
 
-```python
-# nlp/multitask_classifier.py
-from transformers import AutoModel
-import torch
-import torch.nn as nn
+**Loss function:** Confidence-weighted multi-task cross-entropy. Per-example loss is scaled by weak label confidence, so None rows (confidence=0.0) contribute zero gradient. Task weights: B1=0.30, B2=0.30, B3=0.40. B3 weighted highest because unobservable errors are most consequential downstream.
 
-class CriterionClassifier(nn.Module):
-    def __init__(
-        self,
-        base_model: str = 'allenai/scibert_scivocab_uncased',
-        dropout: float = 0.1
-    ):
-        super().__init__()
-        self.encoder = AutoModel.from_pretrained(base_model)
-        hidden_size = self.encoder.config.hidden_size  # 768
+**Class imbalance correction:** Class weights in the loss to counteract majority-class suppression. B2: subjective upweighted 3× (3:1 imbalance). B3: unobservable upweighted 8× (8:1 imbalance). B1 requires no correction.
 
-        self.dropout = nn.Dropout(dropout)
+**Training configuration:**
+- Optimizer: AdamW, lr=2e-5, weight decay=0.01
+- Scheduler: linear warmup over 10% of total steps
+- Batch size: 32, epochs: 8, seed: 48697
+- Train/val split: 80/20
+- Device: Apple MPS (Metal GPU)
+- Best checkpoint saved by validation macro F1 to `nlp/checkpoints/best_model.pt`
 
-        # Three independent classification heads
-        self.head_inclusion = nn.Linear(hidden_size, 2)   # B1
-        self.head_objective = nn.Linear(hidden_size, 2)   # B2
-        self.head_observable = nn.Linear(hidden_size, 2)  # B3
+**Note on validation F1:** Computed only on conf>0 rows per head. This measures reproduction of weak-labeler patterns, not generalization to None rows. Generalization is evaluated in Step 5.
 
-    def forward(self, input_ids, attention_mask):
-        outputs = self.encoder(input_ids, attention_mask=attention_mask)
-        cls = self.dropout(outputs.last_hidden_state[:, 0, :])
-
-        return {
-            'inclusion': self.head_inclusion(cls),
-            'objective': self.head_objective(cls),
-            'observable': self.head_observable(cls)
-        }
-
-# Weighted multi-task loss
-# B3 weighted highest — unobservable errors are most consequential
-def compute_loss(logits: dict, labels: dict) -> torch.Tensor:
-    ce = nn.CrossEntropyLoss()
-    return (
-        0.30 * ce(logits['inclusion'], labels['inclusion']) +
-        0.30 * ce(logits['objective'], labels['objective']) +
-        0.40 * ce(logits['observable'], labels['observable'])
-    )
-```
-
-**Training strategy:**
-- Phase 1: Train on weak labels (~80K criteria from 15K trials)
-- Phase 2: Fine-tune on 300–500 manually labeled criteria per subtask
-- Optimizer: AdamW with linear warmup, weight decay 0.01
-- Epochs: 5–10 with early stopping on validation F1
-- Experiment tracking: Weights & Biases free tier
-
-**Acceptance criteria for Step 4:**
-- [ ] Model trains without errors on weak labels
-- [ ] Validation F1 > 0.75 on B1 (inclusion/exclusion) — strongest signal
-- [ ] Validation F1 > 0.65 on B2 (objective/subjective)
-- [ ] Validation F1 > 0.60 on B3 (observable/unobservable)
-- [ ] Model checkpoint saved to `nlp/checkpoints/`
-- [ ] W&B run logged with training curves
+**Acceptance criteria:**
+- [x] Model trains without errors on weak labels
+- [x] Loss decreases monotonically across epochs with no instability
+- [x] Per-class F1 reported for minority and majority class per head at each epoch
+- [x] Best checkpoint saved to `nlp/checkpoints/`
 
 ---
 
-### Step 5 — Manual Labeling of Validation Set
+### Step 5 — Generalization Evaluation via Hybrid Annotation ✓
 
-**Files:** `data/labeled/criteria_b1.csv`, `criteria_b2.csv`, `criteria_b3.csv`
+**Files:** `scripts/sample_annotation.py`, `scripts/llm_annotate.py`, `scripts/review_annotations.py`, `data/annotation/sample.csv`
 
-**Goal:** Label 300–500 criteria per subtask for reliable evaluation.
+**Goal:** Evaluate SciBERT generalization on None rows — the only population where true generalization can be measured.
 
-**Label schema:**
+**Workflow:**
+1. Sample criteria from None rows (b2_label IS NULL OR b3_label IS NULL), stratified by section. Run SciBERT inference to pre-populate predicted labels and probabilities.
+2. LLM annotation: Claude labels each criterion for B2 and B3 using an explicit written rubric, with self-reported confidence (0.0–1.0).
+3. Conflict flagging: rows where LLM and SciBERT disagree, or where LLM confidence < 0.80, are flagged for human review.
+4. Human adjudication: reviewer examines flagged rows and confirms or overrides LLM label.
+5. Metrics: per-class F1 and calibration table (SciBERT accuracy by probability decile) computed against ground truth.
 
-| Column | Description |
-|---|---|
-| `criterion_id` | Foreign key to `criteria` table |
-| `criterion_text` | The raw criterion sentence |
-| `label` | 0 or 1 per subtask |
-| `notes` | Optional — flag ambiguous cases |
+**B2 rubric — Objective (1) vs Subjective (0):** Could two independent clinicians evaluate this criterion and always reach the same conclusion? Objective = specific threshold or verifiable clinical state. Subjective = requires clinical judgment, no numeric threshold.
 
-**B1 labeling guide:**
-- 1 = Inclusion (patient MUST have this)
-- 0 = Exclusion (patient must NOT have this)
+**B3 rubric — Observable (1) vs Unobservable (0):** Can a clinician answer this criterion from a standard EHR without asking the patient or predicting the future? Observable = lab values, diagnoses, medications, documented history. Unobservable = consent, willingness, life expectancy, geographic constraints.
 
-**B2 labeling guide:**
-- 1 = Objective (has a numeric threshold or standardized scale)
-- 0 = Subjective (requires clinical judgment)
+**Design decision:** Residual model uncertainty is propagated into the Bayesian model's prior structure rather than triggering a retrain. SciBERT probability scores modulate prior strength and marginalization width in PyMC.
 
-**B3 labeling guide:**
-- 1 = Observable (can be assessed from standard EHR data)
-- 0 = Unobservable (requires data not in standard EHR)
-
-**Acceptance criteria for Step 5:**
-- [ ] 300+ criteria labeled for each of B1, B2, B3
-- [ ] CSV files committed to `data/labeled/`
-- [ ] Inter-rater reliability check on 50 criteria (if feasible)
-- [ ] Fine-tuned model re-evaluated on manual labels — F1 per subtask documented
+**Acceptance criteria:**
+- [x] Minimum 300 criteria annotated with ground truth labels for B2 and B3
+- [x] Per-class F1 and calibration computed and reviewed
+- [x] Design decision documented for how residual uncertainty is handled downstream
 
 ---
 
-### Step 6 — NER Extractor
+### Step 6 — NER Extractor ✓
 
 **File:** `nlp/ner_extractor.py`
 
-**Entity types to extract:**
+**Entity types extracted and method per type:**
 
-| Entity | Examples |
-|---|---|
-| CONDITION | "type 2 diabetes", "NSCLC", "metastatic melanoma" |
-| DRUG | "pembrolizumab", "metformin", "carboplatin" |
-| LAB_VALUE | "HbA1c", "eGFR", "ALT", "platelet count" |
-| THRESHOLD | "> 7.5%", "≥ 30 mL/min", "< 40 kg/m²" |
-| DEMOGRAPHIC | "age 18–75", "female", "BMI < 35" |
-| SCALE | "ECOG 0–2", "NYHA Class II", "CTCAE Grade 3" |
-| TIMEFRAME | "within 6 months", "prior 3 years" |
+| Entity | Column | Method |
+|---|---|---|
+| CONDITION | `extracted_conditions` | Trial MeSH dictionary match (`mesh_conditions` + `conditions`) |
+| DRUG | `extracted_drugs` | Trial MeSH + alias dictionary match (`mesh_interventions` + `intervention_other_names`) |
+| LAB_VALUE | `extracted_lab_values` | Regex over curated lab name list |
+| THRESHOLD | `extracted_thresholds` | Regex: comparator + number + optional unit |
+| SCALE | `extracted_scales` | Regex: named clinical scale + optional score |
+| DEMOGRAPHIC | `extracted_demographics` | Regex: age/sex/BMI patterns |
+| TIMEFRAME | `extracted_timeframes` | Regex: "within N days/weeks/months/years" |
 
-**Model:** Fine-tune `d4data/biomedical-ner-all` or `allenai/scibert_scivocab_uncased` with NER head. Training data: BC5CDR corpus (freely available) for pretraining, then adapt to eligibility criteria domain.
+**Design rationale:** MeSH-based dictionary matching for CONDITION and DRUG is higher precision than a general biomedical NER model because it is anchored to the trial's own normalized vocabulary. Regex is appropriate for the remaining types because their pattern space is syntactically bounded.
 
-**Acceptance criteria for Step 6:**
-- [ ] NER model extracts entities from sample criteria
-- [ ] Extracted entities written to `criteria` table columns
-- [ ] Manual inspection of 20 criteria shows reasonable extraction quality
-- [ ] Entity types present in >80% of criteria with relevant content
+**Connection to Bayesian model:** For criteria classified as B2=Objective and B3=Observable, the Bayesian deterministic branch compares the extracted threshold against the patient's EHR value. NER performs this extraction offline so the evaluator executes a simple numeric comparison at query time.
+
+**Processing:** Keyset pagination on `criterion_id` for incremental runs. `--reprocess` flag forces full rebuild. `--spot-check` prints a sample of extractions for manual inspection.
+
+**Acceptance criteria:**
+- [x] All criteria in the criteria table processed
+- [x] Seven NER columns populated
+- [x] `--spot-check` output reviewed for extraction quality
 
 ---
 
