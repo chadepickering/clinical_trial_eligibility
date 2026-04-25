@@ -67,6 +67,7 @@ def query_trials(
     query_embedding: list[float],
     n_results: int = 10,
     filters: dict | None = None,
+    doc_max_len: int = 200,
 ) -> list[dict]:
     """
     Return the top-n most similar trials for a query embedding.
@@ -77,6 +78,9 @@ def query_trials(
         n_results:       number of results to return
         filters:         optional ChromaDB where-clause dict,
                          e.g. {"status": {"$eq": "RECRUITING"}}
+        doc_max_len:     character limit on the returned document field.
+                         200 is sufficient for display; pass 2000 when the
+                         document will be fed to a cross-encoder for reranking.
 
     Returns:
         list of dicts with keys: nct_id, score, conditions, phases, status, document
@@ -99,7 +103,7 @@ def query_trials(
             "conditions": results["metadatas"][0][i].get("conditions", ""),
             "phases":     results["metadatas"][0][i].get("phases", ""),
             "status":     results["metadatas"][0][i].get("status", ""),
-            "document":   results["documents"][0][i][:200],  # truncated for display
+            "document":   results["documents"][0][i][:doc_max_len],
         })
 
     return output

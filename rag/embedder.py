@@ -129,6 +129,11 @@ def build_corpus(rows: list[dict]) -> tuple[list[str], list[dict], list[str]]:
     return texts, metadatas, ids
 
 
+def embed_one(text: str) -> list[float]:
+    """Embed a single string. Convenience wrapper around embed_corpus."""
+    return embed_corpus([text], show_progress=False)[0]
+
+
 def embed_corpus(
     texts: list[str],
     batch_size: int = 64,

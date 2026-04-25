@@ -18,7 +18,7 @@ import math
 
 import pytest
 
-from rag.embedder import embed_corpus, _get_model
+from rag.embedder import embed_one, _get_model
 from rag.vector_store import (
     get_client,
     get_collection,
@@ -50,7 +50,7 @@ def _jaccard(set_a: set, set_b: set) -> float:
 
 
 def _embed_one(text: str) -> list[float]:
-    return embed_corpus([text], show_progress=False)[0]
+    return embed_one(text)
 
 
 # ---------------------------------------------------------------------------
