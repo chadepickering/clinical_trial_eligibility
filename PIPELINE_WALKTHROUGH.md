@@ -580,4 +580,180 @@ entirely and enter the probabilistic branches of the Bayesian model instead.
 
 ---
 
-*Next section will be added after Step 7 (embedding pipeline and ChromaDB) is complete.*
+---
+
+## Step 7 — Embedding Pipeline and ChromaDB
+
+### What happens
+
+Each trial is converted into a single 384-dimensional vector and stored in a
+local ChromaDB collection. At query time, a patient description is encoded
+the same way and the nearest trials are retrieved by cosine similarity.
+
+This step answers the question: *given a free-text description of a patient,
+which trials in the corpus are semantically relevant?*
+
+### The composite document
+
+The embedding is not computed over the eligibility text alone. Each trial
+is represented as a composite string:
+
+```
+brief_title + brief_summary + eligibility_text
+```
+
+This ordering is deliberate. The brief_summary is the most *distinctive*
+content — it names specific drugs, biomarkers, and study design details that
+differentiate one trial from another. The eligibility text follows; it is
+important for patient matching, but its language is frequently generic and
+shared across many similar trials. Putting the summary before the eligibility
+text ensures its signal is captured in the first chunk and therefore contributes
+strongly to the final embedding.
+
+For NCT00127920, the composite document opens with:
+
+```
+Pilot Study of Taxol, Carboplatin, and Bevacizumab in Advanced Stage
+Ovarian Carcinoma Patients
+
+This phase II trial tests the combination of Taxol (paclitaxel),
+Carboplatin, and Bevacizumab (Avastin) as first-line treatment for
+advanced-stage ovarian, fallopian tube, or peritoneal carcinoma...
+
+Inclusion Criteria: Subjects with a histologic or cytologic diagnosis
+of stage III/IV ovarian cancer...
+```
+
+The drug names (Taxol, Carboplatin, Bevacizumab) appear in the title and
+summary — early, before any chunking boundary. They are the strongest
+signal for self-retrieval: a query that names these drugs will find this
+trial.
+
+### Why chunking is necessary
+
+`all-MiniLM-L6-v2` has a hard 256-token limit. A composite trial document
+typically runs 500–700 tokens. Single-pass encoding truncates at the first
+256 tokens — for this document ordering, that keeps the title and summary
+but discards the eligibility criteria entirely.
+
+This would be a poor trade-off: the eligibility text is the primary
+patient-matching signal, containing all the thresholds, history requirements,
+and performance status criteria that determine who can enrol. Losing it
+means the retrieval step returns trials that are topically adjacent but may
+be clinically incompatible.
+
+The solution is to split each document into overlapping chunks, encode
+each chunk independently, then combine the resulting vectors:
+
+| Parameter | Value | Reason |
+|---|---|---|
+| Chunk size | 256 tokens | Model maximum |
+| Overlap | 32 tokens | Preserves context across chunk boundaries |
+| Pooling | Mean of chunk unit vectors | All chunks contribute equally |
+| Normalisation | Explicit L2 after pooling | Mean of unit vectors is not a unit vector |
+
+78% of the 15,010 trials (11,690) exceeded 256 tokens and required chunking.
+Most produced 2–3 chunks.
+
+### Token-boundary chunking
+
+Chunking is done at token boundaries using the model's own tokenizer. This
+matters: if you split on characters or words, the chunks do not correspond
+to what the encoder actually sees. A word split at a chunk boundary would be
+tokenised differently as a standalone token than it would in context.
+
+The implementation encodes the full text to token IDs, slices the ID array
+into overlapping windows, then decodes each window back to a string for
+encoding. The result is that every chunk is a valid, complete-token string
+that the model can process without artefacts.
+
+For NCT00127920 (roughly 500 tokens), the document produces two chunks:
+- **Chunk 1** (tokens 0–255): title + summary + first part of eligibility
+- **Chunk 2** (tokens 224–479): remainder of eligibility, with 32-token overlap
+
+Each chunk is encoded independently with `normalize_embeddings=True`,
+producing two 384-dim unit vectors. Their mean is then L2-normalised to
+produce the final document embedding.
+
+### Why explicit L2 normalisation is required
+
+This is a subtle but important correctness requirement. Each chunk embedding
+is a unit vector (norm = 1.0). The mean of two unit vectors is *not* a unit
+vector — it has norm ≤ 1.0, with equality only when the two vectors are
+identical. Without explicit L2 normalisation after pooling, the stored
+embeddings would have varying norms, which breaks cosine similarity
+(ChromaDB's cosine distance assumes unit vectors).
+
+The test `A1: normalization` catches this directly — it checks that the
+final embedding has norm 1.0 ± 1e-5 and would fail if the L2 step were
+removed.
+
+### ChromaDB collection
+
+The collection `oncology_trials` is stored at `data/processed/chroma/`
+as a persistent ChromaDB database. Key configuration:
+
+- `hnsw:space=cosine` — approximate nearest neighbour index using cosine
+  similarity. Matching the distance metric to the embedding normalisation
+  strategy (unit vectors + cosine) is essential; using Euclidean distance
+  on normalised vectors would still rank correctly, but the raw scores
+  would be meaningless.
+- Metadata stored per document: `nct_id`, `conditions`, `phases`, `status`.
+  The status field enables filtered retrieval (e.g. RECRUITING-only queries).
+- `upsert` rather than `add` — safe to rerun embed.py; existing embeddings
+  are overwritten, not duplicated.
+- Score returned as `1.0 - cosine_distance`, giving cosine similarity in
+  the range [0, 1].
+
+### Self-retrieval: what it reveals about the embedding
+
+An important diagnostic test is self-retrieval: does querying with a trial's
+own title return that trial in the top results?
+
+For NCT00127920, querying with its brief title returns it at **rank 7** out
+of 15,010 trials. This is a meaningful result, but it exposes a fundamental
+property of mean pooling:
+
+A title-only query is encoded in a single pass, producing a vector that
+captures the full signal of the title. The stored document embedding,
+however, is a mean of 2–3 chunks — each chunk contributes ~1/N of the
+signal. The title's signal is diluted by the eligibility text's signal in
+the document embedding. Cosine similarity between the title query and the
+document embedding is therefore lower than it would be under single-pass
+encoding (where the title appears at the start of the first and only chunk
+and gets full weight).
+
+Rank 7 out of 15,010 is a strong result. It confirms that the title's drug
+names and disease terminology are captured in the document embedding, but
+the dilution effect is real: under single-pass truncation the same trial
+appeared at rank 3.
+
+This is a conscious trade-off. Mean pooling is more expensive but ensures
+the eligibility criteria contribute to the embedding. Single-pass truncation
+is faster but discards the eligibility text entirely for most trials. The
+system's primary goal is patient matching, not self-retrieval, so mean
+pooling is the right choice even at the cost of some self-retrieval fidelity.
+
+### Test results summary
+
+The full test suite (`tests/test_embed.py`) verified both embedding quality
+and retrieval correctness against the live 15,010-trial collection:
+
+| Test | Description | Result |
+|---|---|---|
+| A1 | Unit norm (L2 correctness) | Pass |
+| A2 | 384-dim output | Pass |
+| A3 | Semantic ordering (synonyms closer than unrelated terms) | Pass |
+| A4 | Determinism | Pass |
+| A5 | Out-of-domain floor (sim < 0.3 vs unrelated text) | Pass |
+| B1 | Disease area precision — all top-10 gynecologic oncology | Pass |
+| B2 | Self-retrieval — NCT00127920 in top 10 of 15,010 | Pass (rank 7) |
+| B3 | Disease type separation — no gynecologic trials in prostate top 5 | Pass |
+| B4 | Recurrent vs naive differentiation — Jaccard < 0.5 | Pass |
+| B5 | Metadata filter — RECRUITING filter returns only RECRUITING | Pass |
+| B6 | Score floor — top result > 0.5 for any oncology query | Pass |
+| B7 | Biomarker specificity — HER2+ query contains no off-target types | Pass |
+
+---
+
+*Next section will be added after Step 8 (Ollama setup and RAG pipeline) is complete.*

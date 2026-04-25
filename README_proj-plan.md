@@ -145,9 +145,11 @@ clinical_trial_eligibility/
 ├── tests/
 │   ├── test_api_client.py
 │   ├── test_classifier.py
+│   ├── test_embed.py
 │   └── test_bayesian.py
 ├── notebooks/
 │   └── exploration.ipynb       # EDA and prototyping
+├── embed.py                    # Embedding pipeline CLI
 ├── .env                        # gitignored
 ├── .env.example
 ├── .gitignore
@@ -334,48 +336,74 @@ Criteria where neither pattern type fires for a given head receive `label = None
 
 ---
 
-### Step 7 — Embedding Pipeline and ChromaDB Vector Store
+### Step 7 — Embedding Pipeline and ChromaDB Vector Store ✓
 
-**Files:** `rag/embedder.py`, `rag/vector_store.py`
+**Files:** `rag/embedder.py`, `rag/vector_store.py`, `embed.py`, `tests/test_embed.py`
 
-```python
-# rag/embedder.py
-from sentence_transformers import SentenceTransformer
-import chromadb
+**Model:** `sentence-transformers/all-MiniLM-L6-v2` — 384-dim embeddings, 256-token max, ~22MB, designed for cosine similarity. Unit-normalised outputs enable dot-product cosine similarity without explicit normalisation at query time.
 
-MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+**Embedding strategy — mean pooling of overlapping chunks:**
 
-def build_vector_store(
-    trials_df,
-    collection_name: str = "oncology_trials"
-):
-    model = SentenceTransformer(MODEL_NAME)
-    client = chromadb.PersistentClient(path="data/processed/chroma")
-    collection = client.get_or_create_collection(collection_name)
+A composite document per trial (brief_title + brief_summary + eligibility_text) typically runs 500–700 tokens, well above the model's 256-token limit. Single-pass truncation discards the eligibility criteria entirely, which are the primary patient-matching signal. The solution is token-boundary chunking with mean pooling:
 
-    texts = trials_df['eligibility_text'].tolist()
-    embeddings = model.encode(texts, batch_size=64, show_progress_bar=True)
+| Parameter | Value |
+|---|---|
+| Chunk size | 256 tokens (model max) |
+| Overlap | 32 tokens (preserves cross-boundary context) |
+| Pooling | Mean of per-chunk unit vectors |
+| Normalisation | Explicit L2 after pooling (mean of unit vectors ≠ unit vector) |
 
-    collection.add(
-        embeddings=embeddings.tolist(),
-        documents=texts,
-        metadatas=[{
-            'nct_id': row['nct_id'],
-            'conditions': str(row['conditions']),
-            'phase': str(row['phases']),
-            'status': row['status']
-        } for _, row in trials_df.iterrows()],
-        ids=trials_df['nct_id'].tolist()
-    )
+78% of 15,010 trials (11,690) exceeded 256 tokens and required chunking. Most produced 2–3 chunks.
 
-    return collection
+**Composite document ordering:** `brief_title → brief_summary → eligibility_text`
+
+Order matters under mean pooling because the summary contains trial-specific content (drug names, biomarkers, study design) that drives self-retrieval precision, while eligibility text is often generic and shared across many similar trials. Putting the summary before the eligibility text ensures its signal is captured even when document length pushes it past the first chunk boundary.
+
+**Implementation architecture (`rag/embedder.py`):**
+
+- `_chunk_text(text, tokenizer)` — tokenises with the model's own tokenizer so chunk boundaries align with what the encoder sees; decodes chunks back to strings for encoding
+- `_embed_and_pool(chunks, model)` — encodes all chunks with `normalize_embeddings=True`, mean-pools, applies explicit L2 normalisation
+- `build_corpus(rows)` — constructs composite texts and metadata dicts from DuckDB rows
+- `embed_corpus(texts, batch_size, show_progress)` — partitions documents into a fast batch path (≤256 tokens, encoded together) and a chunked path (>256 tokens, encoded one at a time with tqdm progress). Runtime: ~4 minutes for 15,010 trials on CPU.
+
+**ChromaDB (`rag/vector_store.py`):**
+
+- Collection: `oncology_trials`, `hnsw:space=cosine`
+- `upsert` (not `add`) — safe to rerun; overwrites rather than duplicates
+- Metadata stored: `nct_id`, `conditions`, `phases`, `status` — enables filtered retrieval
+- Writes in 500-doc chunks to avoid memory spikes
+- Score returned as `1.0 - cosine_distance` (cosine similarity)
+
+**CLI (`embed.py`):**
+```bash
+python embed.py                  # embed all trials not yet in ChromaDB
+python embed.py --reprocess      # re-embed all (upsert overwrites)
+python embed.py --spot-check     # query with sample patient profile and exit
 ```
 
+**Test suite (`tests/test_embed.py`) — 12 tests, all passing:**
+
+*Class A — Embedding geometry (no ChromaDB required):*
+- A1: Unit norm (catches missing L2 normalisation after pooling)
+- A2: 384-dim output
+- A3: Semantic ordering (synonym closer than unrelated term)
+- A4: Determinism (identical input → identical output)
+- A5: Out-of-domain floor (clinical text not close to unrelated domains)
+
+*Class B — Retrieval correctness (requires populated ChromaDB):*
+- B1: Disease area precision — all top-10 results for an ovarian cancer query are gynecologic oncology trials
+- B2: Self-retrieval — NCT00127920's brief title returns it within the top 10 of 15,010 trials
+- B3: Disease type separation — prostate cancer query returns no gynecologic trials in top 5
+- B4: Recurrent vs naive differentiation — Jaccard < 0.5 between result sets for different treatment lines
+- B5: Metadata filter — status filter returns only RECRUITING trials
+- B6: Score floor — top result for any reasonable oncology query scores > 0.5
+- B7: Biomarker specificity — HER2+ breast cancer query returns no off-target cancer types in top 5
+
 **Acceptance criteria for Step 7:**
-- [ ] ChromaDB collection created at `data/processed/chroma`
-- [ ] All 15,000 trials embedded and stored
-- [ ] Sample query returns semantically relevant trials
-- [ ] Embedding pipeline completes in <30 minutes on CPU
+- [x] ChromaDB collection created at `data/processed/chroma`
+- [x] All ~15k trials embedded and stored 
+- [x] Embedding pipeline completes on CPU
+- [x] 12/12 unit tests pass (geometry + retrieval correctness)
 
 ---
 
