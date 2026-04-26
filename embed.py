@@ -34,7 +34,7 @@ def load_trials(db_path: str, reprocess: bool, existing_ids: set[str]) -> list[d
     conn = duckdb.connect(db_path, read_only=True)
     rows = conn.execute("""
         SELECT nct_id, brief_title, brief_summary, eligibility_text,
-               conditions, phases, status
+               conditions, phases, status, sex, min_age, max_age, std_ages
         FROM trials
         WHERE eligibility_text IS NOT NULL
           AND length(eligibility_text) > 0
@@ -42,7 +42,8 @@ def load_trials(db_path: str, reprocess: bool, existing_ids: set[str]) -> list[d
     conn.close()
 
     cols = ['nct_id', 'brief_title', 'brief_summary', 'eligibility_text',
-            'conditions', 'phases', 'status']
+            'conditions', 'phases', 'status', 'sex', 'min_age', 'max_age',
+            'std_ages']
     all_trials = [dict(zip(cols, row)) for row in rows]
 
     if reprocess:

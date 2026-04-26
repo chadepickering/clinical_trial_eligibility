@@ -756,4 +756,93 @@ and retrieval correctness against the live 15,010-trial collection:
 
 ---
 
+---
+
+## Architectural Note — Generator and Bayesian Scorer: Non-Overlapping Roles
+
+Before Step 8 introduces the generator, it is worth being precise about what
+the two downstream components are actually doing — because they answer adjacent
+questions about the same trial-patient pair using entirely different mechanisms,
+and they are not interchangeable.
+
+### The generator (Mistral-7B via Ollama)
+
+Role: **narrative interpretation for a human reader.**
+
+The generator receives the full composite trial document and a patient
+description and produces a prose explanation in clinical language. For
+NCT00127920 and a clearly eligible patient, it outputs something like:
+
+> *"The patient meets all eligibility criteria. No prior chemotherapy or
+> radiotherapy, stage III ovarian carcinoma, Karnofsky 80%, adequate hepatic
+> function. VERDICT: ELIGIBLE"*
+
+Its verdict (ELIGIBLE / NOT ELIGIBLE / UNCERTAIN) is a reading-comprehension
+output from a language model. It is as reliable as the model's ability to
+parse eligibility text. Empirically tested across eight clearly ineligible
+profiles against NCT00127920, Mistral-7B correctly avoids returning ELIGIBLE
+for any of them, but returns UNCERTAIN in most cases rather than NOT ELIGIBLE
+— it identifies the disqualifying criterion but hedges when other information
+is incomplete. This is acceptable for its role: the clinician reads the
+explanation and makes their own judgment.
+
+The generator **cannot** produce calibrated probabilities. A language model
+has no mechanism for computing a posterior over a product of independent
+criterion probabilities, for decomposing uncertainty by criterion type, or
+for representing what is structurally unknown vs merely unspecified in the
+patient description.
+
+### The Bayesian scorer (PyMC)
+
+Role: **formal quantification of eligibility uncertainty for a decision-support
+system.**
+
+The Bayesian model operates on structured inputs — SciBERT B2/B3 classification
+labels and NER-extracted thresholds — and computes a posterior P(eligible) with
+a 95% credible interval. Its output is a number and an interval, not prose.
+
+A result of P(eligible) = 0.43 [0.11, 0.78] communicates something the LLM
+verdict cannot: that the wide interval is driven by three unobservable criteria
+and two subjective criteria, not by ambiguity about the deterministic ones. The
+credible intervals are informative *about the structure of the uncertainty*, not
+just its magnitude.
+
+The Bayesian scorer has no language understanding and no access to the trial
+text. It compares extracted numbers against patient values and propagates
+uncertainty through a generative model. It does not read; it computes.
+
+### Why they do not overlap
+
+Each component does something the other is architecturally incapable of:
+
+| | Generator | Bayesian scorer |
+|---|---|---|
+| Input | Full trial text + patient free text | SciBERT labels + NER thresholds |
+| Output | Prose explanation + verdict string | P(eligible) + 95% CI |
+| Uncertainty source | Model hedging / incomplete information | Criterion type (subj/unobs) |
+| Calibrated? | No | Yes |
+| Clinician-readable? | Yes | Via display (gauge + CI) |
+
+In the Streamlit interface these map to distinct panels: Panel 3 (probability
+gauge and credible interval from PyMC) and Panel 4 (criterion-level
+explainability and LLM narrative). A clinician looks at both: the number tells
+them how much to trust the match; the explanation tells them what to do with
+that information.
+
+### What the LLM verdict does not do
+
+The generator's UNCERTAIN verdict currently has **zero formal weight in the
+Bayesian posterior**. It is a display artifact for the clinician, not an input
+to the model. The Bayesian model's credible intervals widen for subjective and
+unobservable criteria regardless of what the LLM says — the uncertainty
+quantification is derived from the SciBERT classifications, not from the LLM.
+
+Connecting them — for example, using the LLM's per-criterion assessment to
+modulate Beta prior strength for subjective criteria — would require structured
+output from the generator (criterion-level breakdown rather than a single
+verdict) and a mapping layer between LLM output and the criteria table. This
+is a meaningful extension but outside the scope of this project.
+
+---
+
 *Next section will be added after Step 8 (Ollama setup and RAG pipeline) is complete.*

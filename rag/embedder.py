@@ -89,18 +89,72 @@ def _embed_and_pool(chunks: list[str], model: SentenceTransformer) -> np.ndarray
     return pooled
 
 
+def _build_eligibility_header(row: dict) -> str:
+    """
+    Build a structured eligibility header from DuckDB fields that are not
+    present in the free-text eligibility blob.
+
+    Fields included:
+        Sex eligibility  — e.g. "FEMALE", "MALE", "ALL"
+        Age eligibility  — min_age, max_age (max omitted if None)
+        Age categories   — std_ages list (e.g. ADULT, OLDER_ADULT)
+        Conditions       — the trial's registered condition list
+
+    These fields appear at the top of the composite document so they are
+    always within the LLM's context window regardless of document length.
+    Without this header, sex restriction and condition scope are invisible
+    to the generator — they exist only in DuckDB structured columns, not
+    in the eligibility free text.
+    """
+    parts = []
+
+    sex = (row.get('sex') or '').strip()
+    if sex:
+        parts.append(f"Sex eligibility: {sex}")
+
+    min_age = (row.get('min_age') or '').strip()
+    max_age = (row.get('max_age') or '').strip()
+    if min_age and max_age:
+        parts.append(f"Age eligibility: {min_age} to {max_age}")
+    elif min_age:
+        parts.append(f"Age eligibility: {min_age} and older")
+
+    std_ages = row.get('std_ages')
+    if std_ages:
+        parts.append(f"Age categories: {', '.join(std_ages)}")
+
+    conditions = row.get('conditions')
+    if conditions:
+        cond_str = ', '.join(conditions) if isinstance(conditions, list) else str(conditions)
+        parts.append(f"Conditions: {cond_str}")
+
+    if not parts:
+        return ''
+    return '[Eligibility Overview]\n' + '\n'.join(parts) + '\n'
+
+
 def build_corpus(rows: list[dict]) -> tuple[list[str], list[dict], list[str]]:
     """
     Build composite embedding texts from trial rows.
 
-    Composite order: title → brief_summary → eligibility_text.
-    brief_summary names specific drugs, biomarkers, and trial design — the most
-    distinctive content. Eligibility text follows; with mean pooling, it is no
-    longer truncated so all inclusion/exclusion criteria contribute signal.
+    Composite order:
+        1. Structured eligibility header (sex, age, conditions) — always at
+           the top so these fields are never truncated out of the LLM prompt
+        2. brief_title
+        3. brief_summary — names specific drugs, biomarkers, trial design;
+           most distinctive content for retrieval
+        4. eligibility_text — full inclusion/exclusion criteria
+
+    The eligibility header is prepended because sex restriction and condition
+    scope are stored only in DuckDB structured columns, not in the free-text
+    eligibility blob. Without it, a male patient querying a female-only trial
+    or an endometrial cancer patient querying an ovarian trial would receive
+    no disqualifying signal from the generator.
 
     Args:
         rows: list of dicts with keys nct_id, brief_title, brief_summary,
-              eligibility_text, conditions, phases, status.
+              eligibility_text, conditions, phases, status, sex, min_age,
+              max_age, std_ages.
 
     Returns:
         texts     — one composite string per trial
@@ -110,12 +164,14 @@ def build_corpus(rows: list[dict]) -> tuple[list[str], list[dict], list[str]]:
     texts, metadatas, ids = [], [], []
 
     for row in rows:
-        parts = [row.get('brief_title') or '']
+        header = _build_eligibility_header(row)
+        parts = [header] if header else []
+        parts.append(row.get('brief_title') or '')
         if row.get('brief_summary'):
             parts.append(row['brief_summary'])
         if row.get('eligibility_text'):
             parts.append(row['eligibility_text'])
-        composite = ' '.join(p.strip() for p in parts if p.strip())
+        composite = '\n\n'.join(p.strip() for p in parts if p.strip())
 
         texts.append(composite)
         metadatas.append({
@@ -123,6 +179,9 @@ def build_corpus(rows: list[dict]) -> tuple[list[str], list[dict], list[str]]:
             'conditions': str(row.get('conditions') or ''),
             'phases':     str(row.get('phases') or ''),
             'status':     str(row.get('status') or ''),
+            'sex':        str(row.get('sex') or ''),
+            'min_age':    str(row.get('min_age') or ''),
+            'max_age':    str(row.get('max_age') or ''),
         })
         ids.append(row['nct_id'])
 
