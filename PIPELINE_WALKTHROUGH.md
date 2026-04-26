@@ -845,4 +845,176 @@ is a meaningful extension but outside the scope of this project.
 
 ---
 
-*Next section will be added after Step 8 (Ollama setup and RAG pipeline) is complete.*
+## Step 8 — Ollama Setup and RAG Pipeline
+
+### What happens
+
+Step 8 adds the generative layer: a patient description and the retrieved
+trials are handed to a local LLM, which reads each trial's eligibility
+criteria and produces a per-trial verdict and prose explanation.
+
+This step answers the question: *given that these trials are semantically
+relevant to the patient, what does the LLM say about eligibility for each
+one?*
+
+The answer feeds directly into the Streamlit interface — Panel 3 displays the
+Bayesian posterior, Panel 4 displays the LLM narrative. See the Architectural
+Note above for why these two components have non-overlapping roles.
+
+### Model and setup
+
+Mistral-7B (`mistral:latest`, 4.4 GB) runs via Ollama on the local machine.
+On M1 Pro with 11.8 GiB VRAM, the model runs entirely on Metal — no CPU
+fallback. Cold-start latency (first call after `ollama serve`) is ~29s;
+subsequent calls with the model resident in VRAM average 7–9s per trial.
+
+### Two-stage retrieval: retriever.py
+
+Before the generator sees anything, the retriever narrows 15,010 trials to
+a ranked shortlist using two passes:
+
+**Stage 1 — bi-encoder retrieval:** The patient query is embedded with
+`embed_one` (the same `all-MiniLM-L6-v2` used in Step 7) and the top 20
+candidates are fetched from ChromaDB by cosine similarity. Fast — the query
+embedding is ~50ms; ChromaDB lookup is ~10ms.
+
+**Stage 2 — cross-encoder reranking:** Each `(query, document)` pair is
+scored by `cross-encoder/ms-marco-MiniLM-L-6-v2`. The cross-encoder reads
+both the query and the full document jointly, enabling it to catch relevance
+signals the bi-encoder's independent vectors cannot represent. The top 5 by
+cross-encoder score are returned.
+
+For NCT00127920's walkthrough query (BRCA1, platinum-sensitive recurrent OC):
+
+| Rank | Bi-enc | Rerank | NCT ID | Conditions |
+|---|---|---|---|---|
+| 1 | 0.681 | 4.814 | NCT02222883 | BRCA Status, Ovarian Cancer |
+| 2 | 0.585 | 4.299 | NCT00698451 | Ovarian Neoplasms, Fallopian Tube |
+| 3 | 0.556 | 3.379 | NCT00126542 | Fallopian Tube Cancer, Primary Peritoneal |
+| 4 | 0.557 | 3.095 | NCT00368420 | Ovarian Cancer |
+| 5 | 0.603 | 2.922 | NCT04908787 | Ovarian Cancer |
+
+All 5 are gynecologic oncology trials. NCT02222883 (BRCA Status + Ovarian
+Cancer) ranks first by both metrics with a clear gap — the BRCA1 signal is
+strong. The cross-encoder changes the ordering from the bi-encoder: bi-encoder
+rank 5 (NCT04908787, score 0.603) drops to final rank 5, while bi-encoder
+rank 3 (NCT00126542, score 0.556) rises to final rank 3.
+
+**Known limitation:** `ms-marco-MiniLM-L-6-v2` was trained on MS MARCO web
+search passages, not clinical text. In earlier testing (before the eligibility
+header re-embed), one lung cancer trial was promoted to rank 5 due to lexical
+overlap on "bevacizumab." After re-embedding with the structured header, this
+no longer occurs for the BRCA1 query. The domain shift remains a latent risk
+for queries involving drugs used across cancer types.
+
+### Document truncation fix: doc_max_chars
+
+The generator receives the composite trial document from ChromaDB and builds
+a prompt. The original `doc_max_chars=1500` was set conservatively to protect
+the context window, but analysis revealed that for NCT00127920 (2,765 chars
+total), the eligibility criteria section doesn't begin until char ~1,574 —
+the model was assessing eligibility with only the title and summary, not
+the actual criteria.
+
+Measuring the token budget precisely:
+
+| Component | Tokens |
+|---|---|
+| System prompt | 130 |
+| Long patient query | 90 |
+| Scaffolding | 19 |
+| **Fixed overhead** | **239** |
+| Context window (Mistral) | 4,096 |
+| Reserve for generation | 512 |
+| **Available for document** | **3,345 (~13,380 chars)** |
+
+The corpus p99 document length is 12,494 chars. The new default is 12,000
+chars — covers p99, only the top 1% require truncation.
+
+### Eligibility header: structured fields in the prompt
+
+After fixing truncation, two categories of ineligibility were still being
+missed: wrong sex and wrong cancer type. Investigation showed that `sex`,
+`min_age`, `max_age`, and condition scope are stored only in DuckDB structured
+columns — they are not present in the eligibility free text and were never
+included in the composite document built by `build_corpus`.
+
+The fix: `_build_eligibility_header` prepends these fields to every composite
+document before it is embedded and stored in ChromaDB:
+
+```
+[Eligibility Overview]
+Sex eligibility: FEMALE
+Age eligibility: 18 Years and older
+Age categories: ADULT, OLDER_ADULT
+Conditions: Ovarian Neoplasms
+
+Pilot Study of Taxol, Carboplatin, and Bevacizumab...
+```
+
+This header is always the first thing the model sees, regardless of document
+length. A re-embed of all 15,010 trials was required. The sex and age fields
+were also added to ChromaDB metadata, enabling filtered retrieval by sex
+(`filters={"sex": {"$eq": "FEMALE"}}`).
+
+**Effect on verdict distribution** (8 clearly ineligible profiles, NCT00127920):
+
+| Verdict | Before | After |
+|---|---|---|
+| ELIGIBLE | 3 | **0** |
+| UNCERTAIN | 5 | 7 |
+| NOT ELIGIBLE | 0 | 1 |
+
+### Generator design: per-trial eligibility Q&A
+
+The generator asks one focused question per trial:
+
+> *"Based on these eligibility criteria, is this patient eligible?
+> Answer ELIGIBLE, NOT ELIGIBLE, or UNCERTAIN."*
+
+For NCT00127920 and the clearly eligible patient (stage III OC, no prior
+chemo, Karnofsky 80%):
+
+> *"The patient meets all the eligibility criteria mentioned in the trial
+> NCT00127920 as she is a female with stage III ovarian carcinoma, no prior
+> chemotherapy or radiotherapy, and has an adequate Karnofsky performance
+> status (80%), bone marrow, and hepatic function.*
+> VERDICT: ELIGIBLE"
+
+For the same trial and a patient with prior carboplatin and paclitaxel:
+
+> *"The eligibility criteria require no prior chemotherapy. This patient
+> has received three prior lines including carboplatin and paclitaxel.*
+> VERDICT: NOT ELIGIBLE"
+
+Mistral-7B hedges in most ineligible cases (returning UNCERTAIN rather than
+NOT ELIGIBLE when it identifies a disqualifier but observes other uncertainty).
+This is acceptable — the LLM verdict is a narrative display artifact, not a
+formal classifier. 0/8 clearly ineligible patients receive ELIGIBLE.
+
+### Pipeline orchestration: pipeline.py
+
+`run_pipeline` composes the three modules:
+
+```
+query
+  → retrieve_and_rerank()    # bi-encoder + cross-encoder, ~1s warm
+  → assess_trial() × n       # one Ollama call per trial, ~8s each warm
+  → list[dict]               # nct_id, score, rerank_score, verdict,
+                             #   explanation, latency_s, ...
+```
+
+The `generate=False` flag bypasses Ollama entirely, returning retrieval
+results only. Used in tests and latency profiling.
+
+### Test results summary
+
+| File | Tests | Coverage |
+|---|---|---|
+| `tests/test_rag.py` | 9 | Retriever contract + BRCA1 quality benchmark |
+| `tests/test_generator.py` | 30 | Prompt construction, verdict parsing, 8-case ineligibility suite |
+| `tests/test_pipeline.py` | 12 | Result shape, filter propagation, latency, eligibility header fix |
+
+---
+
+*Next section will be added after Step 9 (RAGAS evaluation) is complete.*
