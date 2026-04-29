@@ -48,7 +48,7 @@ ChromaDB                       └───────────────�
 │  - Semantic retrieval from ChromaDB                 │
 │  - Cross-encoder reranking                          │
 │  - Response generation (Mistral-7B via Ollama)      │
-│  - RAGAS evaluation                                 │
+│  - Generation quality evaluation (verdict accuracy) │
 └─────────────────────────────────────────────────────┘
         ↓
 ┌─────────────────────────────────────────────────────┐
@@ -135,7 +135,7 @@ clinical_trial_eligibility/
 │   ├── retriever.py            # retrieval + cross-encoder reranking
 │   ├── generator.py            # Mistral-7B via Ollama
 │   ├── pipeline.py             # end-to-end RAG orchestration
-│   └── evaluate_ragas.py       # RAGAS evaluation suite
+│   └── evaluate.py             # generation quality evaluation (verdict accuracy)
 ├── bayesian/
 │   ├── criterion_evaluator.py  # patient vs criterion matching
 │   ├── eligibility_model.py    # PyMC Bayesian model
@@ -174,7 +174,7 @@ clinical_trial_eligibility/
 | LLM | Mistral-7B via Ollama (local) | Free |
 | RAG orchestration | LlamaIndex | Free |
 | Reranking | cross-encoder/ms-marco-MiniLM-L-6-v2 | Free |
-| RAG evaluation | RAGAS | Free |
+| RAG evaluation | Custom verdict accuracy (50+50 labeled cases) | Free |
 | Bayesian modeling | PyMC | Free |
 | Frontend | Streamlit | Free |
 | Containerization | Docker + docker-compose (Ollama service) | Free |
@@ -198,7 +198,7 @@ clinical_trial_eligibility/
 ```bash
 pip install duckdb requests python-dotenv
 pip install torch transformers sentence-transformers
-pip install chromadb llama-index ragas
+pip install chromadb
 pip install pymc streamlit
 pip install pytest pandas anthropic python-dotenv
 ```
@@ -478,36 +478,46 @@ Smoke test result (BRCA1 query, 5 trials): 5/5 gynecologic oncology trials, 0 of
 
 ---
 
-### Step 9 — RAGAS Evaluation
+### Step 9 — Generation Quality Evaluation
 
-**File:** `rag/evaluate_ragas.py`
+**Files:** `rag/evaluate.py`, `data/labeled/eval_ineligible.json`, `data/labeled/eval_eligible.json`
 
-**Metrics to compute:**
+**Why not RAGAS?**
+RAGAS was the original plan but was replaced after Step 8 for three reasons:
+(1) We dropped LlamaIndex in favour of a custom pipeline, breaking the RAGAS integration point;
+(2) RAGAS requires an LLM-as-judge evaluator — defaulting to OpenAI, creating a $0-budget violation and a circularity problem (using Mistral to evaluate Mistral);
+(3) `context_recall` requires expert-annotated ground-truth relevance per query, the same annotation burden already incurred for the SciBERT training set.
 
-| Metric | What it measures |
-|---|---|
-| Faithfulness | Generated answers grounded in retrieved context |
-| Answer relevancy | Response addresses the query |
-| Context precision | Retrieved trials are relevant |
-| Context recall | Relevant trials are retrieved |
+**Approach — Track 2: Generation quality (verdict accuracy)**
 
-**Evaluation dataset:** 50–100 manually constructed clinical query / expected answer pairs covering common query patterns such as "What phase 3 trials are recruiting for NSCLC patients with prior platinum therapy?"
+The generator is evaluated in isolation: each case specifies a single NCT ID. The composite document is fetched directly from ChromaDB by ID (bypassing retrieval and reranking) and passed to `assess_trial()`. This measures what the system is built to do — correctly classify patient eligibility.
 
-```python
-from ragas import evaluate
-from ragas.metrics import (
-    faithfulness,
-    answer_relevancy,
-    context_precision,
-    context_recall
-)
+| Track | What it measures | Cases |
+|---|---|---|
+| Track A — Ineligible accuracy | Patients with one hard disqualifier must not receive ELIGIBLE | 50 |
+| Track B — Eligible accuracy | Patients meeting all criteria should receive ELIGIBLE | 50 |
+
+**Evaluation datasets:**
+
+- `data/labeled/eval_ineligible.json` — 50 cases across 13 trials. Each patient has exactly one hard, objective disqualifying criterion (wrong sex, wrong cancer type, ECOG violation, prior treatment violation, lab value violation, comorbidity exclusion, age violation). Includes the 8 `TestIneligibilityVerdict` cases from Step 8.
+- `data/labeled/eval_eligible.json` — 50 cases across 14 trials. Each patient explicitly satisfies all stated inclusion criteria and triggers no exclusion criteria, with structured fields matching the trial's `[Eligibility Overview]` header.
+
+**Runner:**
+
+```bash
+# Full evaluation (~13 min on M1 Pro warm, Mistral-7B)
+python rag/evaluate.py --verbose
+
+# Dry run (no Ollama): print case and trial distribution stats
+python rag/evaluate.py --dry-run
 ```
 
 **Acceptance criteria for Step 9:**
-- [ ] 50+ evaluation Q&A pairs created and committed to `data/labeled/ragas_eval.json`
-- [ ] RAGAS scores computed and logged
-- [ ] Faithfulness > 0.70
-- [ ] Context precision > 0.60
+- [x] 50 ineligible cases constructed and committed to `data/labeled/eval_ineligible.json`
+- [x] 50 eligible cases constructed and committed to `data/labeled/eval_eligible.json`
+- [x] Evaluation runner implemented at `rag/evaluate.py`
+- [ ] Ineligible ELIGIBLE rate = 0% (hard constraint — zero false-ELIGIBLE verdicts)
+- [ ] Eligible ELIGIBLE rate ≥ 70%
 - [ ] Results documented in `reports/rag_evaluation.md`
 
 ---
@@ -690,7 +700,7 @@ volumes:
 - Setup instructions (local and Docker)
 - Scalability note (three-tier architecture)
 - Example queries and screenshots
-- Evaluation results (RAGAS scores, NLP F1 per subtask)
+- Evaluation results (verdict accuracy scores, NLP F1 per subtask)
 - Known limitations and future work
 
 ---
@@ -702,9 +712,10 @@ volumes:
 - Confusion matrix analysis
 - Error analysis on misclassified criteria qualitatively
 
-### RAG (RAGAS)
-- Faithfulness, Answer Relevancy, Context Precision, Context Recall
-- Evaluated on 50–100 manually constructed Q&A pairs
+### RAG (Generation Quality)
+- Ineligible verdict accuracy: % of 50 ineligible patients that do NOT receive ELIGIBLE
+- Eligible verdict accuracy: % of 50 eligible patients that receive ELIGIBLE
+- 100 total labeled cases across 15 distinct oncology trials
 
 ### Bayesian Model
 - Calibration: do 95% CIs contain true eligibility 95% of the time?

@@ -1017,4 +1017,72 @@ results only. Used in tests and latency profiling.
 
 ---
 
-*Next section will be added after Step 9 (RAGAS evaluation) is complete.*
+---
+
+## Step 9 — Generation Quality Evaluation
+
+### Why not RAGAS
+
+RAGAS was the original evaluation framework specified in the project plan. After Step 8 it was replaced for three concrete reasons:
+
+1. **LlamaIndex was dropped** — RAGAS integrates natively with LlamaIndex/LangChain. Our custom pipeline outputs a list of `(nct_id, verdict, explanation)` dicts; adapting these to RAGAS's `EvaluationDataset` format would require a non-trivial adapter layer with no net gain in evaluation quality.
+2. **LLM-as-judge defaults to OpenAI** — RAGAS's `faithfulness` and `answer_relevancy` metrics call an external LLM to score outputs. The project's $0 budget constraint rules out OpenAI. Using Mistral to evaluate Mistral creates a circularity problem.
+3. **`context_recall` requires ground-truth relevance labels** — For 50+ queries, manual annotation of which trials *should* appear in the top-5 is the same subjective labeling burden already incurred for the SciBERT training set.
+
+### Approach — verdict accuracy evaluation
+
+The generator is evaluated in isolation. Each case specifies a single NCT ID; the composite document is fetched directly from ChromaDB by ID (bypassing retrieval and reranking), then passed to `assess_trial()`. This directly measures what the system is built to do: correctly classify patient eligibility.
+
+```
+data/labeled/eval_ineligible.json   →  50 cases (13 trials, 1 hard disqualifier each)
+data/labeled/eval_eligible.json     →  50 cases (14 trials, all criteria satisfied)
+rag/evaluate.py                     →  runner: fetch doc → assess_trial → tabulate
+reports/rag_evaluation.md           →  output: verdict distributions + per-case table
+```
+
+### Labeled case design
+
+**Ineligible cases (50):**
+
+| Disqualifier class | Examples | Count |
+|---|---|---|
+| Wrong sex | Male on FEMALE trial, Female on MALE trial | 5 |
+| Age out of range | Below minimum age, above maximum age | 5 |
+| Wrong cancer type / histology | Endometrial on ovarian trial, non-epithelial OC | 5 |
+| ECOG / performance status | ECOG 3 where 0-2 required, ECOG 2 where <2 required | 5 |
+| Prior treatment violation | No prior docetaxel required, received prohibited drug | 8 |
+| Insufficient prior treatment | No prior HMA for MDS trial requiring prior HMA failure | 3 |
+| Lab value violation | Low LVEF, thrombocytopenia, elevated creatinine, bilirubin | 6 |
+| Active comorbidity / infection | Active hepatitis B, uncontrolled hypertension, active bleeding | 5 |
+| Active cardiac event | MI within exclusion window, known heart failure | 4 |
+| Pregnancy / active treatment | In active chemotherapy where completion required | 4 |
+
+The 8 `TestIneligibilityVerdict` cases from Step 8 (all against NCT00127920) are included in the 50.
+
+**Eligible cases (50):**
+
+Each patient explicitly satisfies all stated inclusion criteria and triggers no exclusion criteria. The structured `[Eligibility Overview]` header prepended to every document (sex, age, conditions — added in Step 8c) provides the model with explicit eligibility signals. Patient descriptions match: sex, age within range, correct cancer type and histology, ECOG within range, prior treatment history satisfying all requirements, lab values within permitted thresholds.
+
+### Evaluation runner
+
+```bash
+# Full evaluation — ~13 min on M1 Pro (100 cases × ~8s warm per Mistral call)
+python rag/evaluate.py --verbose
+
+# Dry run — print case/trial distribution stats, no Ollama calls
+python rag/evaluate.py --dry-run
+```
+
+The runner writes `reports/rag_evaluation.md` with:
+- Verdict distribution tables per track
+- Per-case verdict and latency table
+- Pass/fail assessment against acceptance criteria
+
+### Acceptance criteria
+
+| Criterion | Threshold |
+|---|---|
+| Ineligible ELIGIBLE rate | 0% (hard constraint — no false-ELIGIBLE verdicts) |
+| Eligible ELIGIBLE rate | ≥70% (Mistral-7B hedges toward UNCERTAIN; UNCERTAIN on eligible ≠ failure) |
+
+*Results to be populated after evaluation run completes.*
