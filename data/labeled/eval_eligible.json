@@ -1,0 +1,352 @@
+[
+  {
+    "case_id": "e01_brain_mets_male_ecog1",
+    "nct_id": "NCT02215512",
+    "trial_description": "RRx-001 + Whole Brain Radiation in Brain Metastases — ALL, 18+, ECOG 0-2, no prior WBRT",
+    "qualifier": "Meets all inclusion: age 55, ECOG 1, brain mets present, no prior WBRT, neurologically stable. No exclusions apply.",
+    "patient": "Male, 55yo. Brain metastases from non-small cell lung cancer; three lesions identified on MRI. No prior whole brain radiotherapy — previously received stereotactic radiosurgery to one lesion 18 months ago. ECOG performance status 1. Neurologically stable for 4 weeks. Adequate bone marrow function. No active bleeding disorder. Not pregnant."
+  },
+  {
+    "case_id": "e02_brain_mets_female_ecog0",
+    "nct_id": "NCT02215512",
+    "trial_description": "RRx-001 + Whole Brain Radiation in Brain Metastases — ALL, 18+, ECOG 0-2, no prior WBRT",
+    "qualifier": "Meets all inclusion: age 44, ECOG 0, multiple brain mets, no prior WBRT or RRx-001, neurologically stable. No exclusions apply.",
+    "patient": "Female, 44yo. Brain metastases from HER2-positive breast cancer. No prior whole brain radiotherapy. No prior RRx-001 therapy. ECOG performance status 0. Neurologically stable for 3 weeks. Normal bone marrow reserve. No coagulopathy. Not pregnant. Using effective contraception."
+  },
+  {
+    "case_id": "e03_brain_mets_male_ecog2",
+    "nct_id": "NCT02215512",
+    "trial_description": "RRx-001 + Whole Brain Radiation in Brain Metastases — ALL, 18+, ECOG 0-2, no prior WBRT",
+    "qualifier": "Meets all inclusion: age 72, ECOG 2 (within range), brain mets present, no prior WBRT. No exclusions apply.",
+    "patient": "Male, 72yo. Multiple brain metastases from renal cell carcinoma. No prior whole brain radiotherapy. ECOG performance status 2. Neurologically stable for 4 weeks. Adequate bone marrow function. No bleeding or clotting abnormalities. Prior RRx-001: none. Not receiving anticoagulants."
+  },
+  {
+    "case_id": "e04_urothelial_male_ecog1_naive",
+    "nct_id": "NCT07183319",
+    "trial_description": "Pembrolizumab Monotherapy in Urothelial Cancer — ALL, 18+, ECOG 0-2, no prior PD-1/PD-L1, no enfortumab",
+    "qualifier": "Meets all inclusion: metastatic urothelial carcinoma, no prior PD-1 or enfortumab, ECOG 1, adequate labs. No exclusions apply.",
+    "patient": "Male, 63yo. Histologically confirmed metastatic urothelial carcinoma of the bladder. Measurable disease per RECIST v1.1. No prior PD-1 or PD-L1 inhibitor therapy. No prior enfortumab vedotin or MMAE-based ADC. ECOG performance status 1. Adequate organ function: Hb 10.5 g/dL, ANC 2.3×10^9/L, CrCl 52 mL/min, total bilirubin 0.7 mg/dL, AST and ALT within normal limits. No CNS metastases. No active infections. No diabetes or peripheral neuropathy above grade 2. Life expectancy >12 weeks."
+  },
+  {
+    "case_id": "e05_urothelial_female_ecog0",
+    "nct_id": "NCT07183319",
+    "trial_description": "Pembrolizumab Monotherapy in Urothelial Cancer — ALL, 18+, ECOG 0-2, no prior PD-1/PD-L1, no enfortumab",
+    "qualifier": "Meets all inclusion: locally advanced urothelial carcinoma, treatment naive for immunotherapy, ECOG 0, adequate labs. No exclusions apply.",
+    "patient": "Female, 58yo. Locally advanced urothelial carcinoma of the urothelium, histologically confirmed. Measurable disease. No prior PD-1 or PD-L1 inhibitor therapy for any malignancy. No prior enfortumab. Last anti-cancer treatment completed 35 days ago. ECOG performance status 0. Adequate labs: Hb 11.0 g/dL, ANC 2.0×10^9/L, CrCl 48 mL/min, bilirubin 0.9 mg/dL, AST/ALT normal. No CNS metastases. No active hepatitis B, C, or HIV. No peripheral neuropathy. Archival tumor tissue available."
+  },
+  {
+    "case_id": "e06_urothelial_male_ecog2_prior_chemo",
+    "nct_id": "NCT07183319",
+    "trial_description": "Pembrolizumab Monotherapy in Urothelial Cancer — ALL, 18+, ECOG 0-2, no prior PD-1/PD-L1, no enfortumab",
+    "qualifier": "Meets all inclusion: metastatic urothelial carcinoma, no prior immunotherapy, ECOG 2 (within range), adequate labs. No exclusions apply.",
+    "patient": "Male, 71yo. Metastatic urothelial carcinoma, bladder primary, histologically confirmed. Prior cisplatin-based chemotherapy completed 30 days ago. No prior PD-1 or PD-L1 inhibitor. No prior enfortumab. ECOG performance status 2. CrCl 38 mL/min, bilirubin 1.2 mg/dL, AST/ALT within normal limits, Hb 8.5 g/dL, ANC 1.6×10^9/L. No untreated CNS metastases. No active infections. Life expectancy >12 weeks. Archival tumor tissue available."
+  },
+  {
+    "case_id": "e07_urothelial_male_ecog1_post_doublet",
+    "nct_id": "NCT07183319",
+    "trial_description": "Pembrolizumab Monotherapy in Urothelial Cancer — ALL, 18+, ECOG 0-2, no prior PD-1/PD-L1, no enfortumab",
+    "qualifier": "Meets all inclusion: metastatic urothelial carcinoma, completed doublet chemo >28 days ago, no immunotherapy history, ECOG 1. No exclusions apply.",
+    "patient": "Male, 52yo. Metastatic urothelial carcinoma of the renal pelvis, histologically confirmed. Completed 6 cycles of carboplatin + gemcitabine 32 days ago. No prior PD-1/PD-L1 therapy. No prior enfortumab. Measurable disease. ECOG 1. Hb 9.8 g/dL, ANC 1.8×10^9/L, CrCl 45 mL/min. Bilirubin and AST/ALT normal. No HIV, hepatitis B or C. Archival tumor tissue available."
+  },
+  {
+    "case_id": "e08_mds_male_failed_azacitidine",
+    "nct_id": "NCT05030675",
+    "trial_description": "Fostamatinib for MDS/CMML — ALL, 18+, ECOG ≤2, failed ≥4 cycles HMA, cytopenias present",
+    "qualifier": "Meets all inclusion: MDS low risk, failed 5 cycles azacitidine, Hb <10, ECOG 1, adequate organ function. No exclusions apply.",
+    "patient": "Male, 68yo. Myelodysplastic syndrome, low risk by IPSS-R (score 2.5). Previously treated with 5 cycles of azacitidine without response. Hemoglobin 8.5 g/dL, platelets 58×10^9/L. ECOG performance status 1. Total bilirubin 0.9 mg/dL, AST and ALT within 1.5×ULN. Creatinine clearance 52 mL/min. Blood pressure 122/76 mmHg. No active infection. No prior therapy other than azacitidine for MDS."
+  },
+  {
+    "case_id": "e09_cmml_female_failed_decitabine",
+    "nct_id": "NCT05030675",
+    "trial_description": "Fostamatinib for MDS/CMML — ALL, 18+, ECOG ≤2, failed ≥4 cycles HMA, cytopenias present",
+    "qualifier": "Meets all inclusion: CMML very low risk, failed 6 cycles decitabine with progression, transfusion dependent, ECOG 0. No exclusions apply.",
+    "patient": "Female, 74yo. Chronic myelomonocytic leukemia (CMML), very low risk by IPSS-R (score 1.0). Received 6 cycles of decitabine; progressive disease by IWG 2006 criteria. Transfusion dependent (2 units packed red blood cells within past 28 days). ECOG performance status 0. Total bilirubin 1.1 mg/dL, AST and ALT within 1.5×ULN. CrCl 40 mL/min, no end-stage renal disease. Blood pressure 118/72 mmHg. No uncontrolled infection. No AML transformation."
+  },
+  {
+    "case_id": "e10_mds_male_ecog2_failed_aza",
+    "nct_id": "NCT05030675",
+    "trial_description": "Fostamatinib for MDS/CMML — ALL, 18+, ECOG ≤2, failed ≥4 cycles HMA, cytopenias present",
+    "qualifier": "Meets all inclusion: MDS intermediate risk, failed 4 cycles azacitidine, Hb <10, ECOG 2 (within range), adequate organ function. No exclusions apply.",
+    "patient": "Male, 62yo. Myelodysplastic syndrome, intermediate risk by IPSS-R (score 3.0). Failed azacitidine after 4 cycles without improvement by IWG criteria. Hemoglobin 7.8 g/dL. ECOG 2. Creatinine clearance 44 mL/min. Bilirubin 1.3 mg/dL, AST and ALT within 1.5×ULN. Blood pressure 124/78 mmHg, well-controlled. ANC 0.7×10^9/L. No uncontrolled infection."
+  },
+  {
+    "case_id": "e11_crpc_male_post_docetaxel_ecog1",
+    "nct_id": "NCT02730975",
+    "trial_description": "Abiraterone Acetate in mCRPC — MALE, 18+, ECOG <2, post-docetaxel, testosterone <50 ng/dL",
+    "qualifier": "Meets all inclusion: mCRPC, one prior docetaxel regimen, testosterone <50, ECOG 1, adequate organ function. No exclusions apply.",
+    "patient": "Male, 67yo. Metastatic castration-resistant prostate adenocarcinoma (no neuroendocrine differentiation). One prior docetaxel-containing chemotherapy regimen. Testosterone 28 ng/dL (castrate level). Progressed per PCWG criteria. ECOG performance status 1. No known brain metastases. No significant GI dysfunction. Can swallow tablets. Adequate organ function. No prior abiraterone acetate. No acute toxicity from prior therapy above grade 1."
+  },
+  {
+    "case_id": "e12_crpc_male_ecog0_two_regimens",
+    "nct_id": "NCT02730975",
+    "trial_description": "Abiraterone Acetate in mCRPC — MALE, 18+, ECOG <2, post-docetaxel, testosterone <50 ng/dL",
+    "qualifier": "Meets all inclusion: mCRPC, two prior regimens (one with docetaxel), testosterone castrate, ECOG 0. No exclusions apply.",
+    "patient": "Male, 72yo. mCRPC. Two prior chemotherapy regimens — first-line docetaxel followed by cabazitaxel. Testosterone 12 ng/dL (medically castrated). Progressed per PCWG criteria. ECOG performance status 0. Adequate organ function. No prior abiraterone acetate. No brain metastases. No significant GI malabsorption. Can swallow tablets."
+  },
+  {
+    "case_id": "e13_crpc_male_ecog1_bone_mets",
+    "nct_id": "NCT02730975",
+    "trial_description": "Abiraterone Acetate in mCRPC — MALE, 18+, ECOG <2, post-docetaxel, testosterone <50 ng/dL",
+    "qualifier": "Meets all inclusion: mCRPC with bone metastases, one prior docetaxel, testosterone castrate, ECOG 1. No exclusions apply.",
+    "patient": "Male, 58yo. mCRPC with bone metastases. One prior docetaxel-containing chemotherapy regimen. Testosterone 22 ng/dL. Progressed by PCWG criteria. ECOG performance status 1. No prior abiraterone. No brain metastases. Adequate organ function. No radiotherapy within 14 days. No acute toxicity from prior therapy. Can swallow tablets and retain oral medication."
+  },
+  {
+    "case_id": "e14_nhl_male_ecog0_autosct",
+    "nct_id": "NCT00838357",
+    "trial_description": "Plerixafor + G-CSF Stem Cell Mobilisation in Lymphoma/MM — ALL, 18+, ECOG 0-1, eligible for autologous SCT, no prior allogeneic SCT",
+    "qualifier": "Meets all inclusion: NHL in PR, eligible for autologous SCT, no prior transplant, ECOG 0, adequate labs. No exclusions apply.",
+    "patient": "Male, 55yo. Relapsed non-Hodgkin's lymphoma (DLBCL) in partial remission after second-line R-ICE therapy. Eligible and planned for autologous haematopoietic stem cell transplantation by institutional criteria. No prior allogeneic or autologous transplant. ECOG 0. WBC 3.2×10^9/L, ANC 1.8×10^9/L, Plt 145×10^9/L. Serum creatinine 1.1 mg/dL. Total bilirubin and transaminases within 2.5×ULN. Adequate cardiac, renal, and pulmonary function for apheresis. Using effective contraception."
+  },
+  {
+    "case_id": "e15_mm_female_ecog1_autosct",
+    "nct_id": "NCT00838357",
+    "trial_description": "Plerixafor + G-CSF Stem Cell Mobilisation in Lymphoma/MM — ALL, 18+, ECOG 0-1, eligible for autologous SCT, no prior allogeneic SCT",
+    "qualifier": "Meets all inclusion: MM in CR, eligible for autologous SCT, no prior transplant, ECOG 1, adequate labs. No exclusions apply.",
+    "patient": "Female, 48yo. Multiple myeloma in complete remission following VRd (bortezomib, lenalidomide, dexamethasone) induction therapy. Eligible and planned for first autologous SCT. No prior allogeneic or autologous transplant. ECOG 1. WBC 3.8×10^9/L, ANC 2.1×10^9/L, Plt 162×10^9/L. Serum creatinine 1.0 mg/dL. Bilirubin and transaminases within 2.5×ULN. Adequate cardiac and pulmonary function for transplant."
+  },
+  {
+    "case_id": "e16_hodgkins_male_ecog1_autosct",
+    "nct_id": "NCT00838357",
+    "trial_description": "Plerixafor + G-CSF Stem Cell Mobilisation in Lymphoma/MM — ALL, 18+, ECOG 0-1, eligible for autologous SCT, no prior allogeneic SCT",
+    "qualifier": "Meets all inclusion: Hodgkin's disease in PR, first autologous SCT planned, ECOG 1, adequate labs. No exclusions apply.",
+    "patient": "Male, 36yo. Hodgkin's disease in partial remission after second-line brentuximab vedotin + bendamustine. First autologous SCT planned. No prior allogeneic or autologous transplant. ECOG 1. WBC 2.8×10^9/L, ANC 1.6×10^9/L, Plt 112×10^9/L. Serum creatinine 1.4 mg/dL. Total bilirubin 1.1 mg/dL, AST and ALT within 2.5×ULN. Adequate cardiac and pulmonary function."
+  },
+  {
+    "case_id": "e17_nhl_female_ecog0_cr2",
+    "nct_id": "NCT00838357",
+    "trial_description": "Plerixafor + G-CSF Stem Cell Mobilisation in Lymphoma/MM — ALL, 18+, ECOG 0-1, eligible for autologous SCT, no prior allogeneic SCT",
+    "qualifier": "Meets all inclusion: NHL (follicular) in CR2, no prior transplant, ECOG 0, eligible for autologous SCT. No exclusions apply.",
+    "patient": "Female, 41yo. Non-Hodgkin's lymphoma (follicular, grade 2) in second complete remission after rituximab-bendamustine. No prior allogeneic or autologous stem cell transplant. Eligible for autologous SCT by institutional standards. ECOG 0. WBC 3.5×10^9/L, ANC 2.0×10^9/L, Plt 180×10^9/L. Serum creatinine 0.9 mg/dL. Bilirubin and transaminases normal. Adequate pulmonary and cardiac function."
+  },
+  {
+    "case_id": "e18_prostate_localized_gleason6",
+    "nct_id": "NCT00805701",
+    "trial_description": "Dutasteride for LUTS in Prostate Cancer — MALE, 35-90, biopsy-proven localized, Gleason ≤8, PSA ≤10",
+    "qualifier": "Meets all inclusion: male 62yo, biopsy-proven T2a, Gleason 6, PSA 5.2, no prior treatment, can swallow tablets. No exclusions apply.",
+    "patient": "Male, 62yo. Biopsy-proven localized prostate cancer, clinical stage T2a. Gleason score 6. PSA 5.2 ng/mL within the past 12 months. No prior treatment for prostate cancer (no radiotherapy, chemotherapy, or hormonal therapy). No prior finasteride or dutasteride in the past 6 months. Can swallow and retain oral medication. Experiencing lower urinary tract symptoms including frequency and weak stream. Willing to participate in full study duration."
+  },
+  {
+    "case_id": "e19_prostate_localized_gleason7",
+    "nct_id": "NCT00805701",
+    "trial_description": "Dutasteride for LUTS in Prostate Cancer — MALE, 35-90, biopsy-proven localized, Gleason ≤8, PSA ≤10",
+    "qualifier": "Meets all inclusion: male 47yo, T1c, Gleason 7, PSA 8.9, treatment naive, can swallow tablets. No exclusions apply.",
+    "patient": "Male, 47yo. Biopsy-proven localized prostate cancer, clinical stage T1c. Gleason score 7 (3+4). PSA 8.9 ng/mL. No prior radiotherapy, chemotherapy, or hormonal therapy for prostate cancer. No prior 5-alpha-reductase inhibitors or anabolic steroids in past 6 months. Can swallow and retain oral medication. Experiencing dysuria and frequency. Able to read and write (questionnaires are self-administered)."
+  },
+  {
+    "case_id": "e20_prostate_localized_gleason8",
+    "nct_id": "NCT00805701",
+    "trial_description": "Dutasteride for LUTS in Prostate Cancer — MALE, 35-90, biopsy-proven localized, Gleason ≤8, PSA ≤10",
+    "qualifier": "Meets all inclusion: male 78yo, T2b, Gleason 8 (at limit), PSA 7.4, no prior treatment. No exclusions apply.",
+    "patient": "Male, 78yo. Biopsy-proven localized prostate cancer, clinical stage T2b. Gleason score 8 (4+4). PSA 7.4 ng/mL. No prior finasteride or dutasteride in past 6 months. No prior glucocorticoids (except topical) within past 3 months. No prior radiotherapy or hormonal therapy. Can swallow tablets. Experiencing urgency and incomplete bladder emptying."
+  },
+  {
+    "case_id": "e21_ovarian_platinum_resistant_ecog0",
+    "nct_id": "NCT04908787",
+    "trial_description": "Phase 3 trial in Platinum-Resistant Ovarian Cancer — FEMALE, 18+, epithelial OC, platinum-resistant (progression <6mo), ECOG 0-1",
+    "qualifier": "Meets all inclusion: epithelial OC, platinum-resistant (progressed 3 months post-platinum), ECOG 0, no prior pelvic RT, no non-epithelial histology. No exclusions apply.",
+    "patient": "Female, 61yo. Epithelial ovarian carcinoma, high-grade serous. Platinum-resistant disease — progressed 3 months after completion of last platinum-based chemotherapy. ECOG performance status 0. No prior pelvic or abdominal radiotherapy. Epithelial histology confirmed. One prior non-platinum systemic therapy before developing platinum resistance."
+  },
+  {
+    "case_id": "e22_fallopian_tube_platinum_resistant",
+    "nct_id": "NCT04908787",
+    "trial_description": "Phase 3 trial in Platinum-Resistant Ovarian Cancer — FEMALE, 18+, epithelial OC/FTC/PPC, platinum-resistant, ECOG 0-1",
+    "qualifier": "Meets all inclusion: fallopian tube cancer, platinum-resistant (progressed 4 months post-platinum), ECOG 1, one prior non-platinum line. No exclusions apply.",
+    "patient": "Female, 54yo. Recurrent fallopian tube cancer, epithelial histology. Platinum-resistant — progressed 4 months after last platinum-based therapy. ECOG performance status 1. One prior non-platinum line of systemic therapy before developing platinum resistance. No prior pelvic or abdominal radiotherapy. No ovarian tumours of low malignant potential."
+  },
+  {
+    "case_id": "e23_peritoneal_platinum_resistant_ecog0",
+    "nct_id": "NCT04908787",
+    "trial_description": "Phase 3 trial in Platinum-Resistant Ovarian Cancer — FEMALE, 18+, epithelial OC/FTC/PPC, platinum-resistant, ECOG 0-1",
+    "qualifier": "Meets all inclusion: primary peritoneal carcinoma, platinum-resistant, ECOG 0, no prior pelvic RT, no non-platinum therapy before platinum resistance. No exclusions apply.",
+    "patient": "Female, 67yo. Primary peritoneal carcinoma, platinum-resistant (progressed 5 months after last platinum). ECOG performance status 0. No prior non-platinum systemic therapy before developing platinum resistance. No prior pelvic or abdominal radiotherapy. Epithelial histology confirmed (high-grade serous)."
+  },
+  {
+    "case_id": "e24_ovarian_hgsoc_platinum_resistant_ecog1",
+    "nct_id": "NCT04908787",
+    "trial_description": "Phase 3 trial in Platinum-Resistant Ovarian Cancer — FEMALE, 18+, epithelial OC, platinum-resistant, ECOG 0-1",
+    "qualifier": "Meets all inclusion: high-grade serous OC, platinum-resistant (<6 months post-platinum), ECOG 1, no prior pelvic RT. No exclusions apply.",
+    "patient": "Female, 49yo. Recurrent epithelial ovarian carcinoma, high-grade serous histology. Platinum-resistant — progressed less than 6 months after last platinum-based regimen. ECOG performance status 1. No prior pelvic or abdominal radiotherapy. No non-epithelial histology. One prior non-platinum line before platinum resistance."
+  },
+  {
+    "case_id": "e25_colorectal_male_ecog0",
+    "nct_id": "NCT02009449",
+    "trial_description": "Pegilodecakin in Advanced Solid Tumors — ALL, 18+, ECOG 0-1, failed prior standard therapy, no hematologic malignancy",
+    "qualifier": "Meets all inclusion: metastatic colorectal carcinoma, failed standard chemotherapy, ECOG 0, no cardiac events in 6 months. No exclusions apply.",
+    "patient": "Male, 59yo. Metastatic colorectal carcinoma, refractory to FOLFOX and FOLFIRI. ECOG performance status 0. No myocardial infarction or cardiac events in past 6 months. No active systemic infection. Not HIV positive, no hepatitis B or C. No surgery in past 28 days. No hematologic malignancy. No bleeding diathesis. No neurological disorder (no MS, no Guillain-Barré)."
+  },
+  {
+    "case_id": "e26_nsclc_female_ecog1",
+    "nct_id": "NCT02009449",
+    "trial_description": "Pegilodecakin in Advanced Solid Tumors — ALL, 18+, ECOG 0-1, failed prior therapy, no hematologic malignancy",
+    "qualifier": "Meets all inclusion: advanced NSCLC, failed 2 prior lines, ECOG 1, no cardiac events, no hematologic malignancy. No exclusions apply.",
+    "patient": "Female, 52yo. Advanced non-small cell lung cancer, failed two prior lines of therapy (carboplatin + pemetrexed; then osimertinib). ECOG performance status 1. No MI or cardiac events in past 6 months. No hematologic malignancy. No bleeding disorders. No surgery in past 28 days. No active systemic infection. No HIV or hepatitis B/C. Not pregnant or lactating."
+  },
+  {
+    "case_id": "e27_rcc_male_ecog0_refuses_std",
+    "nct_id": "NCT02009449",
+    "trial_description": "Pegilodecakin in Advanced Solid Tumors — ALL, 18+, ECOG 0-1, failed prior therapy or refuses existing options",
+    "qualifier": "Meets all inclusion: metastatic RCC, failed prior sunitinib, ECOG 0, no cardiac events, no infection. No exclusions apply.",
+    "patient": "Male, 65yo. Metastatic clear cell renal cell carcinoma, failed prior sunitinib. ECOG performance status 0. No active hepatitis B, C, or HIV. No MI or cardiac events in past 6 months. No surgery in past 28 days. No bleeding diathesis. No inflammatory neurological disorders. No active systemic infection. Evaluable disease by irRC criteria."
+  },
+  {
+    "case_id": "e28_melanoma_female_ecog1",
+    "nct_id": "NCT02009449",
+    "trial_description": "Pegilodecakin in Advanced Solid Tumors — ALL, 18+, ECOG 0-1, failed prior therapy, no hematologic malignancy",
+    "qualifier": "Meets all inclusion: advanced melanoma refractory to prior therapy, ECOG 1, no cardiac events, no neurological disorders. No exclusions apply.",
+    "patient": "Female, 44yo. Advanced melanoma, refractory to prior anti-PD-1 immunotherapy. ECOG performance status 1. No history of inflammatory neurological disorders (no MS, no Guillain-Barré). No MI in past 6 months. No unstable angina. No active systemic infection. No HIV or hepatitis B/C. No surgery in past 28 days. No bleeding diathesis. Not pregnant or lactating."
+  },
+  {
+    "case_id": "e29_breast_primary_female_ecog0",
+    "nct_id": "NCT00156312",
+    "trial_description": "Docetaxel + Capecitabine in Breast Cancer — FEMALE, 18+, primary invasive breast cancer intact, ECOG 0-1",
+    "qualifier": "Meets all inclusion: primary invasive breast cancer T2 measurable, ECOG 0, adequate labs, core needle biopsy obtained, no prior chemo. No exclusions apply.",
+    "patient": "Female, 42yo. Primary invasive breast cancer, T2 (3.2 cm on ultrasound), ER-positive, primary tumor intact and measurable. ECOG performance status 0. Core needle biopsy performed; IHC staining for ER/PR/HER2 obtained. Granulocytes 2,800/mm3, hemoglobin 12.4 g/dL, platelets 210,000/mm3. Total bilirubin within normal limits; AST/ALT within permitted range. No peripheral neuropathy. No prior chemotherapy or radiotherapy. Negative serum HCG. Using effective contraception."
+  },
+  {
+    "case_id": "e30_breast_primary_female_ecog1",
+    "nct_id": "NCT00156312",
+    "trial_description": "Docetaxel + Capecitabine in Breast Cancer — FEMALE, 18+, primary invasive breast cancer intact, ECOG 0-1",
+    "qualifier": "Meets all inclusion: Stage II breast cancer T2N1, measurable primary intact, ECOG 1, adequate labs. No exclusions apply.",
+    "patient": "Female, 38yo. Stage II invasive breast cancer, T2N1 (2.8 cm primary tumor, intact and measurable). ECOG performance status 1. Core needle biopsy obtained. Granulocytes 2,200/mm3, hemoglobin 11.8 g/dL, platelets 190,000/mm3. Total bilirubin within normal limits. AST and ALT within permitted range. No grade ≥2 peripheral neuropathy. No prior severe hypersensitivity reaction to drugs formulated with polysorbate 80. No prior chemotherapy. Not pregnant or nursing. Using contraception."
+  },
+  {
+    "case_id": "e31_breast_primary_postmenopausal",
+    "nct_id": "NCT00156312",
+    "trial_description": "Docetaxel + Capecitabine in Breast Cancer — FEMALE, 18+, primary invasive breast cancer intact, ECOG 0-1",
+    "qualifier": "Meets all inclusion: T3N0 ER-negative primary intact, ECOG 0, adequate labs, postmenopausal. No exclusions apply.",
+    "patient": "Female, 55yo. Primary invasive breast cancer, T3N0, ER-negative (4.5 cm tumor intact and measurable). ECOG performance status 0. Core needle biopsy performed; IHC staining obtained. Granulocytes 2,200/mm3, hemoglobin 11.8 g/dL, platelets 185,000/mm3. Total bilirubin within normal limits; AST/ALT within permitted range. No peripheral neuropathy. No prior chemotherapy or radiotherapy. Postmenopausal (amenorrheic >12 months). No prior hypersensitivity to polysorbate 80 or fluoropyrimidine drugs. No known DPD deficiency. No significant cardiac disease."
+  },
+  {
+    "case_id": "e32_cholangiocarcinoma_male_gemox_pd1",
+    "nct_id": "NCT06718257",
+    "trial_description": "GP/GEMOX + Immunotherapy in Cholangiocarcinoma — ALL, histologically/radiologically confirmed, initial GP/GEMOX-based treatment",
+    "qualifier": "Meets all inclusion: histologically confirmed intrahepatic cholangiocarcinoma, initially treated with GP/GEMOX + PD-1 inhibitor + TKI. No exclusions apply.",
+    "patient": "Male, 57yo. Histologically confirmed intrahepatic cholangiocarcinoma. Initially treated with GP/GEMOX combined with a PD-1 inhibitor and TKI agent as first-line systemic therapy. No prior direct surgery as initial treatment. No prior local interventional therapies (no TACE, no radiofrequency ablation, no radiotherapy) as initial treatment."
+  },
+  {
+    "case_id": "e33_cholangiocarcinoma_female_gemox",
+    "nct_id": "NCT06718257",
+    "trial_description": "GP/GEMOX + Immunotherapy in Cholangiocarcinoma — ALL, histologically/radiologically confirmed, initial GP/GEMOX-based treatment",
+    "qualifier": "Meets all inclusion: radiologically confirmed intrahepatic cholangiocarcinoma, initially treated with GP/GEMOX. No exclusions apply.",
+    "patient": "Female, 63yo. Intrahepatic cholangiocarcinoma, radiologically confirmed on CT imaging. Initial treatment with GP/GEMOX regimen. No prior surgery as initial treatment. No prior local therapies (no TACE, no radiofrequency, no particle implantation, no radiotherapy) at time of first treatment. No combination with other comprehensive regimens outside of GP/GEMOX."
+  },
+  {
+    "case_id": "e34_cholangiocarcinoma_male_gemox_pdl1",
+    "nct_id": "NCT06718257",
+    "trial_description": "GP/GEMOX + Immunotherapy in Cholangiocarcinoma — ALL, histologically/radiologically confirmed, initial GP/GEMOX-based treatment",
+    "qualifier": "Meets all inclusion: histologically confirmed intrahepatic cholangiocarcinoma, initial GEMOX + PD-L1 + TKI. No exclusions apply.",
+    "patient": "Male, 69yo. Intrahepatic cholangiocarcinoma, histologically confirmed by liver biopsy. Initial systemic treatment: GEMOX-based regimen combined with a PD-L1 inhibitor and TKI as first-line therapy. No prior direct surgery as initial treatment. No prior interventional radiology procedures or radiotherapy at first-line treatment."
+  },
+  {
+    "case_id": "e35_rectal_male_18mo_post_ar",
+    "nct_id": "NCT01345175",
+    "trial_description": "Rifaximin for Bowel Dysfunction After Anterior Resection — ALL, 21+, anterior resection at MSKCC 1-5 years prior, bowel symptoms present",
+    "qualifier": "Meets all inclusion: male 58yo, anterior resection at MSKCC 18 months ago, bowel continuity restored, experiencing ARS symptoms. No exclusions apply.",
+    "patient": "Male, 58yo. History of rectal cancer at 8 cm from the anal verge, treated with anterior resection at MSKCC 18 months ago. Bowel continuity restored (primary anastomosis). Experiencing clustering of bowel movements, loose stools, and incomplete evacuation since surgery. No local recurrence of rectal cancer. No antibiotic treatment in past 4 weeks. Not pregnant. Not breastfeeding."
+  },
+  {
+    "case_id": "e36_rectal_female_3yr_post_ar",
+    "nct_id": "NCT01345175",
+    "trial_description": "Rifaximin for Bowel Dysfunction After Anterior Resection — ALL, 21+, anterior resection at MSKCC 1-5 years prior, bowel symptoms present",
+    "qualifier": "Meets all inclusion: female 64yo, anterior resection at MSKCC 3 years ago, bowel continuity restored, experiencing ARS symptoms. No exclusions apply.",
+    "patient": "Female, 64yo. Rectal cancer (T2N0) at 10 cm from anal verge, treated with anterior resection at MSKCC 3 years ago with restoration of bowel continuity. Experiencing persistent clustering of bowel motions, urgency, and frequency since surgery. No local recurrence. No antibiotic use in past 4 weeks. Not pregnant. No breastfeeding."
+  },
+  {
+    "case_id": "e37_rectal_male_2yr_post_ar_jpouch",
+    "nct_id": "NCT01345175",
+    "trial_description": "Rifaximin for Bowel Dysfunction After Anterior Resection — ALL, 21+, anterior resection at MSKCC 1-5 years prior, bowel symptoms present",
+    "qualifier": "Meets all inclusion: male 73yo, anterior resection with J-pouch at MSKCC 2.5 years ago, bowel continuity restored, experiencing ARS symptoms. No exclusions apply.",
+    "patient": "Male, 73yo. History of rectal cancer, treated with anterior resection and J-pouch construction at MSKCC 2.5 years ago. Bowel continuity restored. Experiencing increased stool frequency, unformed stool, and excessive flatus since surgery. No local recurrence of rectal cancer. No antibiotics in past 4 weeks. Not pregnant."
+  },
+  {
+    "case_id": "e38_breast_survivor_aa_phq8",
+    "nct_id": "NCT06336538",
+    "trial_description": "MBCT for Depression in Older African American Breast Cancer Survivors — FEMALE, 65+, African American, Stage I-III, post-treatment, PHQ-9 4-14",
+    "qualifier": "Meets all inclusion: female 68yo, African American, Stage II, completed active treatment 6 months ago, PHQ-9 8. No exclusions apply.",
+    "patient": "Female, 68yo, African American. Stage II breast cancer; completed surgery and adjuvant chemotherapy 6 months ago and currently receiving tamoxifen (endocrine therapy only). PHQ-9 score 8 (mild-moderate depression). English-speaking. Willing to be audio and video-recorded. No moderately severe/severe depression. No comorbid psychiatric illness that would interfere with participation (no bipolar, no OCD, no active suicidal ideation, no drug dependence)."
+  },
+  {
+    "case_id": "e39_breast_survivor_black_phq6",
+    "nct_id": "NCT06336538",
+    "trial_description": "MBCT for Depression in Older African American Breast Cancer Survivors — FEMALE, 65+, African American/Black, Stage I-III, post-treatment, PHQ-9 4-14",
+    "qualifier": "Meets all inclusion: female 72yo, Black, Stage I, completed active treatment 1 year ago, PHQ-9 6, no comorbid psychiatric illness. No exclusions apply.",
+    "patient": "Female, 72yo, Black. Stage I breast cancer; completed primary treatment (lumpectomy + radiation therapy) 1 year ago. No additional active treatment scheduled. PHQ-9 score 6 (mild depression). English-speaking. Willing to provide written informed consent and participate. No bipolar disorder, no active suicidal ideation, no PTSD, no panic disorder. No drug or alcohol dependence."
+  },
+  {
+    "case_id": "e40_breast_survivor_aa_phq12",
+    "nct_id": "NCT06336538",
+    "trial_description": "MBCT for Depression in Older African American Breast Cancer Survivors — FEMALE, 65+, African American, Stage I-III, post-treatment, PHQ-9 4-14",
+    "qualifier": "Meets all inclusion: female 66yo, African American, Stage III, completed active treatment 9 months ago, PHQ-9 12. No exclusions apply.",
+    "patient": "Female, 66yo, African American. Stage III breast cancer; completed surgery, chemotherapy, and radiation therapy 9 months ago. Currently on aromatase inhibitor (endocrine therapy only). PHQ-9 score 12 (moderate depression). English-speaking. Willing to be recorded. No PHQ-9 ≥15. No bipolar disorder, OCD, PTSD, panic disorder, generalized social anxiety disorder, or active suicidal ideation. No drug or alcohol dependence. No borderline personality disorder."
+  },
+  {
+    "case_id": "e41_breast_dlbcl_anthracycline_lvef60",
+    "nct_id": "NCT04541212",
+    "trial_description": "Cardiotoxicity Risk in Breast Cancer/Lymphoma/Leukemia Receiving Anthracycline — ALL, 18+, LVEF ≥50%, planned anthracycline chemotherapy",
+    "qualifier": "Meets all inclusion: DLBCL, planned CHOP (anthracycline-containing), LVEF 60%, no prior cardiomyopathy or CHF. No exclusions apply.",
+    "patient": "Female, 51yo. Newly diagnosed diffuse large B-cell lymphoma. Planned anthracycline-based chemotherapy (R-CHOP). LVEF 60% on echocardiogram prior to chemotherapy initiation. No prior cardiomyopathy, no known heart failure, no history of myocardial infarction. No clinically significant valvular disease or pericardial effusion. No metallic implants or pacemaker. Weight 72 kg. No prior gadolinium allergy. No seizure history. eGFR 68 mL/min/1.73m2. Not pregnant."
+  },
+  {
+    "case_id": "e42_leukemia_male_anthracycline_lvef58",
+    "nct_id": "NCT04541212",
+    "trial_description": "Cardiotoxicity Risk in Breast Cancer/Lymphoma/Leukemia Receiving Anthracycline — ALL, 18+, LVEF ≥50%, planned anthracycline chemotherapy",
+    "qualifier": "Meets all inclusion: ALL, planned anthracycline-containing induction, LVEF 58%, no cardiomyopathy or MI. No exclusions apply.",
+    "patient": "Male, 45yo. Newly diagnosed acute lymphoblastic leukemia. Planned anthracycline-containing induction chemotherapy. LVEF 58% pre-chemotherapy. No prior cardiomyopathy, no heart failure, no history of myocardial infarction. No clinically significant valvular or pericardial disease. No allograft history. No metallic implants. Weight 81 kg. No gadolinium allergy. eGFR 72 mL/min/1.73m2. Signed informed consent."
+  },
+  {
+    "case_id": "e43_breast_female_anthracycline_lvef65",
+    "nct_id": "NCT04541212",
+    "trial_description": "Cardiotoxicity Risk in Breast Cancer/Lymphoma/Leukemia Receiving Anthracycline — ALL, 18+, LVEF ≥50%, planned anthracycline chemotherapy",
+    "qualifier": "Meets all inclusion: Stage III breast cancer, planned AC chemotherapy, LVEF 65%, no cardiac history. No exclusions apply.",
+    "patient": "Female, 38yo. Stage III breast cancer. Planned doxorubicin + cyclophosphamide (AC) adjuvant chemotherapy. LVEF 65% pre-chemotherapy. No prior cardiomyopathy, no heart failure, no myocardial infarction history. No valvular disease or pericardial effusion. No metallic implants or pacemaker. Weight 64 kg. No prior gadolinium allergy. No seizure history. eGFR 85 mL/min/1.73m2. Not pregnant. Willing to undergo CMR scans."
+  },
+  {
+    "case_id": "e44_solid_tumor_emetogenic_chemo_female",
+    "nct_id": "NCT00880191",
+    "trial_description": "Gabapentin for CINV Prevention in Patients Receiving Highly Emetogenic Chemotherapy — ALL, 18+, scheduled for highly emetogenic chemo",
+    "qualifier": "Meets all inclusion: Stage IV ovarian cancer, scheduled for highly emetogenic carboplatin + paclitaxel, planned acute CINV prophylaxis. No exclusions apply.",
+    "patient": "Female, 55yo. Stage IV ovarian cancer. Scheduled to receive carboplatin + paclitaxel chemotherapy (highly emetogenic regimen). Planned prophylactic treatment for acute nausea and vomiting with 5-HT3 antagonist and dexamethasone 20 mg on day 1. No known contraindication to gabapentin. ECOG performance status 1. Adequate organ function. Willing to participate in randomized trial."
+  },
+  {
+    "case_id": "e45_solid_tumor_emetogenic_chemo_male",
+    "nct_id": "NCT00880191",
+    "trial_description": "Gabapentin for CINV Prevention in Patients Receiving Highly Emetogenic Chemotherapy — ALL, 18+, scheduled for highly emetogenic chemo",
+    "qualifier": "Meets all inclusion: Stage IV colorectal carcinoma, scheduled for highly emetogenic FOLFOX, planned 5-HT3 + dexamethasone prophylaxis. No exclusions apply.",
+    "patient": "Male, 61yo. Stage IV colorectal carcinoma. Scheduled to begin FOLFOX chemotherapy (highly emetogenic regimen). Planned acute nausea and vomiting prophylaxis with 5-HT3 antagonist and dexamethasone 20 mg on day 1. No known sensitivity to gabapentin. ECOG 0. Adequate renal and hepatic function. Willing to participate in the study."
+  },
+  {
+    "case_id": "e46_solid_tumor_emetogenic_chemo_female2",
+    "nct_id": "NCT00880191",
+    "trial_description": "Gabapentin for CINV Prevention in Patients Receiving Highly Emetogenic Chemotherapy — ALL, 18+, scheduled for highly emetogenic chemo",
+    "qualifier": "Meets all inclusion: breast cancer, scheduled for AC chemotherapy (highly emetogenic), planned acute CINV prophylaxis. No exclusions apply.",
+    "patient": "Female, 48yo. Stage III breast cancer. Scheduled to receive doxorubicin + cyclophosphamide (AC, highly emetogenic regimen). Planned prophylactic 5-HT3 antagonist and dexamethasone on day 1. No contraindication to gabapentin. ECOG 0. Normal hepatic and renal function. Agreed to participate in study."
+  },
+  {
+    "case_id": "e47_rcc_male_ecog0_failed_sunitinib",
+    "nct_id": "NCT02009449",
+    "trial_description": "Pegilodecakin in Advanced Solid Tumors — ALL, 18+, ECOG 0-1, failed prior standard therapy, no hematologic malignancy",
+    "qualifier": "Meets all inclusion: metastatic clear cell RCC, failed prior sunitinib, ECOG 0, no cardiac events, no infection. No exclusions apply.",
+    "patient": "Male, 58yo. Metastatic clear cell renal cell carcinoma. Failed first-line sunitinib. ECOG performance status 0. No myocardial infarction or cardiac events in past 6 months. No active systemic infection. No HIV, no hepatitis B or C. No surgery in past 28 days. No hematologic malignancy. No bleeding diathesis in past 6 months. No history of neurological inflammatory disorders. Measurable disease."
+  },
+  {
+    "case_id": "e48_pancreatic_female_ecog1_refractory",
+    "nct_id": "NCT02009449",
+    "trial_description": "Pegilodecakin in Advanced Solid Tumors — ALL, 18+, ECOG 0-1, failed prior therapy, no hematologic malignancy",
+    "qualifier": "Meets all inclusion: advanced pancreatic carcinoma, failed standard chemotherapy, ECOG 1, no cardiac events. No exclusions apply.",
+    "patient": "Female, 62yo. Advanced pancreatic carcinoma, refractory to first-line gemcitabine + nab-paclitaxel. ECOG performance status 1. No MI or cardiac events in past 6 months. No active infection. No HIV or hepatitis B/C. No surgery in past 28 days. No hematologic malignancy. No bleeding diathesis. No neurological inflammatory disorder. Not pregnant or lactating."
+  },
+  {
+    "case_id": "e49_ovarian_platinum_resistant_brca",
+    "nct_id": "NCT04908787",
+    "trial_description": "Phase 3 trial in Platinum-Resistant Ovarian Cancer — FEMALE, 18+, epithelial OC, platinum-resistant, ECOG 0-1",
+    "qualifier": "Meets all inclusion: BRCA2-mutated high-grade serous OC, platinum-resistant, ECOG 1, no prior pelvic RT, no excess non-platinum lines. No exclusions apply.",
+    "patient": "Female, 56yo. BRCA2-mutated recurrent high-grade serous ovarian carcinoma, epithelial histology. Platinum-resistant — progressed 4 months after most recent platinum-based chemotherapy. ECOG performance status 1. No prior pelvic or abdominal radiotherapy. One prior non-platinum systemic therapy (PARPi) before developing platinum resistance. No tumours of low malignant potential."
+  },
+  {
+    "case_id": "e50_nhl_male_ecog1_mm_cr_autosct",
+    "nct_id": "NCT00838357",
+    "trial_description": "Plerixafor + G-CSF Stem Cell Mobilisation in Lymphoma/MM — ALL, 18+, ECOG 0-1, eligible for autologous SCT, no prior allogeneic SCT",
+    "qualifier": "Meets all inclusion: NHL follicular in CR2, no prior transplant, ECOG 1, eligible for autologous SCT, adequate labs. No exclusions apply.",
+    "patient": "Male, 53yo. Non-Hodgkin's lymphoma (follicular, grade 2) in second complete remission after rituximab + lenalidomide. First autologous SCT planned. No prior allogeneic or autologous stem cell transplant. ECOG 1. Eligible for autologous SCT by institutional standards. WBC 3.0×10^9/L, ANC 1.5×10^9/L, Plt 110×10^9/L. Serum creatinine 1.0 mg/dL (≤2.2 mg/dL). Total bilirubin 0.9 mg/dL, AST and ALT within 2.5×ULN. Adequate cardiac and pulmonary function. Using effective contraception."
+  }
+]
