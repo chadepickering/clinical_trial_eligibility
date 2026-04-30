@@ -83,7 +83,8 @@ def query_trials(
                          document will be fed to a cross-encoder for reranking.
 
     Returns:
-        list of dicts with keys: nct_id, score, conditions, phases, status, document
+        list of dicts with keys: nct_id, score, conditions, phases, status,
+        sex, min_age, max_age, document
     """
     kwargs = dict(
         query_embeddings=[query_embedding],
@@ -97,12 +98,16 @@ def query_trials(
 
     output = []
     for i, nct_id in enumerate(results["ids"][0]):
+        meta = results["metadatas"][0][i]
         output.append({
             "nct_id":     nct_id,
             "score":      1.0 - results["distances"][0][i],  # cosine similarity
-            "conditions": results["metadatas"][0][i].get("conditions", ""),
-            "phases":     results["metadatas"][0][i].get("phases", ""),
-            "status":     results["metadatas"][0][i].get("status", ""),
+            "conditions": meta.get("conditions", ""),
+            "phases":     meta.get("phases", ""),
+            "status":     meta.get("status", ""),
+            "sex":        meta.get("sex", ""),
+            "min_age":    meta.get("min_age", ""),
+            "max_age":    meta.get("max_age", ""),
             "document":   results["documents"][0][i][:doc_max_len],
         })
 

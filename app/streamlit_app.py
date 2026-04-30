@@ -111,6 +111,14 @@ def _build_patient_description(patient: dict) -> str:
     elif age:
         parts.append(f"Age {age}.")
 
+    cancer = patient.get("cancer_type", "")
+    if cancer:
+        parts.append(f"{cancer}.")
+
+    prior = patient.get("prior_therapy_notes", "")
+    if prior:
+        parts.append(f"{prior}.")
+
     ecog = patient.get("ecog")
     kps  = patient.get("karnofsky")
     if ecog is not None:
@@ -190,9 +198,25 @@ def _render_sidebar() -> dict:
         st.session_state["_ex"] = True
     if st.sidebar.button("Clear", use_container_width=True):
         st.session_state["_ex"] = False
+        st.session_state["auto_query"] = ""
 
     ex = st.session_state.get("_ex", False)
 
+    # -- Clinical context ----------------------------------------------------
+    cancer_type = st.sidebar.text_input(
+        "Cancer type / condition",
+        value="stage III ovarian carcinoma" if ex else "",
+        placeholder="e.g. stage III ovarian carcinoma",
+    )
+    prior_therapy = st.sidebar.text_input(
+        "Prior therapy notes",
+        value="no prior chemotherapy or radiotherapy" if ex else "",
+        placeholder="e.g. no prior chemotherapy",
+    )
+
+    st.sidebar.divider()
+
+    # -- Structured fields ---------------------------------------------------
     sex = st.sidebar.selectbox(
         "Sex",
         options=["(not specified)", "female", "male"],
@@ -200,12 +224,18 @@ def _render_sidebar() -> dict:
     )
     age = st.sidebar.number_input("Age", min_value=0, max_value=120,
                                   value=52 if ex else 0, step=1)
-    ecog = st.sidebar.select_slider(
-        "ECOG", options=[0, 1, 2, 3, 4],
-        value=1 if ex else 0,
+    # Fix 2: ECOG as selectbox, KPS as free number input
+    ecog_options = ["(not specified)", 0, 1, 2, 3, 4]
+    ecog_raw = st.sidebar.selectbox(
+        "ECOG performance status",
+        options=ecog_options,
+        index=2 if ex else 0,          # index 2 = value 1 for example patient
+        format_func=lambda x: str(x) if x != "(not specified)" else x,
     )
-    kps = st.sidebar.slider("Karnofsky (%)", 0, 100,
-                             value=80 if ex else 0, step=10)
+    kps = st.sidebar.number_input(
+        "Karnofsky (%)", min_value=0, max_value=100,
+        value=80 if ex else 0, step=1,
+    )
 
     st.sidebar.markdown("**Lab values** *(leave 0 to omit)*")
     with st.sidebar.expander("Lab values", expanded=ex):
@@ -230,12 +260,16 @@ def _render_sidebar() -> dict:
 
     # Build patient dict — omit zero/unspecified values
     patient: dict = {}
+    if cancer_type.strip():
+        patient["cancer_type"] = cancer_type.strip()
+    if prior_therapy.strip():
+        patient["prior_therapy_notes"] = prior_therapy.strip()
     if sex != "(not specified)":
         patient["sex"] = sex
     if age > 0:
         patient["age"] = int(age)
-    if ecog is not None:
-        patient["ecog"] = int(ecog)
+    if ecog_raw != "(not specified)":
+        patient["ecog"] = int(ecog_raw)
     if kps > 0:
         patient["karnofsky"] = int(kps)
 
@@ -255,6 +289,10 @@ def _render_sidebar() -> dict:
     n_fields = len(patient) + len(labs)
     st.sidebar.caption(f"{n_fields} profile field{'s' if n_fields != 1 else ''} set")
 
+    # Fix 1: button at the bottom of sidebar
+    if st.sidebar.button("🔍  Find matching trials", use_container_width=True, type="primary"):
+        st.session_state["auto_query"] = _build_patient_description(patient)
+
     return patient
 
 
@@ -262,18 +300,41 @@ def _render_sidebar() -> dict:
 # Trial search panel
 # ---------------------------------------------------------------------------
 
+def _score_color(score: float) -> str:
+    """Map similarity score 0–1 to a hex color: green (1) → yellow (0.5) → red (0)."""
+    if score >= 0.5:
+        # green to yellow: r increases 0→255, g stays 180
+        t = (score - 0.5) / 0.5
+        r = int(255 * (1 - t))
+        g = int(180 * t + 200 * (1 - t))
+        return f"#{r:02x}{g:02x}00"
+    else:
+        # yellow to red: g decreases 200→0
+        t = score / 0.5
+        g = int(200 * t)
+        return f"#ff{g:02x}00"
+
+
 def _render_search() -> str | None:
     """Renders the search panel. Returns selected nct_id or None."""
     st.subheader("Trial Search")
+
+    # Fix 3: query box populated from full patient description
+    auto_query = st.session_state.get("auto_query", "")
     query = st.text_input(
         "Describe the patient or trial of interest",
-        placeholder="e.g. platinum-sensitive ovarian carcinoma, BRCA1 mutation",
+        value=auto_query,
+        placeholder="e.g. stage III ovarian carcinoma, no prior chemotherapy, female age 52",
+        help='Click "Find matching trials" in the sidebar to auto-fill from the patient profile.',
     )
 
     selected_nct = st.session_state.get("selected_nct_id")
 
     if not query:
-        st.caption("Enter a query above to search the trial corpus.")
+        st.caption(
+            "Fill the patient profile in the sidebar, then click **Find matching trials** "
+            "— or type a query here directly."
+        )
         return selected_nct
 
     with st.spinner("Searching…"):
@@ -287,34 +348,51 @@ def _render_search() -> str | None:
         st.warning("No results. Check that ChromaDB is populated (`python embed.py`).")
         return selected_nct
 
-    # Display as interactive radio list
-    st.markdown(f"**{len(results)} trials found**")
-
-    rows = []
-    for r in results:
-        meta = r.get("metadata") or {}
-        rows.append({
-            "Score":      f"{r['score']:.3f}",
-            "NCT ID":     r["nct_id"],
-            "Status":     meta.get("status", ""),
-            "Sex":        meta.get("sex", ""),
-            "Min age":    meta.get("min_age", ""),
-            "Conditions": (meta.get("conditions") or "")[:60],
-        })
+    st.markdown(f"**{len(results)} trials found** — select a row to score")
 
     import pandas as pd
-    df = pd.DataFrame(rows)
-    st.dataframe(df, use_container_width=True, hide_index=True)
 
-    options = [r["nct_id"] for r in results]
-    idx = options.index(selected_nct) if selected_nct in options else 0
-    chosen = st.radio(
-        "Select trial to score:",
-        options=options,
-        index=idx,
-        horizontal=True,
+    # Fix 4: correct field access (flat dict, not nested); NCT ID left, Score right
+    rows = []
+    for r in results:
+        conds = (r.get("conditions") or "")
+        # conditions is stored as a string repr of a list — clean it up
+        conds = conds.strip("[]'\"").replace("', '", ", ").replace('", "', ", ")[:55]
+        rows.append({
+            "NCT ID":     r["nct_id"],
+            "Status":     r.get("status", ""),
+            "Sex":        r.get("sex", ""),
+            "Min age":    r.get("min_age", ""),
+            "Conditions": conds,
+            "Score":      round(r["score"], 3),
+        })
+
+    df = pd.DataFrame(rows)
+
+    # Fix 5: checkbox row selection via on_select
+    event = st.dataframe(
+        df,
+        use_container_width=True,
+        hide_index=True,
+        on_select="rerun",
+        selection_mode="single-row",
+        column_config={
+            "Score": st.column_config.NumberColumn(
+                "Score",
+                format="%.3f",
+                min_value=0.0,
+                max_value=1.0,
+            ),
+        },
     )
-    return chosen
+
+    selected_rows = event.selection.rows if event.selection else []
+    if selected_rows:
+        chosen = results[selected_rows[0]]["nct_id"]
+        st.session_state["selected_nct_id"] = chosen
+        return chosen
+
+    return selected_nct
 
 
 # ---------------------------------------------------------------------------
@@ -477,18 +555,28 @@ def _render_criterion_table(evaluations: list[dict]):
         hedging_col = (
             f'{e["hedging"]:.2f}' if kind == "subjective" else "—"
         )
-        row_bg = ""
+        # Fix 6: explicit text color on every row so dark-mode white doesn't bleed
+        # through light row backgrounds
         if kind == "deterministic_fail":
-            row_bg = 'style="background:#fff5f5;"'
+            row_style = "background:#fff5f5;"
+            text_color = "color:#7f1d1d;"
         elif kind == "deterministic_pass":
-            row_bg = 'style="background:#f0faf4;"'
+            row_style = "background:#f0faf4;"
+            text_color = "color:#14532d;"
+        elif kind == "subjective":
+            row_style = "background:#fffbeb;"
+            text_color = "color:#78350f;"
+        else:
+            row_style = "background:#f9fafb;"
+            text_color = "color:#1f2937;"
 
+        td = f"padding:4px 8px;font-size:0.82rem;{text_color}"
         rows_html.append(
-            f"<tr {row_bg}>"
+            f'<tr style="{row_style}">'
             f"<td style='padding:4px 8px;'>{chip}</td>"
-            f"<td style='padding:4px 8px;font-size:0.8rem;'>{b1}</td>"
-            f"<td style='padding:4px 8px;font-size:0.82rem;'>{text}</td>"
-            f"<td style='padding:4px 8px;font-size:0.8rem;text-align:center;'>{hedging_col}</td>"
+            f"<td style='{td}font-size:0.8rem;'>{b1}</td>"
+            f"<td style='{td}'>{text}</td>"
+            f"<td style='{td}text-align:center;'>{hedging_col}</td>"
             f"</tr>"
         )
 
