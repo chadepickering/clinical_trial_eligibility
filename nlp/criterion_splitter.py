@@ -150,4 +150,57 @@ def split_criteria(raw_text: str) -> list[dict]:
         # Preamble prose before any bullet in this section — skip it
 
     flush_bullet()
+
+    # Fallback: prose-paragraph format (no bullets found)
+    # Some older ClinicalTrials.gov records list criteria as plain paragraphs
+    # separated by blank lines rather than bullet-prefixed lines.
+    if not results:
+        results = _split_paragraphs(raw_text)
+
+    return results
+
+
+def _split_paragraphs(raw_text: str) -> list[dict]:
+    """
+    Fallback splitter for eligibility text formatted as prose paragraphs
+    (blank-line-separated blocks, no bullet markers).
+
+    Each non-header paragraph becomes one criterion in section "unknown"
+    unless the paragraph text matches an inclusion/exclusion header, in
+    which case subsequent paragraphs are tagged accordingly.
+    """
+    paragraphs = re.split(r'\n\s*\n', raw_text)
+    results: list[dict] = []
+    position = 0
+    current_section = 'unknown'
+
+    for para in paragraphs:
+        stripped = para.strip()
+        if not stripped:
+            continue
+
+        # Check if the whole paragraph (or its first line) is a section header
+        first_line = stripped.splitlines()[0].strip()
+        label, remainder = _is_header(first_line)
+        if label is not None:
+            current_section = label
+            # If there's text after the header on the same line, treat it as a criterion
+            if remainder and len(_clean_text(remainder)) >= MIN_CRITERION_LENGTH:
+                results.append({
+                    'text':     _clean_text(remainder),
+                    'section':  current_section,
+                    'position': position,
+                })
+                position += 1
+            continue
+
+        cleaned = _clean_text(stripped)
+        if len(cleaned) >= MIN_CRITERION_LENGTH:
+            results.append({
+                'text':     cleaned,
+                'section':  current_section,
+                'position': position,
+            })
+            position += 1
+
     return results
