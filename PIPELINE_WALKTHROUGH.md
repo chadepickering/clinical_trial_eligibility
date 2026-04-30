@@ -1114,3 +1114,271 @@ The 1 persistent ineligible failure — `prior_mds_history_lymphoma` (NCT0083835
 | Eligible ELIGIBLE rate | ≥70% (portfolio); ≥90% (production) | 86% — PASS |
 | Evaluation reproducible | temperature=0 | deterministic ✓ |
 | Results documented | `reports/rag_evaluation.md` | ✓ |
+
+---
+
+## Step 10 — PyMC Bayesian Eligibility Model
+
+The Bayesian model is the formal quantification layer that converts SciBERT
+B2/B3 labels and NER-extracted thresholds into a posterior probability of
+eligibility with a calibrated credible interval.
+
+### Architecture: two-stage classification + prior predictive sampling
+
+**Stage 1 — criterion classification (`evaluate_all_criteria`)**
+
+Every criterion for a trial-patient pair is classified into one of five kinds:
+
+| Kind | Condition | Treatment |
+|---|---|---|
+| `DETERMINISTIC_PASS` | B2=1, B3=1, patient meets it | Factor 1.0 — no variable needed |
+| `DETERMINISTIC_FAIL` | B2=1, B3=1, patient fails it | Short-circuit → P(eligible) = 0 |
+| `SUBJECTIVE` | B2=0 | Beta(α, β) shaped by hedging strength |
+| `UNOBSERVABLE` | B3=0, or either label = None | Beta(1, 1) — uninformative |
+| `UNEVALUABLE` | B2=1, B3=1, patient field absent | Beta(1, 1) — uninformative |
+
+**Stage 2 — prior predictive sampling (`compute_posterior`)**
+
+One Beta random variable is created per stochastic criterion. The overall
+eligibility probability is their product, registered as `pm.Deterministic`.
+`pm.sample_prior_predictive(draws=2000)` samples from this joint prior —
+not NUTS, because there is no likelihood. Prior predictive sampling is
+~100× faster and mathematically equivalent for this model structure.
+
+### Walkthrough: NCT00127920 + female patient, age 52, KPS 80
+
+NCT00127920 is the taxol/carboplatin/bevacizumab ovarian carcinoma trial.
+After loading from DuckDB + synthetic metadata criteria:
+
+```
+Total criteria: 12 (10 NLP-split + 2 synthetic)
+  Synthetic: NCT00127920_meta_sex  (Female patients only)
+             NCT00127920_meta_min_age (Age ≥ 18 years)
+```
+
+Patient profile: `age=52, sex="female", karnofsky=80, ecog=None`
+
+**Classification pass:**
+
+| # | Criterion (abbrev.) | B2 | B3 | Patient field | Kind |
+|---|---|---|---|---|---|
+| meta_sex | Female patients only | 1 | 1 | sex=female → meets | PASS |
+| meta_min_age | Age ≥ 18 years | 1 | 1 | age=52 → meets | PASS |
+| NCT00127920_4 | Karnofsky > 50% | 1 | 1 | karnofsky=80 → meets | PASS |
+| NCT00127920_1 | Stage III/IV OC | 1 | 1 | cancer_type=None | UNEVALUABLE |
+| NCT00127920_2 | No prior chemo | 1 | 1 | prior_chemo=None | UNEVALUABLE |
+| NCT00127920_5 | Adequate bone marrow | 0 | — | — | SUBJECTIVE |
+| NCT00127920_6..10 | Exclusion criteria (NLP) | None | None | — | UNOBSERVABLE |
+
+Result: 3 deterministic passes, 0 fails, 2 unevaluable, ~7 stochastic.
+
+No `DETERMINISTIC_FAIL` → model proceeds to sampling.
+
+**Beta model:**
+
+```
+# SUBJECTIVE (hedging=0.8, "adequate" judgment criterion):
+p_0 ~ Beta(alpha=0.4, beta=1.6)   # skewed toward uncertain
+
+# UNEVALUABLE × 2 (missing cancer_type, prior_chemo):
+p_1 ~ Beta(1, 1)
+p_2 ~ Beta(1, 1)
+
+# UNOBSERVABLE × 7 (unlabeled exclusion criteria):
+p_3..p_9 ~ Beta(1, 1)
+
+p_eligible = p_0 * p_1 * ... * p_9   # product of 10 variables
+```
+
+E[Beta(1,1)^n] = 0.5^n. With 10 stochastic variables:
+E[p_eligible] ≈ 0.004 — mathematically correct but driven entirely by the
+sparse patient profile. The model is reporting epistemic uncertainty from
+missing fields (cancer type, prior treatment, lab values), not a clinical
+judgment that the patient is ineligible.
+
+**Uncertainty tier output (`summarize_posterior`):**
+
+```python
+{
+  "mean":    0.004,
+  "hdi_lower": 0.000,
+  "hdi_upper": 0.031,
+  "hdi_width": 0.031,
+  "tier":    "high confidence",   # narrow HDI despite low mean
+  "explanation": "Eligibility probability is 0.4% (95% HDI: 0.0%–3.1%), "
+                 "with a narrow credible interval indicating high confidence."
+}
+```
+
+Note: a narrow HDI here is "high confidence that the probability is near zero"
+given this sparse patient profile — not high confidence the patient is
+ineligible. The `uncertainty_decomposition` output distinguishes these:
+
+```python
+{
+  "dominant_source": "unobservable",   # 7 of 10 stochastic criteria
+  "n_unevaluable":   2,
+  "n_unobservable":  7,
+  "n_deterministic": 3,
+}
+```
+
+The Streamlit UI uses `dominant_source` to display a "High uncertainty —
+profile incomplete" banner alongside the criterion breakdown, so clinicians
+see why the probability is low, not just that it is.
+
+### Walkthrough: NCT00127920 + male patient
+
+```python
+patient = {"age": 54, "sex": "male", "karnofsky": 80}
+```
+
+Classification hits `NCT00127920_meta_sex` immediately:
+- Text: "Female patients only" — `_SEX_FEMALE_RE` matches
+- Patient sex = "male" ≠ "female" → `meets = False`
+- `b1_label = 1` (inclusion) → return `False` → `DETERMINISTIC_FAIL`
+
+**Short-circuit engaged → P(eligible) = 0.000 exactly. No PyMC model built.**
+
+```python
+{
+  "mean": 0.0, "ci_lower": 0.0, "ci_upper": 0.0,
+  "short_circuited": True,
+  "failing_criterion": "NCT00127920_meta_sex",
+}
+```
+
+Uncertainty tier: `"disqualified"` — hard constraint, no sampling required.
+
+### Synthetic metadata criteria
+
+Sex restriction and min/max age are not in the NLP-split criteria text —
+they exist only in the `trials` table structured columns. Without synthetic
+criteria, a male patient on a female-only trial would receive no deterministic
+disqualifier and proceed to sampling with an ambiguous posterior.
+
+`_synthetic_criteria_from_metadata(nct_id, con)` solves this by building
+fully-labeled (B2=1, B3=1) `Criterion` objects directly from DuckDB:
+
+- `trials.sex = 'FEMALE'` → `Criterion(text="Female patients only", ...)`
+- `trials.min_age = '18 Years'` → `Criterion(text="Age ≥ 18 years", extracted_thresholds=["≥ 18 years"], ...)`
+- `trials.sex = 'ALL'` → no criterion produced (not a restriction)
+
+These are appended to `load_criteria_for_trial`'s return value after the
+NLP-split criteria, so they are always evaluated last — after the main
+inclusion/exclusion criteria — but before any stochastic sampling.
+
+### Hedging prior calibration
+
+For subjective criteria, the Beta parameters are derived from `estimate_hedging`:
+
+| Criterion type | hedging | α = 2(1-h) | β = 2h | Beta shape |
+|---|---|---|---|---|
+| Signed informed consent | 0.05 | 1.9 | 0.1 | Strongly right-skewed (usually met) |
+| Cancer type, prior treatment | 0.5 | 1.0 | 1.0 | Uniform (maximum uncertainty) |
+| Physician judgment, willingness | 0.8 | 0.4 | 1.6 | Left-skewed (genuinely uncertain) |
+
+### Why this model is necessary: observed posterior distributions
+
+The following output was produced by running `compute_eligibility_posterior` and
+`summarize_posterior` across five constructed scenarios that span the full range
+of the model's output. Each scenario corresponds to a structurally different
+trial-patient configuration; the █/░ bar is the posterior mean P(eligible) on
+a 0→1 scale.
+
+```
+P = 0.000  [DISQUALIFIED]  male patient on female-only trial (NCT00127920_meta_sex FAIL)
+P = 0.000  HDI [0.000 – 0.000]
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  disqualified
+p5=0.000  p25=0.000  p50=0.000  p75=0.000  p95=0.000
+
+P ≈ 0.004  [HIGH UNCERTAINTY]  3 PASS + 7 unobservable + 2 subjective — sparse profile
+P = 0.004  HDI [0.000 – 0.019]
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  high confidence
+p5=0.000  p25=0.000  p50=0.000  p75=0.002  p95=0.019
+
+P ≈ 0.250  [HIGH UNCERTAINTY]  2 PASS + 2 unknown conditions (h=0.5 each)
+P = 0.250  HDI [0.000 – 0.702]
+██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  high uncertainty
+p5=0.009  p25=0.071  p50=0.192  p75=0.374  p95=0.702
+
+P ≈ 0.475  [HIGH UNCERTAINTY]  2 PASS + consent (h=0.05) + 1 unknown condition
+P = 0.475  HDI [0.007 – 0.943]
+██████████████████░░░░░░░░░░░░░░░░░░░░░░  high uncertainty
+p5=0.049  p25=0.235  p50=0.464  p75=0.712  p95=0.938
+
+P ≈ 0.854  [HIGH UNCERTAINTY]  2 PASS + 3 consent-only items (h=0.05 each)
+P = 0.854  HDI [0.398 – 1.000]
+██████████████████████████████████░░░░░░  high uncertainty
+p5=0.398  p25=0.787  p50=0.951  p75=0.995  p95=1.000
+
+P = 1.000  [HIGH CONFIDENCE]  all 5 criteria met deterministically (point mass)
+P = 1.000  HDI [1.000 – 1.000]
+████████████████████████████████████████  high confidence
+p5=1.000  p25=1.000  p50=1.000  p75=1.000  p95=1.000
+```
+
+**Reading the outputs:**
+
+| Scenario | What drives the posterior | Clinical interpretation |
+|---|---|---|
+| P = 0.000, disqualified | Hard constraint violated: sex, age, lab value outside absolute threshold | Patient cannot be enrolled — no profile completion can change this |
+| P = 0.004, "high confidence" | 7 UNOBSERVABLE criteria each contribute Beta(1,1); product = 0.5^7 × ... | The model is *confident that P is near zero given this profile* — it is a data completeness statement, not a clinical judgment |
+| P = 0.250, high uncertainty | 2 unknown conditions each Beta(1,1); product = 0.5² | Genuine two-way uncertainty: completing the profile could shift P to either extreme |
+| P = 0.475, high uncertainty | Consent (Beta(1.9,0.1)) × unknown (Beta(1,1)) ≈ 0.95×0.5 | Near-uniform posterior — the model has essentially no information; both outcomes equally plausible |
+| P = 0.854, high uncertainty | 3 consent-type criteria each Beta(1.9,0.1); product = 0.95³ | Strong prior that consent-type criteria are met; wide HDI because consent is not observed |
+| P = 1.000, "high confidence" | All criteria evaluated against patient fields and passed | Deterministic certification — no stochastic factors remain |
+
+**The tier naming:** "high confidence" appears at *both* ends of P (P≈0 and P=1.0). This
+is not a contradiction. The tier classifies certainty about what the posterior *says*,
+not the probability value itself.
+
+- P = 0.004 with HDI width 0.019: the model is *confident* that eligibility probability
+  is near zero — that is a precise, narrow statement about an incomplete patient profile.
+- P = 1.000 with HDI width 0.000: the model is *certain* because all factors were
+  resolved deterministically.
+- P = 0.475 with HDI width 0.936: the model *genuinely does not know* — both eligible
+  and ineligible are plausible given the available data.
+
+**Why this model is necessary:**
+
+An LLM verdict (ELIGIBLE / NOT ELIGIBLE / UNCERTAIN) cannot make these distinctions.
+It cannot tell you whether its "UNCERTAIN" comes from a patient who is 70% likely
+eligible but has two genuinely unobservable criteria, or from a patient who is 4%
+likely eligible because 7 criteria reference trial-specific conditions never mentioned
+in the profile. The Bayesian model makes that structure explicit:
+
+- `n_unobservable = 7` → profile incompleteness, not clinical doubt
+- `n_subjective = 2, dominant_source = "subjective"` → physician judgment required
+- `short_circuited = True` → categorical exclusion, no uncertainty to quantify
+
+This is the core argument for the Bayesian layer: it does not compete with the LLM
+narrative, it *quantifies what the LLM narrative cannot*.
+
+### Known limitation: multiplicative shrinkage
+
+The product of N independent Beta(1,1) variables has mean 0.5^N. For a trial
+with 15 stochastic factors (common for trials with many unobservable criteria),
+E[p_eligible] ≈ 0.00003. This is mathematically correct for a completely
+unknown patient profile, but it means the model is not useful as a standalone
+eligibility screener — it is useful as an *uncertainty decomposer*.
+
+Mitigations applied in the UI:
+1. `uncertainty_decomposition` shows which criterion types drive the result
+2. The "high uncertainty" tier triggers a "profile incomplete" message
+3. Criterion-level breakdown lets clinicians identify which fields to collect
+
+A product-to-sum transformation (log-probability space), hierarchical priors,
+or partial patient profile imputation are architectural improvements outside
+the scope of this project.
+
+### Files produced
+
+| File | Purpose |
+|---|---|
+| `bayesian/criterion_evaluator.py` | Criterion dataclass, threshold parser, keyword router, DuckDB loader, synthetic criteria |
+| `bayesian/eligibility_model.py` | Five-kind classifier, PyMC model builder, prior predictive sampler, convenience wrapper |
+| `bayesian/uncertainty.py` | arviz HDI, tier classification, uncertainty decomposition |
+| `tests/test_criterion_evaluator.py` | 135 tests across all evaluator functions including integration |
+| `tests/test_bayesian.py` | 103 tests across all model functions and B1/B2/B3 permutations |
+| `tests/test_uncertainty.py` | 38 tests for summarize_posterior and uncertainty_decomposition |
