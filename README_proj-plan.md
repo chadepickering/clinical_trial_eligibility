@@ -516,8 +516,8 @@ python rag/evaluate.py --dry-run
 - [x] 50 ineligible cases constructed and committed to `data/labeled/eval_ineligible.json`
 - [x] 50 eligible cases constructed and committed to `data/labeled/eval_eligible.json`
 - [x] Evaluation runner implemented at `rag/evaluate.py`
-- [ ] Ineligible ELIGIBLE rate = 0% (hard constraint — zero false-ELIGIBLE verdicts)
-- [ ] Eligible ELIGIBLE rate ≥ 70%
+- [ ] Ineligible ELIGIBLE rate = 0% (hard constraint — zero false-ELIGIBLE verdicts; production threshold identical)
+- [ ] Eligible ELIGIBLE rate ≥ 70% (portfolio threshold for Mistral-7B local; production minimum would be ≥90% with a frontier model)
 - [ ] Results documented in `reports/rag_evaluation.md`
 
 ---

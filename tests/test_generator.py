@@ -202,7 +202,8 @@ class TestGeneratorContract:
     def test_e6_prompt_default_truncation_is_12000_chars(self):
         """
         Default doc_max_chars is 12,000 — covers p99 of the corpus while
-        staying within Mistral's 4096-token context window.
+        staying within Mistral's 4096-token context window after few-shot
+        examples (~265 tokens) added in Step 9.
 
         Verify by supplying a document longer than 12,000 chars and checking
         that the default prompt is shorter than a full-document prompt and

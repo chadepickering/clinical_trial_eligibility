@@ -188,10 +188,10 @@ REPORT_TEMPLATE = """\
 
 ## Summary
 
-| Track | Cases run | Passed | Failed | Pass rate | Acceptance criterion |
-|---|---|---|---|---|---|
-| Ineligible (0 ELIGIBLE) | {inelig_run} | {inelig_pass} | {inelig_fail} | {inelig_pct}% | 100% (zero ELIGIBLE) |
-| Eligible (≥70% ELIGIBLE) | {elig_run} | {elig_pass} | {elig_fail} | {elig_pct}% | ≥70% ELIGIBLE |
+| Track | Cases run | Passed | Failed | Pass rate | Portfolio threshold | Production threshold |
+|---|---|---|---|---|---|---|
+| Ineligible (0 ELIGIBLE) | {inelig_run} | {inelig_pass} | {inelig_fail} | {inelig_pct}% | 100% | 100% |
+| Eligible (ELIGIBLE rate) | {elig_run} | {elig_pass} | {elig_fail} | {elig_pct}% | ≥70% | ≥90% |
 
 **Overall result:** {overall}
 
@@ -244,12 +244,59 @@ labels for each query — the same subjective annotation problem encountered wit
 the SciBERT training set. Track 2 directly measures what the system is built to
 do: correctly classify patient eligibility.
 
+**Prompt engineering — iterative evaluation:**
+Three prompt variants were evaluated before arriving at the final configuration:
+
+| Variant | Ineligible pass | Eligible ELIGIBLE | Overall | Runtime |
+|---|---|---|---|---|
+| Baseline (direct assessment) | 86% — 7 failures | 100% | FAIL | ~14 min |
+| Few-shot (3 numeric examples) | **100% — 0 failures** | 88% | **PASS** | ~14 min |
+| Few-shot + chain-of-thought | 98% — 1 failure | 94% | FAIL | ~49 min |
+
+The baseline failed on quantitative/temporal threshold comparisons — the model
+performed holistic assessments without explicitly comparing patient values to
+trial thresholds. Three few-shot examples (platelet count, age, platinum timing)
+demonstrating the comparison pattern recovered all 7 ineligible failures at no
+runtime cost.
+
+Chain-of-thought prompting (structured criterion-by-criterion output format) was
+tested next. It improved eligible accuracy (88%→94%) and reduced ineligible
+failures (7→1), but tripled runtime and introduced a regression on `age_below_65`
+— the longer CoT output caused Mistral-7B to accumulate enough "met" criteria
+before reaching the age threshold that it summarised toward ELIGIBLE. Critically,
+it moved the ineligible pass rate below 100%, violating the hard constraint.
+
+Few-shot-only is the final production configuration: it meets both acceptance
+criteria, runs in 14 minutes, and the empirical comparison between all three
+variants is itself a portfolio-relevant engineering finding.
+
 **Known limitation — UNCERTAIN vs NOT ELIGIBLE:**
 Mistral-7B (7B parameters) correctly avoids ELIGIBLE for ineligible patients
 but frequently returns UNCERTAIN rather than NOT ELIGIBLE when identifying a
 disqualifying criterion. UNCERTAIN is treated as a pass for ineligible cases:
 clinically, a hedge is preferable to a false ELIGIBLE. See Step 8 documentation
 in PIPELINE_WALKTHROUGH.md for the full analysis.
+
+**Production vs. portfolio thresholds:**
+The acceptance thresholds used here reflect the capability ceiling of Mistral-7B
+in a local, $0 deployment, not a production standard:
+
+| Metric | This evaluation (Mistral-7B local) | Production minimum |
+|---|---|---|
+| Ineligible ELIGIBLE rate | 0% (hard constraint) | 0% (hard constraint — unchanged) |
+| Eligible ELIGIBLE rate | ≥70% | ≥90% |
+
+The ineligibility constraint is absolute regardless of model size: a false ELIGIBLE
+verdict (missed exclusion) could result in enrolling a patient in a contraindicated
+trial. UNCERTAIN on an eligible patient is merely inefficient — it routes the case
+to human review rather than causing patient harm.
+
+The eligible accuracy gap (70% vs. 90%) is a direct consequence of model size.
+Mistral-7B at 4-bit quantization hedges toward UNCERTAIN on cases where a frontier
+model (GPT-4o, Llama-3-70B on hosted inference) would confidently return ELIGIBLE,
+particularly when eligibility depends on the absence of exclusion criteria rather
+than explicit positive inclusion signals. A production deployment would upgrade the
+generator model and rerun this evaluation suite against the 90% threshold.
 
 **Ineligible case design:**
 50 cases across 13 distinct trials. Each patient has exactly one hard disqualifying

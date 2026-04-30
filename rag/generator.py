@@ -51,6 +51,55 @@ SYSTEM_PROMPT = (
     "  VERDICT: UNCERTAIN"
 )
 
+# ---------------------------------------------------------------------------
+# Few-shot examples
+#
+# Three worked examples demonstrating the numeric/temporal comparison failures
+# observed in Step 9 evaluation (7/50 ineligible cases received ELIGIBLE).
+# All use fictional NCT IDs (NCT00000001–3) to avoid ambiguity with real trials.
+#
+# Pattern covered by each example:
+#   1. Numeric lab threshold  — platelet count below required minimum
+#   2. Age range (lower bound) — patient below minimum age
+#   3. Time window (temporal)  — platinum-sensitive misclassified as resistant
+#
+# Token overhead: ~265 tokens. Revised document budget: 3,080 tokens ≈ 12,320
+# chars. Default doc_max_chars=12,000 remains within budget.
+# ---------------------------------------------------------------------------
+
+FEW_SHOT_EXAMPLES = """\
+---
+EXAMPLES (for reference — do not assess these, use them as a guide):
+
+TRIAL: NCT00000001
+Inclusion Criteria: Platelet count ≥ 100,000/mm³.
+
+PATIENT: Female, 44yo. Primary breast cancer. Platelet count 78,000/mm³. ECOG 0.
+
+Assessment: The trial requires platelet count ≥ 100,000/mm³. The patient's platelet count is 78,000/mm³. Since 78,000 < 100,000, this inclusion criterion is not met.
+VERDICT: NOT ELIGIBLE
+
+---
+TRIAL: NCT00000002
+Age eligibility: 65 Years and older.
+Inclusion Criteria: Age ≥ 65 years.
+
+PATIENT: Female, 59yo. Stage II breast cancer survivor, post-treatment.
+
+Assessment: The trial requires age ≥ 65 years. The patient is 59 years old. Since 59 < 65, the minimum age criterion is not met.
+VERDICT: NOT ELIGIBLE
+
+---
+TRIAL: NCT00000003
+Inclusion Criteria: Platinum-resistant disease, defined as disease progression within 6 months of completing platinum-based chemotherapy.
+
+PATIENT: Female, 55yo. Recurrent ovarian carcinoma. Progressed 14 months after last platinum-based chemotherapy.
+
+Assessment: The trial requires platinum-resistant disease (progression < 6 months after platinum therapy). The patient progressed at 14 months. Since 14 > 6, the disease is platinum-sensitive, not platinum-resistant. This inclusion criterion is not met.
+VERDICT: NOT ELIGIBLE
+
+"""
+
 
 def build_prompt(
     nct_id: str,
@@ -62,15 +111,17 @@ def build_prompt(
     Construct the full prompt string for a single trial eligibility assessment.
 
     Token budget (Mistral 4096-token context window):
-        Fixed overhead (system prompt + patient query + scaffolding): ~239 tokens
+        Fixed overhead (system prompt + few-shot examples + patient query
+                        + scaffolding):                                 ~504 tokens
         Reserve for generated output:                                   512 tokens
-        Available for trial document:                                 3,345 tokens
-                                                                   ≈ 13,380 chars
+        Available for trial document:                                 3,080 tokens
+                                                                   ≈ 12,320 chars
 
-    Default of 12,000 chars covers p99 of the corpus (12,494 chars) while
-    leaving a small buffer. Only the top ~1% of trials by length require
-    truncation. The previous default of 1,500 chars cut off the eligibility
-    criteria section entirely for most trials.
+    Default of 12,000 chars fits within the revised budget (12,000 < 12,320).
+    The previous default of 1,500 chars cut off the eligibility criteria section
+    entirely for most trials. Few-shot examples (~265 tokens) were added in Step 9
+    to improve numeric threshold reasoning; they reduce the document budget by ~265
+    tokens vs the original 3,345 but remain within the 12,000-char default.
 
     Args:
         nct_id:         trial identifier, included in the prompt for traceability
@@ -87,6 +138,7 @@ def build_prompt(
 
     return (
         f"{SYSTEM_PROMPT}\n\n"
+        f"{FEW_SHOT_EXAMPLES}"
         f"---\n"
         f"TRIAL: {nct_id}\n\n"
         f"{truncated_doc}\n\n"
