@@ -1,6 +1,6 @@
 # RAG Generation Quality Evaluation
 
-**Date:** 2026-04-29 20:13
+**Date:** 2026-04-29 20:41
 **Model:** mistral
 **Evaluation set:** 50 ineligible cases + 50 eligible cases
 
@@ -34,7 +34,7 @@ Pass rate: **98.0%** (49/50)
 
 ### Failures (received 'ELIGIBLE' verdict)
 
-- `prior_mds_history_lymphoma` — NCT: NCT00838357  (latency: 17.2s)
+- `prior_mds_history_lymphoma` — NCT: NCT00838357  (latency: 17.3s)
 
 ---
 
@@ -57,8 +57,8 @@ Pass rate: **86.0%** (43/50)
 
 - `e03_brain_mets_male_ecog2` — NCT: NCT02215512  (latency: 2.5s)
 - `e20_prostate_localized_gleason8` — NCT: NCT00805701  (latency: 7.3s)
-- `e21_ovarian_platinum_resistant_ecog0` — NCT: NCT04908787  (latency: 8.4s)
-- `e22_fallopian_tube_platinum_resistant` — NCT: NCT04908787  (latency: 6.9s)
+- `e21_ovarian_platinum_resistant_ecog0` — NCT: NCT04908787  (latency: 8.5s)
+- `e22_fallopian_tube_platinum_resistant` — NCT: NCT04908787  (latency: 7.0s)
 - `e24_ovarian_hgsoc_platinum_resistant_ecog1` — NCT: NCT04908787  (latency: 6.1s)
 - `e44_solid_tumor_emetogenic_chemo_female` — NCT: NCT00880191  (latency: 6.5s)
 - `e49_ovarian_platinum_resistant_brca` — NCT: NCT04908787  (latency: 9.2s)
@@ -179,7 +179,7 @@ inclusion criteria and triggers no exclusion criteria, with structured fields
 
 | case_id | nct_id | verdict | latency |
 |---|---|---|---|
-| prior_chemo | NCT00127920 | NOT ELIGIBLE | 16.5s |
+| prior_chemo | NCT00127920 | NOT ELIGIBLE | 16.9s |
 | prior_radiotherapy | NCT00127920 | UNCERTAIN | 13.7s |
 | low_karnofsky | NCT00127920 | UNCERTAIN | 2.3s |
 | low_malignancy_potential | NCT00127920 | UNCERTAIN | 4.1s |
@@ -192,7 +192,7 @@ inclusion criteria and triggers no exclusion criteria, with structured fields
 | active_bleeding_brain_mets | NCT02215512 | NOT ELIGIBLE | 3.9s |
 | grade2_neuropathy_breast | NCT00156312 | NOT ELIGIBLE | 11.7s |
 | male_breast_cancer | NCT00156312 | NOT ELIGIBLE | 2.2s |
-| thrombocytopenia_breast | NCT00156312 | UNCERTAIN | 6.2s |
+| thrombocytopenia_breast | NCT00156312 | UNCERTAIN | 6.1s |
 | elevated_bilirubin_breast | NCT00156312 | UNCERTAIN | 9.4s |
 | prior_pd1_urothelial | NCT07183319 | NOT ELIGIBLE | 13.5s |
 | prior_enfortumab_urothelial | NCT07183319 | NOT ELIGIBLE | 4.2s |
@@ -204,10 +204,10 @@ inclusion criteria and triggers no exclusion criteria, with structured fields
 | female_prostate_trial | NCT02730975 | UNCERTAIN | 8.0s |
 | no_docetaxel_crpc | NCT02730975 | NOT ELIGIBLE | 6.6s |
 | ecog2_crpc | NCT02730975 | UNCERTAIN | 5.5s |
-| testosterone_not_castrate | NCT02730975 | NOT ELIGIBLE | 9.1s |
+| testosterone_not_castrate | NCT02730975 | NOT ELIGIBLE | 9.2s |
 | prior_allo_sct_lymphoma | NCT00838357 | NOT ELIGIBLE | 10.2s |
 | ecog2_lymphoma_sct | NCT00838357 | NOT ELIGIBLE | 8.2s |
-| elevated_creatinine_lymphoma | NCT00838357 | UNCERTAIN | 25.9s |
+| elevated_creatinine_lymphoma | NCT00838357 | UNCERTAIN | 26.0s |
 | active_leukemia_sct | NCT00838357 | NOT ELIGIBLE | 3.8s |
 | age_below_35_prostate | NCT00805701 | NOT ELIGIBLE | 12.0s |
 | age_above_90_prostate | NCT00805701 | UNCERTAIN | 9.5s |
@@ -228,7 +228,7 @@ inclusion criteria and triggers no exclusion criteria, with structured fields
 | known_heart_failure_cardiotoxicity | NCT04541212 | NOT ELIGIBLE | 3.4s |
 | prior_surgery_first_chol | NCT06718257 | NOT ELIGIBLE | 5.2s |
 | initial_tace_chol | NCT06718257 | UNCERTAIN | 7.7s |
-| prior_mds_history_lymphoma | NCT00838357 | ELIGIBLE | 17.2s |
+| prior_mds_history_lymphoma | NCT00838357 | ELIGIBLE | 17.3s |
 
 ### Eligible Cases
 
@@ -237,40 +237,40 @@ inclusion criteria and triggers no exclusion criteria, with structured fields
 | e01_brain_mets_male_ecog1 | NCT02215512 | UNCERTAIN | 10.3s |
 | e02_brain_mets_female_ecog0 | NCT02215512 | UNCERTAIN | 2.9s |
 | e03_brain_mets_male_ecog2 | NCT02215512 | NOT ELIGIBLE | 2.5s |
-| e04_urothelial_male_ecog1_naive | NCT07183319 | ELIGIBLE | 16.3s |
+| e04_urothelial_male_ecog1_naive | NCT07183319 | ELIGIBLE | 16.4s |
 | e05_urothelial_female_ecog0 | NCT07183319 | ELIGIBLE | 8.8s |
 | e06_urothelial_male_ecog2_prior_chemo | NCT07183319 | UNCERTAIN | 12.9s |
-| e07_urothelial_male_ecog1_post_doublet | NCT07183319 | UNCERTAIN | 13.8s |
-| e08_mds_male_failed_azacitidine | NCT05030675 | UNCERTAIN | 19.5s |
-| e09_cmml_female_failed_decitabine | NCT05030675 | ELIGIBLE | 12.7s |
-| e10_mds_male_ecog2_failed_aza | NCT05030675 | UNCERTAIN | 10.5s |
-| e11_crpc_male_post_docetaxel_ecog1 | NCT02730975 | ELIGIBLE | 14.8s |
+| e07_urothelial_male_ecog1_post_doublet | NCT07183319 | UNCERTAIN | 14.0s |
+| e08_mds_male_failed_azacitidine | NCT05030675 | UNCERTAIN | 19.6s |
+| e09_cmml_female_failed_decitabine | NCT05030675 | ELIGIBLE | 12.6s |
+| e10_mds_male_ecog2_failed_aza | NCT05030675 | UNCERTAIN | 10.6s |
+| e11_crpc_male_post_docetaxel_ecog1 | NCT02730975 | ELIGIBLE | 14.9s |
 | e12_crpc_male_ecog0_two_regimens | NCT02730975 | UNCERTAIN | 5.4s |
 | e13_crpc_male_ecog1_bone_mets | NCT02730975 | ELIGIBLE | 5.1s |
 | e14_nhl_male_ecog0_autosct | NCT00838357 | UNCERTAIN | 41.8s |
 | e15_mm_female_ecog1_autosct | NCT00838357 | ELIGIBLE | 27.2s |
-| e16_hodgkins_male_ecog1_autosct | NCT00838357 | UNCERTAIN | 30.5s |
+| e16_hodgkins_male_ecog1_autosct | NCT00838357 | UNCERTAIN | 30.4s |
 | e17_nhl_female_ecog0_cr2 | NCT00838357 | UNCERTAIN | 12.4s |
 | e18_prostate_localized_gleason6 | NCT00805701 | UNCERTAIN | 12.2s |
-| e19_prostate_localized_gleason7 | NCT00805701 | UNCERTAIN | 7.5s |
+| e19_prostate_localized_gleason7 | NCT00805701 | UNCERTAIN | 7.6s |
 | e20_prostate_localized_gleason8 | NCT00805701 | NOT ELIGIBLE | 7.3s |
-| e21_ovarian_platinum_resistant_ecog0 | NCT04908787 | NOT ELIGIBLE | 8.4s |
-| e22_fallopian_tube_platinum_resistant | NCT04908787 | NOT ELIGIBLE | 6.9s |
+| e21_ovarian_platinum_resistant_ecog0 | NCT04908787 | NOT ELIGIBLE | 8.5s |
+| e22_fallopian_tube_platinum_resistant | NCT04908787 | NOT ELIGIBLE | 7.0s |
 | e23_peritoneal_platinum_resistant_ecog0 | NCT04908787 | ELIGIBLE | 6.9s |
 | e24_ovarian_hgsoc_platinum_resistant_ecog1 | NCT04908787 | NOT ELIGIBLE | 6.1s |
-| e25_colorectal_male_ecog0 | NCT02009449 | ELIGIBLE | 11.4s |
+| e25_colorectal_male_ecog0 | NCT02009449 | ELIGIBLE | 11.5s |
 | e26_nsclc_female_ecog1 | NCT02009449 | ELIGIBLE | 5.0s |
 | e27_rcc_male_ecog0_refuses_std | NCT02009449 | ELIGIBLE | 7.4s |
 | e28_melanoma_female_ecog1 | NCT02009449 | ELIGIBLE | 4.8s |
 | e29_breast_primary_female_ecog0 | NCT00156312 | ELIGIBLE | 13.0s |
-| e30_breast_primary_female_ecog1 | NCT00156312 | ELIGIBLE | 7.8s |
+| e30_breast_primary_female_ecog1 | NCT00156312 | ELIGIBLE | 7.9s |
 | e31_breast_primary_postmenopausal | NCT00156312 | ELIGIBLE | 8.2s |
 | e32_cholangiocarcinoma_male_gemox_pd1 | NCT06718257 | ELIGIBLE | 7.9s |
 | e33_cholangiocarcinoma_female_gemox | NCT06718257 | ELIGIBLE | 6.7s |
 | e34_cholangiocarcinoma_male_gemox_pdl1 | NCT06718257 | ELIGIBLE | 6.2s |
 | e35_rectal_male_18mo_post_ar | NCT01345175 | ELIGIBLE | 14.5s |
 | e36_rectal_female_3yr_post_ar | NCT01345175 | ELIGIBLE | 10.0s |
-| e37_rectal_male_2yr_post_ar_jpouch | NCT01345175 | ELIGIBLE | 6.7s |
+| e37_rectal_male_2yr_post_ar_jpouch | NCT01345175 | ELIGIBLE | 6.8s |
 | e38_breast_survivor_aa_phq8 | NCT06336538 | UNCERTAIN | 11.9s |
 | e39_breast_survivor_black_phq6 | NCT06336538 | ELIGIBLE | 8.7s |
 | e40_breast_survivor_aa_phq12 | NCT06336538 | ELIGIBLE | 6.2s |
