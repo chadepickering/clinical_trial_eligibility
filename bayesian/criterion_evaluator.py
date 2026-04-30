@@ -85,6 +85,36 @@ _OP_MAP = {
 }
 
 
+# English-language comparator phrases → symbolic operators.
+# Applied by _threshold_from_text before the regex runs so that criteria
+# written in prose ("less than or equal to ECOG 2") are handled the same
+# way as symbolic ones ("ECOG ≤ 2").
+_ENGLISH_OP_SUBS: list[tuple[re.Pattern, str]] = [
+    (re.compile(r'\bgreater\s+than\s+or\s+equal\s+to\b', re.I), '>='),
+    (re.compile(r'\bless\s+than\s+or\s+equal\s+to\b',    re.I), '<='),
+    (re.compile(r'\bgreater\s+than\b',                    re.I), '>'),
+    (re.compile(r'\bless\s+than\b',                       re.I), '<'),
+    (re.compile(r'\bat\s+least\b',                        re.I), '>='),
+    (re.compile(r'\bat\s+most\b',                         re.I), '<='),
+    (re.compile(r'\bno\s+more\s+than\b',                  re.I), '<='),
+    (re.compile(r'\bno\s+less\s+than\b',                  re.I), '>='),
+    (re.compile(r'\bnot\s+exceed(?:ing)?\b',              re.I), '<='),
+]
+
+# Loose threshold: operator followed by optional non-numeric words then a number.
+# Handles "≤ ECOG 2" or "> grade 1" after English normalization.
+_LOOSE_THRESHOLD_RE = re.compile(
+    r'(>=|<=|>|<)\s*(?:[A-Za-z]+\s+){0,3}(\d[\d,]*\.?\d*)',
+)
+
+
+def _normalize_english_ops(text: str) -> str:
+    """Replace English comparison phrases with symbolic operators."""
+    for pattern, symbol in _ENGLISH_OP_SUBS:
+        text = pattern.sub(symbol, text)
+    return text
+
+
 def _parse_threshold(s: str) -> tuple[str, float, str] | None:
     """
     Parse a threshold string into (operator, value, unit).
@@ -135,8 +165,38 @@ def _first_threshold(thresholds: list[str]) -> tuple[str, float, str] | None:
 
 
 def _threshold_from_text(text: str) -> tuple[str, float, str] | None:
-    """Fallback: scan criterion text directly for a threshold expression."""
-    return _parse_threshold(text)
+    """
+    Scan criterion text for a threshold expression.
+
+    Three-pass strategy:
+      1. Strict symbolic parse on the original text.
+      2. Normalize English comparators ("less than or equal to" → "<="),
+         then strict parse again.
+      3. Loose parse: operator followed by optional intervening words then
+         a number (e.g. "≤ ECOG 2" or "> grade 1").
+    """
+    # Pass 1: original text, strict
+    result = _parse_threshold(text)
+    if result:
+        return result
+
+    # Pass 2: normalize English operators, then strict
+    normalized = _normalize_english_ops(text)
+    result = _parse_threshold(normalized)
+    if result:
+        return result
+
+    # Pass 3: loose — operator + up to 3 optional words + number
+    m = _LOOSE_THRESHOLD_RE.search(normalized)
+    if m:
+        op = m.group(1)
+        try:
+            value = float(m.group(2).replace(',', ''))
+        except ValueError:
+            return None
+        return op, value, ''
+
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -245,6 +305,14 @@ def evaluate_objective_criterion(
     lab_values = patient.get("lab_values") or {}
     for field_name, pattern in _LAB_KEYWORDS.items():
         if pattern.search(text) and field_name in lab_values:
+            # Creatinine clearance (cc/min or mL/min) is a different measurement
+            # from serum creatinine (mg/dL). The patient profile stores serum
+            # creatinine; skip criteria that explicitly reference clearance to
+            # avoid comparing 0.9 mg/dL against a 60 cc/min threshold.
+            if field_name == "creatinine" and re.search(
+                r'\bclearance\b', text, re.I
+            ):
+                continue
             parsed = _first_threshold(thresholds) or _threshold_from_text(text)
             if parsed:
                 op, val, _ = parsed

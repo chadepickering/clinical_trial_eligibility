@@ -99,19 +99,23 @@ def evaluate_all_criteria(
         is_obj = c.b2_label == 1
         is_obs = c.b3_label == 1
 
-        if is_obj and is_obs:
-            match = evaluate_objective_criterion(c, patient_profile)
-            if match is True:
-                kind = DETERMINISTIC_PASS
-            elif match is False:
-                kind = DETERMINISTIC_FAIL
-            else:
-                # Objective+observable but patient profile lacks the field
-                kind = UNEVALUABLE
+        # Always attempt keyword-routed evaluation first, regardless of B2/B3
+        # labels. Prose-format criteria (section="unknown") often have NULL
+        # labels but contain evaluable information (ECOG thresholds, lab values)
+        # that the keyword router can resolve from the patient profile.
+        match = evaluate_objective_criterion(c, patient_profile)
+
+        if match is True:
+            kind = DETERMINISTIC_PASS
+        elif match is False:
+            kind = DETERMINISTIC_FAIL
+        elif is_obj and is_obs:
+            # Labeled as objective+observable but patient field was absent
+            kind = UNEVALUABLE
         elif c.b2_label == 0:
             kind = SUBJECTIVE
         else:
-            # b3_label=0 (unobservable), or either label is None (unknown)
+            # Unobservable, or labels unknown — marginalize with Beta(1,1)
             kind = UNOBSERVABLE
 
         evaluations.append(
