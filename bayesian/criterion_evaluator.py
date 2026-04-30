@@ -292,6 +292,90 @@ def estimate_hedging(text: str) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Synthetic criteria from trial-level metadata
+# ---------------------------------------------------------------------------
+
+_AGE_DIGITS_RE = re.compile(r"(\d+)")
+
+
+def _parse_age_years(age_str: str | None) -> int | None:
+    """Parse '18 Years' → 18, None / '' → None."""
+    if not age_str:
+        return None
+    m = _AGE_DIGITS_RE.search(age_str)
+    return int(m.group(1)) if m else None
+
+
+def _synthetic_criteria_from_metadata(nct_id: str, con) -> list[Criterion]:
+    """
+    Build Criterion objects from trial-level metadata fields that are not
+    captured in the NLP-split criteria text:
+
+        trials.sex     → sex eligibility criterion (FEMALE / MALE only;
+                          ALL and None produce no criterion)
+        trials.min_age → minimum age inclusion criterion
+        trials.max_age → maximum age inclusion criterion (uncommon; mostly NULL)
+
+    All synthetic criteria are labeled B2=1 (objective) + B3=1 (observable)
+    so they enter the deterministic branch of evaluate_all_criteria.
+
+    Criterion IDs carry a ``_meta_`` infix so they are distinguishable from
+    NLP-split criteria in downstream output and tests.
+    """
+    row = con.execute(
+        "SELECT sex, min_age, max_age FROM trials WHERE nct_id = ?", [nct_id]
+    ).fetchone()
+    if not row:
+        return []
+
+    sex, min_age_str, max_age_str = row
+    synthetic: list[Criterion] = []
+
+    # -- Sex -----------------------------------------------------------------
+    if sex and sex.upper() in ("FEMALE", "MALE"):
+        label = "Female" if sex.upper() == "FEMALE" else "Male"
+        synthetic.append(
+            Criterion(
+                criterion_id=f"{nct_id}_meta_sex",
+                text=f"{label} patients only",
+                b1_label=1,
+                b2_label=1,
+                b3_label=1,
+            )
+        )
+
+    # -- Minimum age ---------------------------------------------------------
+    min_years = _parse_age_years(min_age_str)
+    if min_years is not None:
+        synthetic.append(
+            Criterion(
+                criterion_id=f"{nct_id}_meta_min_age",
+                text=f"Age ≥ {min_years} years",
+                b1_label=1,
+                b2_label=1,
+                b3_label=1,
+                extracted_thresholds=[f"≥ {min_years} years"],
+            )
+        )
+
+    # -- Maximum age ---------------------------------------------------------
+    max_years = _parse_age_years(max_age_str)
+    if max_years is not None:
+        synthetic.append(
+            Criterion(
+                criterion_id=f"{nct_id}_meta_max_age",
+                text=f"Age ≤ {max_years} years",
+                b1_label=1,
+                b2_label=1,
+                b3_label=1,
+                extracted_thresholds=[f"≤ {max_years} years"],
+            )
+        )
+
+    return synthetic
+
+
+# ---------------------------------------------------------------------------
 # DuckDB loader
 # ---------------------------------------------------------------------------
 
@@ -307,7 +391,10 @@ def load_criteria_for_trial(nct_id: str, con) -> list[Criterion]:
         con:    active DuckDB connection
 
     Returns:
-        list of Criterion objects ordered by position within the trial
+        list of Criterion objects ordered by position within the trial,
+        followed by any synthetic criteria derived from trial-level metadata
+        (sex eligibility, min/max age) that are not present in the NLP-split
+        criteria text.
     """
     rows = con.execute(
         """
@@ -349,4 +436,4 @@ def load_criteria_for_trial(nct_id: str, con) -> list[Criterion]:
             extracted_scales=list(row[12]),
         )
         for row in rows
-    ]
+    ] + _synthetic_criteria_from_metadata(nct_id, con)

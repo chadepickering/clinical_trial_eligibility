@@ -1,7 +1,7 @@
 """
 Tests for bayesian/criterion_evaluator.py.
 
-Three test classes:
+Test classes:
 
   TestParseThreshold          — _parse_threshold: operator/value/unit parsing
                                 across common oncology criterion formats. No
@@ -21,8 +21,18 @@ Three test classes:
   TestEstimateHedging         — estimate_hedging: keyword coverage for high,
                                 low, and default hedging tiers.
 
-  TestLoadCriteriaForTrial    — integration test: DuckDB round-trip for NCT00127920.
-                                Skipped automatically if the database file is absent.
+  TestParseAgeYears           — _parse_age_years: integer extraction from
+                                ClinicalTrials.gov age strings ("18 Years", etc.).
+                                No external dependencies. Always runnable.
+
+  TestLoadCriteriaForTrial    — integration test: DuckDB round-trip for NCT00127920,
+                                including synthetic metadata criteria (_meta_sex,
+                                _meta_min_age). Skipped if the database file is absent.
+
+  TestSyntheticCriteriaFromMetadata
+                              — integration test: _synthetic_criteria_from_metadata
+                                for trials with sex=FEMALE, sex=MALE, and sex=ALL.
+                                Skipped if the database file is absent.
 
 Run all unit tests (no DB):
     PYTHONPATH=. pytest tests/test_criterion_evaluator.py -v -m "not integration"
@@ -38,6 +48,8 @@ from bayesian.criterion_evaluator import (
     Criterion,
     _parse_threshold,
     _compare,
+    _parse_age_years,
+    _synthetic_criteria_from_metadata,
     evaluate_objective_criterion,
     estimate_hedging,
     load_criteria_for_trial,
@@ -668,8 +680,9 @@ class TestLoadCriteriaForTrial:
         assert isinstance(criteria, list)
 
     def test_correct_count_for_nct00127920(self, criteria):
-        # NCT00127920 has 10 criteria (6 inclusion + 4 exclusion)
-        assert len(criteria) == 10
+        # NCT00127920 has 10 NLP-split criteria (6 inclusion + 4 exclusion)
+        # plus 2 synthetic metadata criteria (_meta_sex, _meta_min_age)
+        assert len(criteria) == 12
 
     def test_all_elements_are_criterion_objects(self, criteria):
         for c in criteria:
@@ -679,6 +692,40 @@ class TestLoadCriteriaForTrial:
         for c in criteria:
             assert isinstance(c.criterion_id, str)
             assert c.criterion_id.startswith("NCT00127920_")
+
+    def test_synthetic_criteria_present(self, criteria):
+        ids = [c.criterion_id for c in criteria]
+        assert "NCT00127920_meta_sex" in ids
+        assert "NCT00127920_meta_min_age" in ids
+
+    def test_synthetic_criteria_are_fully_labeled(self, criteria):
+        for c in criteria:
+            if "_meta_" in c.criterion_id:
+                assert c.b1_label == 1
+                assert c.b2_label == 1
+                assert c.b3_label == 1
+
+    def test_meta_min_age_has_threshold(self, criteria):
+        min_age_c = next(
+            (c for c in criteria if c.criterion_id == "NCT00127920_meta_min_age"), None
+        )
+        assert min_age_c is not None
+        assert len(min_age_c.extracted_thresholds) > 0
+        assert "18" in min_age_c.extracted_thresholds[0]
+
+    def test_meta_sex_evaluates_correctly_for_female(self, criteria):
+        sex_c = next(
+            (c for c in criteria if c.criterion_id == "NCT00127920_meta_sex"), None
+        )
+        assert sex_c is not None
+        assert evaluate_objective_criterion(sex_c, base_patient(sex="female")) is True
+
+    def test_meta_sex_excludes_male(self, criteria):
+        sex_c = next(
+            (c for c in criteria if c.criterion_id == "NCT00127920_meta_sex"), None
+        )
+        assert sex_c is not None
+        assert evaluate_objective_criterion(sex_c, base_patient(sex="male")) is False
 
     def test_b1_labels_are_int_or_none(self, criteria):
         for c in criteria:
@@ -733,3 +780,135 @@ class TestLoadCriteriaForTrial:
     def test_unknown_nct_id_returns_empty_list(self, con):
         result = load_criteria_for_trial("NCT99999999", con)
         assert result == []
+
+
+# ===========================================================================
+# TestParseAgeYears
+# ===========================================================================
+
+class TestParseAgeYears:
+    """_parse_age_years: int extraction from ClinicalTrials.gov age strings."""
+
+    def test_standard_format(self):
+        assert _parse_age_years("18 Years") == 18
+
+    def test_no_space(self):
+        assert _parse_age_years("18Years") == 18
+
+    def test_large_age(self):
+        assert _parse_age_years("99 Years") == 99
+
+    def test_zero_years(self):
+        assert _parse_age_years("0 Years") == 0
+
+    def test_none_input(self):
+        assert _parse_age_years(None) is None
+
+    def test_empty_string(self):
+        assert _parse_age_years("") is None
+
+    def test_n_a_string(self):
+        assert _parse_age_years("N/A") is None
+
+    def test_plain_integer_string(self):
+        assert _parse_age_years("65") == 65
+
+    def test_months_still_extracts_number(self):
+        # ClinicalTrials.gov sometimes uses "6 Months" — we still extract 6
+        assert _parse_age_years("6 Months") == 6
+
+    def test_leading_text(self):
+        assert _parse_age_years("Minimum: 18 Years") == 18
+
+    def test_two_digit_age(self):
+        assert _parse_age_years("25 Years") == 25
+
+    def test_three_digit_age(self):
+        assert _parse_age_years("100 Years") == 100
+
+
+# ===========================================================================
+# TestSyntheticCriteriaFromMetadata  (integration — requires DuckDB)
+# ===========================================================================
+
+@pytest.mark.integration
+class TestSyntheticCriteriaFromMetadata:
+    """
+    _synthetic_criteria_from_metadata: verify Criterion objects built from
+    trial-level metadata for trials with different sex and age configurations.
+    """
+
+    @pytest.fixture(scope="class")
+    def con(self):
+        duckdb = pytest.importorskip("duckdb")
+        if not os.path.exists(DB_PATH):
+            pytest.skip(f"Database not found: {DB_PATH}")
+        conn = duckdb.connect(DB_PATH)
+        yield conn
+        conn.close()
+
+    # -- NCT00127920: sex=FEMALE, min_age='18 Years' -------------------------
+
+    def test_female_trial_produces_sex_criterion(self, con):
+        result = _synthetic_criteria_from_metadata("NCT00127920", con)
+        ids = [c.criterion_id for c in result]
+        assert "NCT00127920_meta_sex" in ids
+
+    def test_female_trial_sex_criterion_text(self, con):
+        result = _synthetic_criteria_from_metadata("NCT00127920", con)
+        sex_c = next(c for c in result if c.criterion_id == "NCT00127920_meta_sex")
+        assert "Female" in sex_c.text
+
+    def test_female_trial_produces_min_age_criterion(self, con):
+        result = _synthetic_criteria_from_metadata("NCT00127920", con)
+        ids = [c.criterion_id for c in result]
+        assert "NCT00127920_meta_min_age" in ids
+
+    def test_min_age_criterion_threshold_parseable(self, con):
+        result = _synthetic_criteria_from_metadata("NCT00127920", con)
+        min_age_c = next(c for c in result if c.criterion_id == "NCT00127920_meta_min_age")
+        from bayesian.criterion_evaluator import _parse_threshold
+        assert len(min_age_c.extracted_thresholds) > 0
+        parsed = _parse_threshold(min_age_c.extracted_thresholds[0])
+        assert parsed is not None
+        op, val, _ = parsed
+        assert op == ">="
+        assert val == 18.0
+
+    def test_all_synthetic_criteria_fully_labeled(self, con):
+        result = _synthetic_criteria_from_metadata("NCT00127920", con)
+        for c in result:
+            assert c.b1_label == 1
+            assert c.b2_label == 1
+            assert c.b3_label == 1
+
+    def test_unknown_nct_id_returns_empty(self, con):
+        result = _synthetic_criteria_from_metadata("NCT99999999", con)
+        assert result == []
+
+    # -- Sex=ALL trial produces no sex criterion -----------------------------
+
+    def test_sex_all_trial_no_sex_criterion(self, con):
+        # NCT04541212 has sex=ALL — should generate no _meta_sex criterion
+        result = _synthetic_criteria_from_metadata("NCT04541212", con)
+        ids = [c.criterion_id for c in result]
+        assert "NCT04541212_meta_sex" not in ids
+
+    # -- Male-only trial produces MALE sex criterion -------------------------
+
+    def test_male_trial_sex_criterion_text(self, con):
+        # NCT02730975 has sex=MALE
+        result = _synthetic_criteria_from_metadata("NCT02730975", con)
+        sex_criteria = [c for c in result if "_meta_sex" in c.criterion_id]
+        assert len(sex_criteria) == 1
+        assert "Male" in sex_criteria[0].text
+
+    def test_male_sex_criterion_excludes_female_patient(self, con):
+        result = _synthetic_criteria_from_metadata("NCT02730975", con)
+        sex_c = next(c for c in result if "_meta_sex" in c.criterion_id)
+        assert evaluate_objective_criterion(sex_c, base_patient(sex="female")) is False
+
+    def test_male_sex_criterion_passes_male_patient(self, con):
+        result = _synthetic_criteria_from_metadata("NCT02730975", con)
+        sex_c = next(c for c in result if "_meta_sex" in c.criterion_id)
+        assert evaluate_objective_criterion(sex_c, base_patient(sex="male")) is True
