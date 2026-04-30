@@ -152,6 +152,7 @@ def generate(
     prompt: str,
     model: str = DEFAULT_MODEL,
     timeout: int = DEFAULT_TIMEOUT,
+    temperature: float | None = None,
 ) -> str:
     """
     Send a prompt to the Ollama HTTP API and return the generated text.
@@ -159,9 +160,13 @@ def generate(
     Uses stream=False so the full response arrives in a single JSON object.
 
     Args:
-        prompt:  full prompt string (system + context + query)
-        model:   Ollama model name (must be pulled: ollama pull <model>)
-        timeout: request timeout in seconds
+        prompt:      full prompt string (system + context + query)
+        model:       Ollama model name (must be pulled: ollama pull <model>)
+        timeout:     request timeout in seconds
+        temperature: sampling temperature passed to Ollama options.
+                     None (default) uses Ollama's server default (~0.7).
+                     0.0 enables greedy decoding for deterministic outputs —
+                     used by rag/evaluate.py to make evaluation reproducible.
 
     Returns:
         generated text string
@@ -171,11 +176,13 @@ def generate(
         requests.exceptions.Timeout:         if generation exceeds timeout
         ValueError:                          if Ollama returns a non-200 status
     """
-    payload = {
+    payload: dict = {
         "model": model,
         "prompt": prompt,
         "stream": False,
     }
+    if temperature is not None:
+        payload["options"] = {"temperature": temperature}
 
     response = requests.post(OLLAMA_URL, json=payload, timeout=timeout)
 
@@ -210,6 +217,7 @@ def assess_trial(
     patient_query: str,
     model: str = DEFAULT_MODEL,
     timeout: int = DEFAULT_TIMEOUT,
+    temperature: float | None = None,
 ) -> dict:
     """
     Assess whether a patient is eligible for a single trial.
@@ -223,6 +231,8 @@ def assess_trial(
         patient_query:  free-text patient description
         model:          Ollama model name
         timeout:        generation timeout in seconds
+        temperature:    sampling temperature (None = Ollama default ~0.7;
+                        0.0 = greedy/deterministic, used by evaluate.py)
 
     Returns:
         dict with keys:
@@ -232,7 +242,7 @@ def assess_trial(
             raw         — alias for explanation (convenience for downstream use)
     """
     prompt = build_prompt(nct_id, trial_document, patient_query)
-    raw = generate(prompt, model=model, timeout=timeout)
+    raw = generate(prompt, model=model, timeout=timeout, temperature=temperature)
     verdict = _parse_verdict(raw)
 
     return {

@@ -92,6 +92,7 @@ def run_case(col, case: dict, model: str, timeout: int, verbose: bool) -> dict:
         patient_query=patient,
         model=model,
         timeout=timeout,
+        temperature=0.0,   # greedy decoding — deterministic, reproducible evaluation
     )
     elapsed = round(time.time() - t0, 1)
 
@@ -236,7 +237,10 @@ Pass rate: **{elig_pct}%** ({elig_pass}/{elig_run})
 **Evaluation design:** Track 2 (generation quality), bypassing retrieval.
 Each case specifies a single NCT ID. The composite document is fetched directly
 from ChromaDB and passed to `assess_trial()` in `rag/generator.py`. This isolates
-generator quality from retrieval quality.
+generator quality from retrieval quality. Temperature is set to 0.0 (greedy
+decoding) for all evaluation calls, making results deterministic and reproducible.
+The production pipeline uses Ollama's default temperature (~0.7) for more natural
+clinician-facing explanations.
 
 **Why not Track 1 (retrieval precision)?**
 Track 1 (Precision@5, NDCG@5) requires expert-annotated ground-truth relevance
@@ -249,9 +253,15 @@ Three prompt variants were evaluated before arriving at the final configuration:
 
 | Variant | Ineligible pass | Eligible ELIGIBLE | Overall | Runtime |
 |---|---|---|---|---|
-| Baseline (direct assessment) | 86% — 7 failures | 100% | FAIL | ~14 min |
-| Few-shot (3 numeric examples) | **100% — 0 failures** | 88% | **PASS** | ~14 min |
-| Few-shot + chain-of-thought | 98% — 1 failure | 94% | FAIL | ~49 min |
+| Baseline (direct, stochastic) | 86% — 7 failures | 100% | FAIL | ~14 min |
+| Few-shot only (stochastic) | 96–100% across runs | 88% | PASS | ~14 min |
+| Few-shot + chain-of-thought (stochastic) | 98% — 1 failure | 94% | FAIL | ~49 min |
+| **Few-shot + temperature=0 (deterministic)** | **98% — 1 known hard case** | **86%** | **FAIL*** | ~15 min |
+
+*Overall FAIL by the strict 100% ineligible criterion. The 1 persistent failure is
+a medical taxonomy case (MDS classified as leukaemia under trial protocol) documented
+as a known Mistral-7B limitation. Both thresholds met in at least one stochastic run.
+The deterministic result is the canonical reportable metric.
 
 The baseline failed on quantitative/temporal threshold comparisons — the model
 performed holistic assessments without explicitly comparing patient values to
@@ -266,9 +276,27 @@ failures (7→1), but tripled runtime and introduced a regression on `age_below_
 before reaching the age threshold that it summarised toward ELIGIBLE. Critically,
 it moved the ineligible pass rate below 100%, violating the hard constraint.
 
-Few-shot-only is the final production configuration: it meets both acceptance
-criteria, runs in 14 minutes, and the empirical comparison between all three
-variants is itself a portfolio-relevant engineering finding.
+Few-shot-only with temperature=0 (greedy decoding) is the final configuration.
+With stochastic sampling, the ineligible pass rate fluctuated between 96–100%
+across runs. Setting temperature=0 made results deterministic: the ineligible
+pass rate is a fixed 98% — one persistent failure on a medical taxonomy case
+(see Known Hard Case below). Eligible accuracy is 86%, well above the 70%
+threshold. The empirical comparison between all three prompt variants is itself
+a portfolio-relevant engineering finding.
+
+**Known hard case — `prior_mds_history_lymphoma` (NCT00838357):**
+The trial excludes *"history of any acute or chronic leukaemia (including
+myelodysplastic syndrome)"*. The patient has a documented prior history of MDS.
+Mistral-7B correctly reads both facts but issues ELIGIBLE because MDS being
+classified as leukaemia for trial protocol purposes is non-obvious medical
+taxonomy — in clinical vernacular, MDS is a pre-malignant myeloid disorder,
+not a leukaemia. The model does not apply the parenthetical MDS→leukaemia
+equivalence established by the protocol. This is a domain knowledge failure,
+not a numeric threshold failure, and is not addressed by the few-shot examples
+(which cover platelet count, age, and temporal reasoning). Fixing it would
+require either a targeted few-shot example for protocol taxonomy equivalences
+(narrow, may not generalise) or a larger model with deeper medical pretraining.
+This case is documented as a known limitation of Mistral-7B at 7B parameters.
 
 **Known limitation — UNCERTAIN vs NOT ELIGIBLE:**
 Mistral-7B (7B parameters) correctly avoids ELIGIBLE for ineligible patients
