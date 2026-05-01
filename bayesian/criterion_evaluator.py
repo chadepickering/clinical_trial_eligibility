@@ -11,17 +11,31 @@ Patient profile schema (flat dict):
     ecog          (int: 0–4)
     karnofsky     (int: 0–100)
     cancer_type   (str, free-text)
-    prior_chemo   (bool)
-    prior_rt      (bool)
+    prior_chemo   (bool) — True if patient received prior chemotherapy
+    prior_rt      (bool) — True if patient received prior radiation therapy
+    brain_mets    (bool) — True if patient has active brain metastases
+    nyha_class    (int: 1–4) — NYHA cardiac functional classification
+    child_pugh    (str: "A" | "B" | "C") — Child-Pugh hepatic class
     lab_values    (dict[str, float]):
         platelet_count    — /mm³
         hemoglobin        — g/dL
-        neutrophil_count  — /mm³
-        creatinine        — mg/dL
+        neutrophil_count  — /mm³ (ANC / granulocyte count)
+        wbc               — /mm³ (total white blood cell count)
+        inr               — ratio
+        aptt              — seconds
+        creatinine        — mg/dL (serum; for GFR/clearance criteria use egfr)
+        egfr              — mL/min/1.73m² (also handles creatinine clearance criteria)
         bilirubin         — mg/dL
         alt               — U/L
         ast               — U/L
+        albumin           — g/dL
         lvef              — %
+        qtc               — ms
+        calcium           — mg/dL
+        glucose           — mg/dL
+        potassium         — mEq/L
+        ldh               — U/L
+        psa               — ng/mL
         testosterone      — ng/dL
 
 For criteria where the patient profile lacks the relevant field,
@@ -207,19 +221,79 @@ _SEX_FEMALE_RE = re.compile(r"\b(female|women|woman)\b", re.I)
 _SEX_MALE_RE   = re.compile(r"\b(male|men|man)\b", re.I)
 
 _LAB_KEYWORDS: dict[str, re.Pattern] = {
+    # Haematology
     "platelet_count":   re.compile(r"\bplatelet\b", re.I),
-    "hemoglobin":       re.compile(r"\bhemoglobin\b|\bHgb\b|\b\bHb\b", re.I),
+    "hemoglobin":       re.compile(r"\bhemoglobin\b|\bHgb\b|\bHb\b", re.I),
     "neutrophil_count": re.compile(r"\bneutrophil\b|\bANC\b|\bgranulocyte\b", re.I),
+    "wbc":              re.compile(r"\bWBC\b|\bwhite\s+blood\s+cell(?:\s+count)?\b|\bleukocyte\s+count\b", re.I),
+    # Coagulation
+    "inr":              re.compile(r"\bINR\b|\binternational\s+normalized\s+ratio\b", re.I),
+    "aptt":             re.compile(r"\baPTT\b|\bAPTT\b|\bactivated\s+partial\s+thromboplastin\b", re.I),
+    # Renal — creatinine = serum (mg/dL); egfr also catches creatinine clearance (mL/min)
     "creatinine":       re.compile(r"\bcreatinine\b", re.I),
+    "egfr":             re.compile(r"\beGFR\b|\bGFR\b|\bglomerular\s+filtration\s+rate\b|\bcreatinine\s+clearance\b", re.I),
+    # Hepatic
     "bilirubin":        re.compile(r"\bbilirubin\b", re.I),
-    "alt":              re.compile(r"\bALT\b|\balanine aminotransferase\b", re.I),
-    "ast":              re.compile(r"\bAST\b|\baspartate aminotransferase\b", re.I),
-    "lvef":             re.compile(
-        r"\bLVEF\b|\bleft ventricular ejection fraction\b|\bejection fraction\b",
-        re.I,
-    ),
+    "alt":              re.compile(r"\bALT\b|\balanine\s+aminotransferase\b", re.I),
+    "ast":              re.compile(r"\bAST\b|\baspartate\s+aminotransferase\b", re.I),
+    "albumin":          re.compile(r"\balbumin\b", re.I),
+    # Cardiac
+    "lvef":             re.compile(r"\bLVEF\b|\bleft\s+ventricular\s+ejection\s+fraction\b|\bejection\s+fraction\b", re.I),
+    "qtc":              re.compile(r"\bQTc\b|\bQTcF\b|\bQTcB\b|\bQT\s+(?:interval|corrected|prolongation)\b", re.I),
+    # Metabolic / Chemistry
+    "calcium":          re.compile(r"\bcalcium\b", re.I),
+    "glucose":          re.compile(r"\bglucose\b|\bblood\s+sugar\b", re.I),
+    "potassium":        re.compile(r"\bpotassium\b", re.I),
+    "ldh":              re.compile(r"\bLDH\b|\blactate\s+dehydrogenase\b", re.I),
+    # Tumour markers / reproductive
+    "psa":              re.compile(r"\bPSA\b|\bprostate[- ]specific\s+antigen\b", re.I),
     "testosterone":     re.compile(r"\btestosterone\b", re.I),
 }
+
+# ---------------------------------------------------------------------------
+# Boolean / categorical clinical field routing
+# ---------------------------------------------------------------------------
+
+_PRIOR_CHEMO_MENTION_RE = re.compile(r"\bchemo(?:therapy)?\b", re.I)
+_PRIOR_RT_MENTION_RE    = re.compile(
+    r"\bradiation\s+(?:therapy|treatment)\b|\bradiotherapy\b", re.I
+)
+_BRAIN_METS_RE = re.compile(
+    r"\bbrain\s+(?:metasta[sz]\w*|involvement|tumor|lesion|disease)\b|"
+    r"\bCNS\s+metasta[sz]\w*\b|\bintracranial\s+metasta[sz]\w*\b",
+    re.I,
+)
+
+# Exclusion direction: criterion requires patient to NOT have had prior therapy
+_EXCL_THERAPY_DIRECTION_RE = re.compile(
+    r"\bno\s+prior\b|\bwithout\s+prior\b|\bna[ïi]ve\b|\buntreated\b|"
+    r"\bineligible\b|\bnot\s+(?:allowed|permitted|eligible)\b|"
+    r"\bprohibit\b|\bmakes?\s+(?:a\s+patient\s+)?ineligible\b|"
+    r"\bpreviously\s+untreated\b|\btreatment[- ]na[ïi]ve\b|"
+    r"\bchemo(?:therapy)?[- ]na[ïi]ve\b",
+    re.I,
+)
+# Inclusion direction: criterion requires patient to have had prior therapy
+_INCL_THERAPY_DIRECTION_RE = re.compile(
+    r"\bat\s+least\s+(?:one|1|two|2|\d+)\s+(?:prior|previous)\b|"
+    r"\bpreviously\s+treated\b|\breceived\s+(?:prior|previous)\b|"
+    r"\bone\s+or\s+more\s+prior\b|\b\d+\s+prior\s+(?:line|regimen|course)\b",
+    re.I,
+)
+
+
+def _normalize_roman_numerals(text: str) -> str:
+    """Replace NYHA Roman numeral class labels I–IV with integers.
+
+    Processes in reverse length order (IV before I) to avoid partial matches.
+    Standalone 'I' is only converted in the context of 'class I' to avoid
+    false matches in ordinary English text.
+    """
+    text = re.sub(r"\bIV\b", "4", text)
+    text = re.sub(r"\bIII\b", "3", text)
+    text = re.sub(r"\bII\b", "2", text)
+    text = re.sub(r"\bclass\s+I\b", "class 1", text, flags=re.I)
+    return text
 
 
 def evaluate_objective_criterion(
@@ -282,6 +356,66 @@ def evaluate_objective_criterion(
                 op, val, _ = parsed
                 meets = _compare(float(kps), op, val)
                 return (not meets) if is_exclusion else meets
+
+    # -- Prior chemotherapy ------------------------------------------------
+    # Detect exclusion direction (chemo-naive required) vs inclusion direction
+    # (prior chemo required). Return None for ambiguous mentions.
+    if _PRIOR_CHEMO_MENTION_RE.search(text):
+        prior_chemo = patient.get("prior_chemo")
+        if prior_chemo is not None:
+            if _EXCL_THERAPY_DIRECTION_RE.search(text) or is_exclusion:
+                return not bool(prior_chemo)
+            if _INCL_THERAPY_DIRECTION_RE.search(text):
+                return bool(prior_chemo)
+
+    # -- Prior radiation therapy -------------------------------------------
+    if _PRIOR_RT_MENTION_RE.search(text):
+        prior_rt = patient.get("prior_rt")
+        if prior_rt is not None:
+            if _EXCL_THERAPY_DIRECTION_RE.search(text) or is_exclusion:
+                return not bool(prior_rt)
+            if _INCL_THERAPY_DIRECTION_RE.search(text):
+                return bool(prior_rt)
+
+    # -- Brain metastases --------------------------------------------------
+    # Almost universally an exclusion criterion. Rare brain-tumour inclusion
+    # trials are not handled to avoid false positives.
+    if _BRAIN_METS_RE.search(text):
+        brain_mets = patient.get("brain_mets")
+        if brain_mets is not None:
+            return not bool(brain_mets)
+
+    # -- NYHA class --------------------------------------------------------
+    if re.search(r"\bNYHA\b", text, re.I):
+        nyha = patient.get("nyha_class")
+        if nyha is not None:
+            norm = _normalize_roman_numerals(text)
+            parsed = _first_threshold(thresholds) or _threshold_from_text(norm)
+            if parsed:
+                op, val, _ = parsed
+                meets = _compare(float(nyha), op, val)
+                return (not meets) if is_exclusion else meets
+            # Fallback: list of class numbers mentioned → treat max as ≤ threshold
+            nums = [int(m) for m in re.findall(r"\b([1-4])\b", norm)]
+            if nums:
+                meets = float(nyha) <= max(nums)
+                return (not meets) if is_exclusion else meets
+
+    # -- Child-Pugh class --------------------------------------------------
+    if re.search(r"\bChild[-\s]?Pugh\b", text, re.I):
+        cp = patient.get("child_pugh")
+        if cp:
+            cp_val = {"A": 1, "B": 2, "C": 3}.get(str(cp).upper())
+            if cp_val is not None:
+                classes_found = re.findall(r"\b([ABC])\b", text, re.I)
+                if classes_found:
+                    max_allowed = max(
+                        {"A": 1, "B": 2, "C": 3}.get(c.upper(), 0)
+                        for c in classes_found
+                    )
+                    if max_allowed > 0:
+                        meets = cp_val <= max_allowed
+                        return (not meets) if is_exclusion else meets
 
     # -- Age ---------------------------------------------------------------
     if re.search(r"\bage\b|\byears? old\b|\byears? of age\b", text, re.I):

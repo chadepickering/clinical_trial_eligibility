@@ -126,17 +126,39 @@ def _build_patient_description(patient: dict) -> str:
     if kps is not None:
         parts.append(f"Karnofsky {kps}%.")
 
+    if patient.get("prior_chemo") is not None:
+        parts.append("Prior chemotherapy: " + ("yes" if patient["prior_chemo"] else "none") + ".")
+    if patient.get("prior_rt") is not None:
+        parts.append("Prior radiation therapy: " + ("yes" if patient["prior_rt"] else "none") + ".")
+    if patient.get("brain_mets") is not None:
+        parts.append("Brain metastases: " + ("yes" if patient["brain_mets"] else "none") + ".")
+    if patient.get("nyha_class") is not None:
+        parts.append(f"NYHA class {patient['nyha_class']}.")
+    if patient.get("child_pugh") is not None:
+        parts.append(f"Child-Pugh class {patient['child_pugh']}.")
+
     labs = patient.get("lab_values") or {}
     lab_strs = []
     lab_map = {
         "platelet_count":   ("Platelets", "/mm³", 1),
         "hemoglobin":       ("Hgb", "g/dL", 1),
         "neutrophil_count": ("ANC", "/mm³", 0),
+        "wbc":              ("WBC", "/mm³", 0),
+        "inr":              ("INR", "", 2),
+        "aptt":             ("aPTT", "sec", 1),
         "creatinine":       ("Creatinine", "mg/dL", 1),
+        "egfr":             ("eGFR", "mL/min", 0),
         "bilirubin":        ("Bilirubin", "mg/dL", 1),
         "alt":              ("ALT", "U/L", 0),
         "ast":              ("AST", "U/L", 0),
+        "albumin":          ("Albumin", "g/dL", 1),
         "lvef":             ("LVEF", "%", 0),
+        "qtc":              ("QTc", "ms", 0),
+        "calcium":          ("Calcium", "mg/dL", 1),
+        "glucose":          ("Glucose", "mg/dL", 0),
+        "potassium":        ("Potassium", "mEq/L", 1),
+        "ldh":              ("LDH", "U/L", 0),
+        "psa":              ("PSA", "ng/mL", 1),
         "testosterone":     ("Testosterone", "ng/dL", 0),
     }
     for key, (label, unit, decimals) in lab_map.items():
@@ -224,12 +246,11 @@ def _render_sidebar() -> dict:
     )
     age = st.sidebar.number_input("Age", min_value=0, max_value=120,
                                   value=52 if ex else 0, step=1)
-    # Fix 2: ECOG as selectbox, KPS as free number input
     ecog_options = ["(not specified)", 0, 1, 2, 3, 4]
     ecog_raw = st.sidebar.selectbox(
         "ECOG performance status",
         options=ecog_options,
-        index=2 if ex else 0,          # index 2 = value 1 for example patient
+        index=2 if ex else 0,
         format_func=lambda x: str(x) if x != "(not specified)" else x,
     )
     kps = st.sidebar.number_input(
@@ -237,24 +258,68 @@ def _render_sidebar() -> dict:
         value=80 if ex else 0, step=1,
     )
 
-    st.sidebar.markdown("**Lab values** *(leave 0 to omit)*")
-    with st.sidebar.expander("Lab values", expanded=ex):
+    st.sidebar.markdown("**Medical history**")
+    yn_opts = ["(not specified)", "Yes", "No"]
+    prior_chemo_raw = st.sidebar.selectbox(
+        "Prior chemotherapy", yn_opts, index=2 if ex else 0,
+    )
+    prior_rt_raw = st.sidebar.selectbox(
+        "Prior radiation therapy", yn_opts, index=2 if ex else 0,
+    )
+    brain_mets_raw = st.sidebar.selectbox(
+        "Brain metastases", yn_opts, index=2 if ex else 0,
+    )
+    nyha_opts = ["(not specified)", "Class I", "Class II", "Class III", "Class IV"]
+    nyha_raw = st.sidebar.selectbox("NYHA class", nyha_opts, index=0)
+    cp_opts = ["(not specified)", "A", "B", "C"]
+    cp_raw = st.sidebar.selectbox("Child-Pugh class", cp_opts, index=0)
+
+    with st.sidebar.expander("Lab values *(leave 0 to omit)*", expanded=ex):
+        st.markdown("*Haematology*")
         plat  = st.number_input("Platelet count (/mm³)", 0, 1_000_000,
                                 value=180_000 if ex else 0, step=1_000)
         hgb   = st.number_input("Hemoglobin (g/dL)", 0.0, 25.0,
                                 value=12.5 if ex else 0.0, step=0.1, format="%.1f")
-        anc   = st.number_input("Neutrophil count (/mm³)", 0, 50_000,
+        anc   = st.number_input("ANC / neutrophil count (/mm³)", 0, 50_000,
                                 value=2_800 if ex else 0, step=100)
+        wbc   = st.number_input("WBC (/mm³)", 0, 100_000,
+                                value=0, step=100)
+        st.markdown("*Coagulation*")
+        inr   = st.number_input("INR", 0.0, 10.0,
+                                value=0.0, step=0.1, format="%.1f")
+        aptt  = st.number_input("aPTT (sec)", 0.0, 200.0,
+                                value=0.0, step=1.0, format="%.1f")
+        st.markdown("*Renal*")
         creat = st.number_input("Creatinine (mg/dL)", 0.0, 20.0,
                                 value=0.9 if ex else 0.0, step=0.1, format="%.1f")
+        egfr  = st.number_input("eGFR / CrCl (mL/min)", 0, 200,
+                                value=0, step=1)
+        st.markdown("*Hepatic*")
         bili  = st.number_input("Bilirubin (mg/dL)", 0.0, 20.0,
                                 value=0.7 if ex else 0.0, step=0.1, format="%.1f")
         alt   = st.number_input("ALT (U/L)", 0, 1_000,
                                 value=28 if ex else 0, step=1)
         ast   = st.number_input("AST (U/L)", 0, 1_000,
                                 value=22 if ex else 0, step=1)
+        alb   = st.number_input("Albumin (g/dL)", 0.0, 6.0,
+                                value=0.0, step=0.1, format="%.1f")
+        st.markdown("*Cardiac*")
         lvef  = st.number_input("LVEF (%)", 0, 100,
                                 value=62 if ex else 0, step=1)
+        qtc   = st.number_input("QTc (ms)", 0, 700,
+                                value=0, step=1)
+        st.markdown("*Metabolic / Chemistry*")
+        calc  = st.number_input("Calcium (mg/dL)", 0.0, 20.0,
+                                value=0.0, step=0.1, format="%.1f")
+        gluc  = st.number_input("Glucose (mg/dL)", 0, 600,
+                                value=0, step=1)
+        pota  = st.number_input("Potassium (mEq/L)", 0.0, 10.0,
+                                value=0.0, step=0.1, format="%.1f")
+        ldh   = st.number_input("LDH (U/L)", 0, 5_000,
+                                value=0, step=10)
+        st.markdown("*Tumour markers / Reproductive*")
+        psa   = st.number_input("PSA (ng/mL)", 0.0, 500.0,
+                                value=0.0, step=0.1, format="%.1f")
         testo = st.number_input("Testosterone (ng/dL)", 0, 2_000,
                                 value=12 if ex else 0, step=1)
 
@@ -272,16 +337,37 @@ def _render_sidebar() -> dict:
         patient["ecog"] = int(ecog_raw)
     if kps > 0:
         patient["karnofsky"] = int(kps)
+    if prior_chemo_raw != "(not specified)":
+        patient["prior_chemo"] = prior_chemo_raw == "Yes"
+    if prior_rt_raw != "(not specified)":
+        patient["prior_rt"] = prior_rt_raw == "Yes"
+    if brain_mets_raw != "(not specified)":
+        patient["brain_mets"] = brain_mets_raw == "Yes"
+    if nyha_raw != "(not specified)":
+        patient["nyha_class"] = nyha_opts.index(nyha_raw)  # I=1, II=2, III=3, IV=4
+    if cp_raw != "(not specified)":
+        patient["child_pugh"] = cp_raw
 
     labs: dict = {}
     if plat  > 0: labs["platelet_count"]   = float(plat)
     if hgb   > 0: labs["hemoglobin"]       = float(hgb)
     if anc   > 0: labs["neutrophil_count"] = float(anc)
+    if wbc   > 0: labs["wbc"]              = float(wbc)
+    if inr   > 0: labs["inr"]              = float(inr)
+    if aptt  > 0: labs["aptt"]             = float(aptt)
     if creat > 0: labs["creatinine"]       = float(creat)
+    if egfr  > 0: labs["egfr"]             = float(egfr)
     if bili  > 0: labs["bilirubin"]        = float(bili)
     if alt   > 0: labs["alt"]              = float(alt)
     if ast   > 0: labs["ast"]              = float(ast)
+    if alb   > 0: labs["albumin"]          = float(alb)
     if lvef  > 0: labs["lvef"]             = float(lvef)
+    if qtc   > 0: labs["qtc"]              = float(qtc)
+    if calc  > 0: labs["calcium"]          = float(calc)
+    if gluc  > 0: labs["glucose"]          = float(gluc)
+    if pota  > 0: labs["potassium"]        = float(pota)
+    if ldh   > 0: labs["ldh"]              = float(ldh)
+    if psa   > 0: labs["psa"]              = float(psa)
     if testo > 0: labs["testosterone"]     = float(testo)
     if labs:
         patient["lab_values"] = labs
