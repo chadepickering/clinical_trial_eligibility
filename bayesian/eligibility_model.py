@@ -177,7 +177,14 @@ def build_model(criteria_evaluations: list[dict]) -> pm.Model:
                 alpha = max(2.0 * (1.0 - hedging), 0.1)
                 beta_param = max(2.0 * hedging, 0.1)
             else:
-                alpha, beta_param = 1.0, 1.0
+                # Beta(3, 1): mean = 0.75, SD ≈ 0.19.
+                # Reflects the referral-population selection effect: patients
+                # actively seeking oncology trial enrollment are healthier than
+                # the general population, so unobservable criteria are more
+                # likely met than a coin-flip (Beta(1,1)) would imply.
+                # Beta(3,1) is still wide enough to be honest about uncertainty
+                # while avoiding the unrealistic 50% floor of Beta(1,1).
+                alpha, beta_param = 3.0, 1.0
 
             beta_vars.append(
                 pm.Beta(f"p_{i}", alpha=alpha, beta=beta_param)

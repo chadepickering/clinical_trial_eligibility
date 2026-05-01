@@ -421,6 +421,18 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
             st.error(f"Bayesian scoring failed: {e}")
             return None
 
+    # --- Coverage gate ---
+    # Count how many criteria the model could actually resolve.
+    # "Evaluable" = deterministic pass/fail + subjective (has a meaningful prior).
+    # "Unevaluable" = unobservable + unevaluable (Beta(3,1) placeholder priors).
+    _COVERAGE_THRESHOLD = 0.4
+    n_total = len(evaluations)
+    n_evaluable = sum(
+        1 for e in evaluations
+        if e["kind"] in ("deterministic_pass", "deterministic_fail", "subjective")
+    )
+    coverage = n_evaluable / n_total if n_total > 0 else 0.0
+
     # --- Short-circuit: hard disqualifier ---
     if result["short_circuited"]:
         failing_id = result.get("failing_criterion", "")
@@ -431,6 +443,23 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
         st.error(
             f"**⛔ Ineligible — hard disqualifier**\n\n"
             f"`{failing_id}`: {failing_text}"
+        )
+        _render_count_row(result)
+        return evaluations, result
+
+    # --- Profile incomplete: not enough criteria evaluable ---
+    if coverage < _COVERAGE_THRESHOLD:
+        n_unobs = sum(1 for e in evaluations if e["kind"] in ("unobservable", "unevaluable"))
+        st.warning(
+            f"**Profile incomplete** — {n_evaluable} of {n_total} criteria evaluable "
+            f"({coverage:.0%}). The eligibility probability would be unreliable with "
+            f"this much missing data.\n\n"
+            f"**{n_unobs} criteria cannot be assessed** from the current patient profile. "
+            f"To improve coverage, consider adding:\n"
+            f"- Cancer stage, histology, and prior therapy details (in *Cancer type* / *Prior therapy notes*)\n"
+            f"- Lab values: ANC, platelets, creatinine, bilirubin, LFTs\n"
+            f"- Performance status (ECOG or Karnofsky)\n\n"
+            f"*The criterion breakdown below shows exactly which criteria are missing data.*"
         )
         _render_count_row(result)
         return evaluations, result
@@ -595,7 +624,8 @@ def _render_criterion_table(evaluations: list[dict]):
     st.caption(
         "FAIL rows (red) are hard disqualifiers. "
         "SUBJ rows (amber) use hedging-shaped Beta priors. "
-        "UNOBS/EVAL rows (grey) use Beta(1,1) — they widen the credible interval."
+        "UNOBS/EVAL rows (grey) use Beta(3,1) — optimistic prior reflecting "
+        "the trial-seeking population; they widen the credible interval."
     )
 
 
