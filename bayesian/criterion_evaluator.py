@@ -14,6 +14,8 @@ Patient profile schema (flat dict):
     prior_chemo   (bool) — True if patient received prior chemotherapy
     prior_rt      (bool) — True if patient received prior radiation therapy
     brain_mets    (bool) — True if patient has active brain metastases
+    pregnant      (bool) — True if patient is pregnant or breastfeeding
+                           (omit/None → pregnancy criteria become UNOBSERVABLE)
     nyha_class    (int: 1–4) — NYHA cardiac functional classification
     child_pugh    (str: "A" | "B" | "C") — Child-Pugh hepatic class
     lab_values    (dict[str, float]):
@@ -258,6 +260,14 @@ _PRIOR_CHEMO_MENTION_RE = re.compile(r"\bchemo(?:therapy)?\b", re.I)
 _PRIOR_RT_MENTION_RE    = re.compile(
     r"\bradiation\s+(?:therapy|treatment)\b|\bradiotherapy\b", re.I
 )
+# Pregnancy / lactation exclusion — must only fire when patient explicitly
+# states pregnant=True. If the field is absent, return None (→ UNOBSERVABLE).
+_PREGNANCY_RE = re.compile(
+    r"\bpregnant\b|\bpregnancy\b|\blactati(?:ng|on)\b|\bbreastfeed(?:ing)?\b|"
+    r"\bnursing\b|\bbreast[\s-]?feed(?:ing)?\b|\bchild[-\s]?bearing\b",
+    re.I,
+)
+
 _BRAIN_METS_RE = re.compile(
     r"\bbrain\s+(?:metasta[sz]\w*|involvement|tumor|lesion|disease)\b|"
     r"\bCNS\s+metasta[sz]\w*\b|\bintracranial\s+metasta[sz]\w*\b",
@@ -303,7 +313,8 @@ def evaluate_objective_criterion(
     """
     Compare a patient profile against a single objective criterion.
 
-    Routing order: sex → ECOG → Karnofsky → age → lab values.
+    Routing order: sex → pregnancy → ECOG → Karnofsky → prior therapy →
+                   brain mets → NYHA → Child-Pugh → age → lab values.
     Returns None when the criterion cannot be matched to any patient field.
 
     Returns:
@@ -318,6 +329,31 @@ def evaluate_objective_criterion(
     text = criterion.text
     thresholds = criterion.extracted_thresholds or []
     is_exclusion = (criterion.b1_label == 0)
+
+    # -- Compound criterion guard ------------------------------------------
+    # Compound criteria pack multiple distinct fields into one text block
+    # (e.g. "WBC ≥ 3000, Platelet ≥ 100,000, Hgb ≥ 8.0, Bilirubin ≤ 1.5...").
+    # The keyword-first routing picks the first matching field and the first
+    # threshold in the whole block, which may belong to a different field —
+    # producing incorrect hard pass/fail results. Guard: if three or more
+    # distinct lab keyword patterns match the text, the criterion is too
+    # compound to evaluate safely; return None → UNOBSERVABLE.
+    _lab_hits = sum(1 for pat in _LAB_KEYWORDS.values() if pat.search(text))
+    if _lab_hits >= 3:
+        return None
+
+    # -- Pregnancy / lactation ---------------------------------------------
+    # Only evaluate when patient explicitly provides a `pregnant` boolean.
+    # If the field is absent, return None so the criterion becomes UNOBSERVABLE
+    # rather than a spurious hard disqualifier for every female patient.
+    if _PREGNANCY_RE.search(text):
+        pregnant = patient.get("pregnant")
+        if pregnant is not None:
+            # Pregnancy criteria are universally exclusions; patient is eligible
+            # w.r.t. this criterion only if they are not pregnant/lactating.
+            return not bool(pregnant)
+        # Field absent — cannot evaluate; fall through to return None below
+        return None
 
     # -- Sex ---------------------------------------------------------------
     has_female = bool(_SEX_FEMALE_RE.search(text))
@@ -358,8 +394,13 @@ def evaluate_objective_criterion(
                 return (not meets) if is_exclusion else meets
 
     # -- Prior chemotherapy ------------------------------------------------
-    # Detect exclusion direction (chemo-naive required) vs inclusion direction
-    # (prior chemo required). Return None for ambiguous mentions.
+    # Direction detection order:
+    #   1. Explicit exclusion-direction phrases ("no prior", "naive", etc.)
+    #      OR criterion is labeled EXC (b1_label=0) → patient must be chemo-naive.
+    #   2. Explicit inclusion-direction phrases ("at least 1 prior line", etc.)
+    #      → patient must have had chemo.
+    #   3. Fallback to b1_label: INC (b1_label=1) → patient must have had chemo;
+    #      b1_label=None → cannot determine, return None.
     if _PRIOR_CHEMO_MENTION_RE.search(text):
         prior_chemo = patient.get("prior_chemo")
         if prior_chemo is not None:
@@ -367,6 +408,11 @@ def evaluate_objective_criterion(
                 return not bool(prior_chemo)
             if _INCL_THERAPY_DIRECTION_RE.search(text):
                 return bool(prior_chemo)
+            # Fallback: trust b1_label when text direction is ambiguous
+            if criterion.b1_label == 1:
+                return bool(prior_chemo)
+            # b1_label=None — too ambiguous to call
+            # fall through to return None
 
     # -- Prior radiation therapy -------------------------------------------
     if _PRIOR_RT_MENTION_RE.search(text):
@@ -375,6 +421,8 @@ def evaluate_objective_criterion(
             if _EXCL_THERAPY_DIRECTION_RE.search(text) or is_exclusion:
                 return not bool(prior_rt)
             if _INCL_THERAPY_DIRECTION_RE.search(text):
+                return bool(prior_rt)
+            if criterion.b1_label == 1:
                 return bool(prior_rt)
 
     # -- Brain metastases --------------------------------------------------

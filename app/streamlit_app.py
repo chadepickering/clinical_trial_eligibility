@@ -132,6 +132,8 @@ def _build_patient_description(patient: dict) -> str:
         parts.append("Prior radiation therapy: " + ("yes" if patient["prior_rt"] else "none") + ".")
     if patient.get("brain_mets") is not None:
         parts.append("Brain metastases: " + ("yes" if patient["brain_mets"] else "none") + ".")
+    if patient.get("pregnant") is not None:
+        parts.append("Pregnant/breastfeeding: " + ("yes" if patient["pregnant"] else "no") + ".")
     if patient.get("nyha_class") is not None:
         parts.append(f"NYHA class {patient['nyha_class']}.")
     if patient.get("child_pugh") is not None:
@@ -269,6 +271,9 @@ def _render_sidebar() -> dict:
     brain_mets_raw = st.sidebar.selectbox(
         "Brain metastases", yn_opts, index=2 if ex else 0,
     )
+    pregnant_raw = st.sidebar.selectbox(
+        "Pregnant / breastfeeding", yn_opts, index=2 if ex else 0,
+    )
     nyha_opts = ["(not specified)", "Class I", "Class II", "Class III", "Class IV"]
     nyha_raw = st.sidebar.selectbox("NYHA class", nyha_opts, index=0)
     cp_opts = ["(not specified)", "A", "B", "C"]
@@ -343,6 +348,8 @@ def _render_sidebar() -> dict:
         patient["prior_rt"] = prior_rt_raw == "Yes"
     if brain_mets_raw != "(not specified)":
         patient["brain_mets"] = brain_mets_raw == "Yes"
+    if pregnant_raw != "(not specified)":
+        patient["pregnant"] = pregnant_raw == "Yes"
     if nyha_raw != "(not specified)":
         patient["nyha_class"] = nyha_opts.index(nyha_raw)  # I=1, II=2, III=3, IV=4
     if cp_raw != "(not specified)":
@@ -508,10 +515,12 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
             return None
 
     # --- Coverage gate ---
-    # Count how many criteria the model could actually resolve.
-    # "Evaluable" = deterministic pass/fail + subjective (has a meaningful prior).
-    # "Unevaluable" = unobservable + unevaluable (Beta(3,1) placeholder priors).
+    # Two conditions must both pass before showing a probability:
+    #   1. Coverage ≥ 40%: enough of the criteria are evaluable (not just UNOBS)
+    #   2. At least 5 total criteria: guards against trials with only 2-3 trivial
+    #      metadata criteria yielding a spuriously confident P=1.0
     _COVERAGE_THRESHOLD = 0.4
+    _MIN_CRITERIA = 5
     n_total = len(evaluations)
     n_evaluable = sum(
         1 for e in evaluations
@@ -533,13 +542,17 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
         _render_count_row(result)
         return evaluations, result
 
-    # --- Profile incomplete: not enough criteria evaluable ---
-    if coverage < _COVERAGE_THRESHOLD:
+    # --- Profile incomplete: coverage or count too low ---
+    if coverage < _COVERAGE_THRESHOLD or n_total < _MIN_CRITERIA:
         n_unobs = sum(1 for e in evaluations if e["kind"] in ("unobservable", "unevaluable"))
+        reason = (
+            f"only {n_total} criteria in database (minimum 5 required)"
+            if n_total < _MIN_CRITERIA
+            else f"{n_evaluable} of {n_total} criteria evaluable ({coverage:.0%}, threshold 40%)"
+        )
         st.warning(
-            f"**Profile incomplete** — {n_evaluable} of {n_total} criteria evaluable "
-            f"({coverage:.0%}). The eligibility probability would be unreliable with "
-            f"this much missing data.\n\n"
+            f"**Profile incomplete** — {reason}. The eligibility probability would be "
+            f"unreliable with this much missing data.\n\n"
             f"**{n_unobs} criteria cannot be assessed** from the current patient profile. "
             f"To improve coverage, consider adding:\n"
             f"- Cancer stage, histology, and prior therapy details (in *Cancer type* / *Prior therapy notes*)\n"
