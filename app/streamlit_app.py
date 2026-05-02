@@ -13,6 +13,7 @@ Run:
 import hashlib
 import json
 import os
+import re
 import sys
 
 import requests
@@ -390,29 +391,164 @@ def _render_sidebar() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Helpers for criterion table
+# ---------------------------------------------------------------------------
+
+def _patient_context_for_criterion(ev: dict, patient: dict) -> str:
+    """Return the patient value(s) most relevant to why this criterion got its kind."""
+    text = (ev.get("text") or "").lower()
+    kind = ev["kind"]
+    labs = patient.get("lab_values") or {}
+    parts = []
+
+    if re.search(r"\bage\b|\byears?\s+(old|of\s+age)\b", text):
+        age = patient.get("age")
+        if age:
+            parts.append(f"Age {age}")
+
+    if re.search(r"\becog\b|\bperformance\s+status\b", text):
+        ecog = patient.get("ecog")
+        if ecog is not None:
+            parts.append(f"ECOG {ecog}")
+
+    if re.search(r"\bkarnofsky\b|\bkps\b", text):
+        kps = patient.get("karnofsky")
+        if kps is not None:
+            parts.append(f"KPS {kps}%")
+
+    if re.search(r"\bplatelet\b", text):
+        plat = labs.get("platelet_count")
+        if plat:
+            parts.append(f"Plt {int(plat):,}/mm³")
+
+    if re.search(r"\bhemoglobin\b|\bhgb\b|\bhaemoglobin\b", text):
+        hgb = labs.get("hemoglobin")
+        if hgb:
+            parts.append(f"Hgb {hgb} g/dL")
+
+    if re.search(r"\bneutrophil\b|\banc\b|\bgranulocyte\b", text):
+        anc = labs.get("neutrophil_count")
+        if anc:
+            parts.append(f"ANC {int(anc):,}/mm³")
+
+    if re.search(r"\bwbc\b|\bleukocyte\b|\bwhite\s+blood\s+cell\b", text):
+        wbc = labs.get("wbc")
+        if wbc:
+            parts.append(f"WBC {int(wbc):,}/mm³")
+
+    if re.search(r"\bcreatinine\b", text):
+        creat = labs.get("creatinine")
+        if creat:
+            parts.append(f"Creatinine {creat} mg/dL")
+
+    if re.search(r"\bbilirubin\b", text):
+        bili = labs.get("bilirubin")
+        if bili:
+            parts.append(f"Bili {bili} mg/dL")
+
+    if re.search(r"\b(alt|sgpt|alanine)\b", text):
+        alt = labs.get("alt")
+        if alt:
+            parts.append(f"ALT {alt} U/L")
+
+    if re.search(r"\b(ast|sgot|aspartate)\b", text):
+        ast = labs.get("ast")
+        if ast:
+            parts.append(f"AST {ast} U/L")
+
+    if re.search(r"\blvef\b|\bejection\s+fraction\b", text):
+        lvef = labs.get("lvef")
+        if lvef:
+            parts.append(f"LVEF {lvef}%")
+
+    if re.search(r"\bpregnant\b|\bpregnancy\b|\blactat\b|\bbreastfeed\b|\bnursing\b|\bchild.?bear\b", text):
+        pregnant = patient.get("pregnant")
+        if pregnant is None:
+            parts.append("Pregnancy: not specified")
+        else:
+            parts.append(f"Pregnant: {'yes' if pregnant else 'no'}")
+
+    if re.search(r"\bchemotherapy\b|\bchemo\b", text):
+        pc = patient.get("prior_chemo")
+        if pc is not None:
+            parts.append(f"Prior chemo: {'yes' if pc else 'no'}")
+
+    if re.search(r"\bradiation\b|\bradiotherapy\b|\birradiation\b", text):
+        prt = patient.get("prior_rt")
+        if prt is not None:
+            parts.append(f"Prior RT: {'yes' if prt else 'no'}")
+
+    if re.search(r"\bbrain\s+(metastas|lesion|tumor|tumour)\b|\bcns\s+metastas\b|\bintracranial\b", text):
+        bm = patient.get("brain_mets")
+        if bm is not None:
+            parts.append(f"Brain mets: {'yes' if bm else 'no'}")
+
+    if re.search(r"\bfemale\b|\bwomen\b|\bwoman\b|\bmale\b|\bmen\b|\bman\b|\bgender\b", text):
+        sex = patient.get("sex")
+        if sex:
+            parts.append(f"Sex: {sex}")
+
+    if parts:
+        return "; ".join(parts)
+
+    if kind == "unobservable":
+        return "Patient data absent"
+    if kind == "unevaluable":
+        return "Criterion not parseable"
+    return "—"
+
+
+@st.cache_data(show_spinner=False)
+def _fetch_trial_titles(nct_ids_json: str) -> dict[str, str]:
+    """Batch-fetch brief_title from DuckDB keyed by nct_id."""
+    nct_ids = json.loads(nct_ids_json)
+    if not nct_ids:
+        return {}
+    con = _get_db()
+    placeholders = ", ".join("?" for _ in nct_ids)
+    rows = con.execute(
+        f"SELECT nct_id, brief_title FROM trials WHERE nct_id IN ({placeholders})",
+        nct_ids,
+    ).fetchall()
+    return {r[0]: r[1] for r in rows}
+
+
+# ---------------------------------------------------------------------------
 # Trial search panel
 # ---------------------------------------------------------------------------
 
 def _score_color(score: float) -> str:
     """Map similarity score 0–1 to a hex color: green (1) → yellow (0.5) → red (0)."""
     if score >= 0.5:
-        # green to yellow: r increases 0→255, g stays 180
         t = (score - 0.5) / 0.5
         r = int(255 * (1 - t))
         g = int(180 * t + 200 * (1 - t))
         return f"#{r:02x}{g:02x}00"
     else:
-        # yellow to red: g decreases 200→0
         t = score / 0.5
         g = int(200 * t)
         return f"#ff{g:02x}00"
+
+
+def _score_text_color(score: float) -> str:
+    """Return black or white text for readability on the score cell background."""
+    if score >= 0.5:
+        t = (score - 0.5) / 0.5
+        r_n = (255 * (1 - t)) / 255
+        g_n = (180 * t + 200 * (1 - t)) / 255
+    else:
+        t = score / 0.5
+        r_n = 1.0
+        g_n = (200 * t) / 255
+    # Perceived luminance (sRGB approximation)
+    lum = 0.2126 * r_n + 0.7152 * g_n
+    return "#111111" if lum > 0.35 else "#ffffff"
 
 
 def _render_search() -> str | None:
     """Renders the search panel. Returns selected nct_id or None."""
     st.subheader("Trial Search")
 
-    # Fix 3: query box populated from full patient description
     auto_query = st.session_state.get("auto_query", "")
     query = st.text_input(
         "Describe the patient or trial of interest",
@@ -441,37 +577,49 @@ def _render_search() -> str | None:
         st.warning("No results. Check that ChromaDB is populated (`python embed.py`).")
         return selected_nct
 
-    st.markdown(f"**{len(results)} trials found** — select a row to score")
+    st.caption(
+        "Trials are ranked by **semantic similarity**: the patient description is encoded "
+        "into a 384-dimension sentence embedding (MiniLM-L6-v2) and compared against all "
+        "trials indexed in a ChromaDB vector database — nearest-neighbour retrieval, not "
+        "keyword matching. Select a row to run the eligibility assessment."
+    )
 
     import pandas as pd
 
-    # Fix 4: correct field access (flat dict, not nested); NCT ID left, Score right
+    nct_ids = [r["nct_id"] for r in results]
+    title_map = _fetch_trial_titles(json.dumps(nct_ids))
+
     rows = []
     for r in results:
-        conds = (r.get("conditions") or "")
-        # conditions is stored as a string repr of a list — clean it up
-        conds = conds.strip("[]'\"").replace("', '", ", ").replace('", "', ", ")[:55]
+        raw_title = title_map.get(r["nct_id"], "")
+        short_title = (raw_title[:52] + "…") if len(raw_title) > 52 else raw_title
         rows.append({
-            "NCT ID":     r["nct_id"],
-            "Status":     r.get("status", ""),
-            "Sex":        r.get("sex", ""),
-            "Min age":    r.get("min_age", ""),
-            "Conditions": conds,
-            "Score":      round(r["score"], 3),
+            "NCT ID":           r["nct_id"],
+            "Trial Name":       short_title,
+            "Status":           r.get("status", ""),
+            "Sex":              r.get("sex", ""),
+            "Min age":          r.get("min_age", ""),
+            "Similarity Score": round(r["score"], 3),
         })
 
     df = pd.DataFrame(rows)
 
-    # Fix 5: checkbox row selection via on_select
+    def _style_score(val):
+        bg = _score_color(val)
+        fg = _score_text_color(val)
+        return f"background-color: {bg}; color: {fg}; font-weight: 600;"
+
+    styled = df.style.map(_style_score, subset=["Similarity Score"])
+
     event = st.dataframe(
-        df,
+        styled,
         use_container_width=True,
         hide_index=True,
         on_select="rerun",
         selection_mode="single-row",
         column_config={
-            "Score": st.column_config.NumberColumn(
-                "Score",
+            "Similarity Score": st.column_config.NumberColumn(
+                "Similarity Score",
                 format="%.3f",
                 min_value=0.0,
                 max_value=1.0,
@@ -497,6 +645,14 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
     import plotly.graph_objects as go
 
     st.subheader("Eligibility Assessment")
+    st.caption(
+        "Each eligibility criterion for this trial is evaluated against the patient profile "
+        "and classified as a deterministic pass/fail (objectively verifiable from structured "
+        "data), subjective (requires physician judgment), or unobservable (data absent from "
+        "profile). A Beta-distributed prior is assigned to each criterion and combined "
+        "multiplicatively via a PyMC Bayesian model to yield a posterior probability of "
+        "eligibility with a 95% highest-density interval."
+    )
 
     if not patient:
         st.info("Fill in the patient profile to compute eligibility probability.")
@@ -655,8 +811,23 @@ _KIND_ORDER = {
 _B1_LABEL = {1: "INC", 0: "EXC", None: "?"}
 
 
-def _render_criterion_table(evaluations: list[dict]):
+def _render_criterion_table(evaluations: list[dict], patient: dict | None = None):
     st.subheader("Criterion Breakdown")
+    st.caption(
+        "Every eligibility criterion stored for this trial is listed below, sorted by "
+        "evaluation outcome. The **Patient Context** column shows which patient value(s) "
+        "informed the classification — or why data was absent."
+    )
+    st.markdown(
+        "<small>"
+        "**✗ FAIL** — criterion objectively not met; triggers hard disqualification &nbsp;|&nbsp; "
+        "**✓ PASS** — criterion objectively met &nbsp;|&nbsp; "
+        "**~ SUBJ** — subjective language (e.g. *adequate function*); assessed via hedging prior &nbsp;|&nbsp; "
+        "**? UNOBS** — patient profile lacks required data &nbsp;|&nbsp; "
+        "**? EVAL** — criterion text could not be parsed into a structured rule"
+        "</small>",
+        unsafe_allow_html=True,
+    )
 
     if not evaluations:
         st.caption("No criteria loaded.")
@@ -677,14 +848,14 @@ def _render_criterion_table(evaluations: list[dict]):
             f'font-weight:600;white-space:nowrap;">{chip_text}</span>'
         )
         b1   = _B1_LABEL.get(e.get("b1_label"), "?")
-        text = (e.get("text") or "")[:90]
-        if len(e.get("text") or "") > 90:
+        text = (e.get("text") or "")[:75]
+        if len(e.get("text") or "") > 75:
             text += "…"
         hedging_col = (
             f'{e["hedging"]:.2f}' if kind == "subjective" else "—"
         )
-        # Fix 6: explicit text color on every row so dark-mode white doesn't bleed
-        # through light row backgrounds
+        ctx = _patient_context_for_criterion(e, patient or {})
+
         if kind == "deterministic_fail":
             row_style = "background:#fff5f5;"
             text_color = "color:#7f1d1d;"
@@ -704,6 +875,7 @@ def _render_criterion_table(evaluations: list[dict]):
             f"<td style='padding:4px 8px;'>{chip}</td>"
             f"<td style='{td}font-size:0.8rem;'>{b1}</td>"
             f"<td style='{td}'>{text}</td>"
+            f"<td style='{td}font-size:0.78rem;color:#4b5563;'>{ctx}</td>"
             f"<td style='{td}text-align:center;'>{hedging_col}</td>"
             f"</tr>"
         )
@@ -714,6 +886,7 @@ def _render_criterion_table(evaluations: list[dict]):
         "<th style='padding:4px 8px;text-align:left;font-size:0.82rem;'>Kind</th>"
         "<th style='padding:4px 8px;text-align:left;font-size:0.82rem;'>Type</th>"
         "<th style='padding:4px 8px;text-align:left;font-size:0.82rem;'>Criterion</th>"
+        "<th style='padding:4px 8px;text-align:left;font-size:0.82rem;'>Patient Context</th>"
         "<th style='padding:4px 8px;text-align:center;font-size:0.82rem;'>Hedging</th>"
         "</tr></thead>"
         "<tbody>" + "".join(rows_html) + "</tbody>"
@@ -721,10 +894,10 @@ def _render_criterion_table(evaluations: list[dict]):
     )
     st.html(table_html)
     st.caption(
-        "FAIL rows (red) are hard disqualifiers. "
-        "SUBJ rows (amber) use hedging-shaped Beta priors. "
-        "UNOBS/EVAL rows (grey) use Beta(3,1) — optimistic prior reflecting "
-        "the trial-seeking population; they widen the credible interval."
+        "Type: INC = inclusion criterion, EXC = exclusion criterion. "
+        "FAIL rows are hard disqualifiers regardless of other criteria. "
+        "UNOBS/EVAL rows use Beta(3,1) — an optimistic prior reflecting the "
+        "trial-seeking referral population — and widen the credible interval."
     )
 
 
@@ -734,6 +907,15 @@ def _render_criterion_table(evaluations: list[dict]):
 
 def _render_llm_panel(nct_id: str, patient: dict):
     st.subheader("AI Narrative (Mistral-7B)")
+    st.caption(
+        "The Bayesian model excels at objective, data-driven criteria but cannot reason "
+        "over free-text nuance (e.g. platinum-sensitivity windows, combination drug rules, "
+        "disease-specific staging). Mistral-7B-Instruct is a 7-billion-parameter "
+        "open-source LLM run **locally via Ollama** — no data leaves the machine. It reads "
+        "the full trial eligibility text and produces a plain-language verdict with "
+        "criterion-by-criterion reasoning. Use it as a second opinion to cross-check the "
+        "Bayesian result, particularly when the Bayesian tier is 'uncertain'."
+    )
 
     ollama_ok = _ollama_available()
     if not ollama_ok:
@@ -835,7 +1017,7 @@ def main():
     st.divider()
 
     # 11e — Criterion breakdown table
-    _render_criterion_table(evaluations)
+    _render_criterion_table(evaluations, patient)
 
     st.divider()
 
