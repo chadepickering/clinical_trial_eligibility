@@ -1,0 +1,167 @@
+========================================================================
+BATCH EVALUATION — STAGE 3 ANALYSIS REPORT
+Generated: 2026-05-02 11:45:00
+Stage 1 pairs: 6000
+Stage 2 pairs: 1032
+========================================================================
+
+========================================================================
+STAGE 1 — BAYESIAN SWEEP SUMMARY
+========================================================================
+Total pairs evaluated : 6000
+  Short-circuited     : 4167 (69.5%)
+  Coverage-gated      : 1353 (22.6%)
+  Bayesian-scored     : 480 (8.0%)
+
+------------------------------------------------------------------------
+Coverage distribution (non-short-circuited pairs)
+  0–20%       :    213 pairs (11.6%)
+  20–40%      :    996 pairs (54.3%)
+  40–60%      :    468 pairs (25.5%)
+  60–80%      :    110 pairs (6.0%)
+  80–100%     :     46 pairs (2.5%)
+
+------------------------------------------------------------------------
+Tier distribution (Bayesian-scored pairs only)
+  high confidence          :    327 (68.1%)
+  high uncertainty         :     86 (17.9%)
+  moderate uncertainty     :     67 (14.0%)
+
+------------------------------------------------------------------------
+Top fail pattern analysis (short-circuited pairs)
+  other                                        :  2068 (49.6%)
+  prior chemotherapy (required or excluded)    :  1280 (30.7%)
+  prior radiation therapy                      :   275 (6.6%)
+  brain metastases                             :   234 (5.6%)
+  sex restriction                              :   141 (3.4%)
+  recurrence/relapse required                  :   104 (2.5%)
+  pregnancy/lactation                          :    65 (1.6%)
+
+------------------------------------------------------------------------
+Per-patient short-circuit rate
+  OV_08       : 92% (185 of 200 trials)
+  OV_06       : 92% (185 of 200 trials)
+  PR_03       : 86% (172 of 200 trials)
+  LU_02       : 84% (168 of 200 trials)
+  LU_04       : 84% (167 of 200 trials)
+  OV_03       : 82% (165 of 200 trials)
+  ME_02       : 79% (158 of 200 trials)
+  GU_01       : 78% (156 of 200 trials)
+  BR_02       : 78% (156 of 200 trials)
+  OV_02       : 76% (152 of 200 trials)
+  PR_01       : 74% (149 of 200 trials)
+  BR_04       : 74% (147 of 200 trials)
+  BR_05       : 74% (147 of 200 trials)
+  OV_04       : 73% (146 of 200 trials)
+  GI_01       : 73% (146 of 200 trials)
+  OV_05       : 72% (143 of 200 trials)
+  PR_02       : 70% (140 of 200 trials)
+  HM_03       : 70% (139 of 200 trials)
+  HM_02       : 66% (131 of 200 trials)
+  GI_02       : 66% (131 of 200 trials)
+  OV_01       : 64% (128 of 200 trials)
+  HM_04       : 64% (127 of 200 trials)
+  OV_07       : 59% (118 of 200 trials)
+  BR_01       : 58% (117 of 200 trials)
+  HM_01       : 55% (109 of 200 trials)
+  BR_03       : 53% (106 of 200 trials)
+  ME_01       : 52% (104 of 200 trials)
+  LU_03       : 50% (101 of 200 trials)
+  GI_03       : 44% (89 of 200 trials)
+  LU_01       : 42% (85 of 200 trials)
+
+========================================================================
+STAGE 2 — MISTRAL SPOT-CHECK SUMMARY
+========================================================================
+
+------------------------------------------------------------------------
+Verdict distribution
+  UNCERTAIN      :    665 (64.4%)
+  NOT ELIGIBLE   :    240 (23.3%)
+  ELIGIBLE       :    125 (12.1%)
+  ERROR          :      2 (0.2%)
+
+------------------------------------------------------------------------
+Agreement distribution
+  PARTIAL_BAYES_FAIL_MISTRAL_UNCERTAIN              :   291 (28.2%)
+  NEUTRAL                                           :   279 (27.0%)
+  COVERAGE_GATED                                    :   135 (13.1%)
+  AGREE_INELIGIBLE                                  :    97 (9.4%)
+  AGREE_LOW_PROB                                    :    95 (9.2%)
+  DISAGREE_BAYES_LOW_MISTRAL_ELIG                   :    70 (6.8%)
+  DISAGREE_BAYES_FAIL_MISTRAL_ELIG                  :    29 (2.8%)
+  PARTIAL_BAYES_ELIG_MISTRAL_UNCERTAIN              :    23 (2.2%)
+  DISAGREE_BAYES_ELIG_MISTRAL_FAIL                  :    12 (1.2%)
+  AGREE_ELIGIBLE                                    :     1 (0.1%)
+
+------------------------------------------------------------------------
+Hard disagreements (Bayesian=FAIL, Mistral=ELIGIBLE)
+  Count: 29
+  Samples (first_fail_text | mistral_explanation[:120]):
+    [HM_01/NCT06806033]
+      Fail: Participants who have failed only one prior line of therapy must not be a candid
+      Mistral: The patient is likely eligible for the trial based on the information provided.  The patient has diffuse large B-cell ly
+    [OV_07/NCT07291180]
+      Fail: Has an ECOG performance status score of 0-2. Male Participants
+      Mistral: The patient is likely eligible for the trial based on the information provided.  The trial requires a primary diagnosis 
+    [OV_01/NCT00086567]
+      Fail: 2.1.3<TAB>Entry within 9 weeks of completion of final cycle of chemotherapy (wit
+      Mistral: The patient is likely eligible for the trial based on the information provided.  The trial requires Stage III or IV epit
+    [BR_04/NCT00196820]
+      Fail: Locally advanced or metastatic stage of disease not suitable for surgery or radi
+      Mistral: The patient is a female, 78yo with hormone receptor-positive breast cancer and bone metastases. She has prior history of
+    [BR_03/NCT00045097]
+      Fail: Bilirubin no greater than 1.5 times upper limit of normal (ULN) (3 times ULN if 
+      Mistral: The patient is a female, 41yo with BRCA1-mutated breast cancer, stage II and no prior chemotherapy. ECOG 0. Pregnant: no
+    [OV_01/NCT00453310]
+      Fail: Received prior high-dose chemotherapy regimens
+      Mistral: The patient is likely eligible for the trial based on the information provided.  The trial requires histologically confi
+    [LU_01/NCT06238882]
+      Fail: Presence of brain metastases, candidates for treatment with holocranial radiatio
+      Mistral: The patient is likely eligible for the trial based on the information provided.  The patient has Stage IIIB non-small ce
+    [HM_01/NCT00006473]
+      Fail: Primary radiotherapy is 1 regimen
+      Mistral: The trial requires histologically or cytologically confirmed recurrent or refractory non-Hodgkin's lymphoma of any subty
+    [LU_01/NCT01945021]
+      Fail: Any prior treatment (chemotherapy, radiation \[except for palliative\], or surge
+      Mistral: The trial requires a histologically or cytologically proven diagnosis of NSCLC that is locally advanced or metastatic, t
+    [OV_01/NCT00231855]
+      Fail: Histologically documented recurrent endometrial adenocarcinoma, papillary serous
+      Mistral: The patient is a female, 52 years old with Stage III ovarian serous carcinoma, no prior chemotherapy or radiotherapy, EC
+
+------------------------------------------------------------------------
+Bayesian=low-prob, Mistral=ELIGIBLE disagreements
+  Count: 70
+
+------------------------------------------------------------------------
+Hallucination candidates (Mistral=NOT ELIGIBLE, Bayesian=high-prob eligible)
+  Count: 12
+    [OV_04/NCT00006454] p_mean=0.753
+      Mistral: The trial requires the patient to be female, aged between 18 and 120 years, have a histologically confirmed stage IIB, III, or IV ovarian ep
+    [OV_05/NCT07229040] p_mean=0.753
+      Mistral: The trial requires age to be between 18-75 years (inclusive). The patient is 72 years old. Since 72 > 75, the maximum age criterion is not m
+    [OV_06/NCT00006454] p_mean=0.753
+      Mistral: The trial requires the patient to be female, aged between 18 and 120 years, have histologically confirmed stage IIB, III, or IV ovarian epit
+    [OV_06/NCT00004046] p_mean=0.753
+      Mistral: The trial (NCT00004046) is for metastatic breast cancer, but the patient has Stage III ovarian carcinoma. Therefore, the patient is not like
+    [BR_01/NCT00003927] p_mean=0.753
+      Mistral: The trial requires the patient to be between 18 and 59 years old, which the patient (48yo) is not eligible for. VERDICT: NOT ELIGIBLE
+
+========================================================================
+RECOMMENDATIONS FOR NEXT ITERATION
+========================================================================
+Review the fail pattern analysis above. Fix patterns that affect > 5% of
+all pairs. Patterns affecting < 1% are noise — do not over-fit to them.
+
+Priority order:
+  1. Any fail pattern that appears in > 10% of short-circuit cases AND
+     where Mistral disagrees (ELIGIBLE or UNCERTAIN) > 50% of the time
+     → routing error, fix the keyword router.
+  2. Coverage gate triggering > 60% of non-SC pairs → patient schema
+     missing fields that matter; expand the profile or lower gate threshold.
+  3. Mistral hallucination rate > 10% in scored pairs → prompt engineering.
+  4. Patterns affecting < 1% of pairs: document as known limitation only.
+
+========================================================================
+END OF REPORT
+========================================================================
