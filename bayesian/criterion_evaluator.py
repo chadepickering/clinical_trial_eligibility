@@ -106,14 +106,17 @@ _OP_MAP = {
 # written in prose ("less than or equal to ECOG 2") are handled the same
 # way as symbolic ones ("ECOG ≤ 2").
 _ENGLISH_OP_SUBS: list[tuple[re.Pattern, str]] = [
+    # Longer phrases first — prevents "greater than" from matching inside
+    # "no greater than" before the compound phrase rule fires.
     (re.compile(r'\bgreater\s+than\s+or\s+equal\s+to\b', re.I), '>='),
     (re.compile(r'\bless\s+than\s+or\s+equal\s+to\b',    re.I), '<='),
+    (re.compile(r'\bno\s+(?:more|greater)\s+than\b',      re.I), '<='),
+    (re.compile(r'\bnot\s+(?:more|greater)\s+than\b',     re.I), '<='),
+    (re.compile(r'\bno\s+less\s+than\b',                  re.I), '>='),
     (re.compile(r'\bgreater\s+than\b',                    re.I), '>'),
     (re.compile(r'\bless\s+than\b',                       re.I), '<'),
     (re.compile(r'\bat\s+least\b',                        re.I), '>='),
     (re.compile(r'\bat\s+most\b',                         re.I), '<='),
-    (re.compile(r'\bno\s+more\s+than\b',                  re.I), '<='),
-    (re.compile(r'\bno\s+less\s+than\b',                  re.I), '>='),
     (re.compile(r'\bnot\s+exceed(?:ing)?\b',              re.I), '<='),
 ]
 
@@ -253,6 +256,27 @@ _LAB_KEYWORDS: dict[str, re.Pattern] = {
 }
 
 # ---------------------------------------------------------------------------
+# ULN multiplier guard — skip lab criteria expressed as multiples of ULN
+# ---------------------------------------------------------------------------
+#
+# Criteria like "AST ≤ 2.5 × ULN" express the threshold as a small multiplier
+# (2.5) of the institution-specific upper limit of normal, not as an absolute
+# lab value. Without knowing the ULN we cannot safely compare a patient value
+# (AST = 28 U/L) against a multiplier (2.5). The threshold parser would extract
+# 2.5 and produce a hard fail (28 > 2.5), which is a false positive.
+#
+# Fix: detect ULN-multiplier language and return None → UNOBSERVABLE.
+# Only absolute-value criteria ("Bilirubin ≤ 1.5 mg/dL") continue to the
+# numeric comparison; ULN expressions are intentionally unresolved.
+
+_ULN_MULTIPLIER_RE = re.compile(
+    r"\b(?:times?|×|x)\s*(?:(?:upper\s+)?(?:limit\s+of\s+)?normal|ULN)\b"
+    r"|\bULN\b"
+    r"|\btimes\s+normal\b",
+    re.I,
+)
+
+# ---------------------------------------------------------------------------
 # Boolean / categorical clinical field routing
 # ---------------------------------------------------------------------------
 
@@ -260,6 +284,14 @@ _PRIOR_CHEMO_MENTION_RE = re.compile(r"\bchemo(?:therapy)?\b", re.I)
 _PRIOR_RT_MENTION_RE    = re.compile(
     r"\bradiation\s+(?:therapy|treatment)\b|\bradiotherapy\b", re.I
 )
+
+# Concurrent-treatment guard — criteria about *currently* administered therapy
+# are distinct from prior therapy history. The patient profile records prior
+# chemo/RT (bool) but not concurrent/active treatment status. Routing a
+# "no concurrent chemotherapy" exclusion through prior_chemo would produce a
+# false fail for any patient with a prior_chemo=True history.
+# Guard: if "concurrent" appears in the criterion text, skip therapy routing.
+_CONCURRENT_RE = re.compile(r"\bconcurrent\b", re.I)
 # Pregnancy / lactation exclusion — must only fire when patient explicitly
 # states pregnant=True. If the field is absent, return None (→ UNOBSERVABLE).
 _PREGNANCY_RE = re.compile(
@@ -402,6 +434,10 @@ def evaluate_objective_criterion(
     #   3. Fallback to b1_label: INC (b1_label=1) → patient must have had chemo;
     #      b1_label=None → cannot determine, return None.
     if _PRIOR_CHEMO_MENTION_RE.search(text):
+        # Concurrent-treatment criteria cannot be evaluated from prior_chemo;
+        # returning None sends them to UNOBSERVABLE rather than a false fail.
+        if _CONCURRENT_RE.search(text):
+            return None
         prior_chemo = patient.get("prior_chemo")
         if prior_chemo is not None:
             if _EXCL_THERAPY_DIRECTION_RE.search(text) or is_exclusion:
@@ -416,6 +452,8 @@ def evaluate_objective_criterion(
 
     # -- Prior radiation therapy -------------------------------------------
     if _PRIOR_RT_MENTION_RE.search(text):
+        if _CONCURRENT_RE.search(text):
+            return None
         prior_rt = patient.get("prior_rt")
         if prior_rt is not None:
             if _EXCL_THERAPY_DIRECTION_RE.search(text) or is_exclusion:
@@ -495,6 +533,13 @@ def evaluate_objective_criterion(
                 r'\bclearance\b', text, re.I
             ):
                 continue
+            # ULN-multiplier guard: threshold is expressed as a multiple of the
+            # upper limit of normal (e.g. "≤ 2.5 × ULN"). Parsing extracts 2.5
+            # as an absolute value, which would incorrectly compare AST=28 against
+            # a threshold of 2.5 and produce a false hard fail. We cannot safely
+            # evaluate without knowing the institution-specific ULN; return None.
+            if _ULN_MULTIPLIER_RE.search(text):
+                return None
             parsed = _first_threshold(thresholds) or _threshold_from_text(text)
             if parsed:
                 op, val, _ = parsed
@@ -532,13 +577,19 @@ def estimate_hedging(text: str) -> float:
         genuinely uncertain → Beta(0.4, 1.6) skewed toward uncertain.
     Low hedging (0.05): written consent — nearly always met in practice →
         Beta(1.9, 0.1) skewed strongly toward met.
-    Default (0.5): maximum uncertainty → Beta(1.0, 1.0) uninformative.
+    Default (0.35): moderately optimistic → Beta(1.3, 0.7) mean ≈ 0.65.
+        Reflects the trial-seeking population selection effect: patients
+        who reach the eligibility screening step typically meet most
+        protocol requirements that cannot be objectively assessed from
+        structured data. Lowered from 0.5 (maximum uncertainty / Beta(1,1))
+        to reduce multiplicative shrinkage when several subjective criteria
+        appear together.
     """
     if _HEDGING_HIGH_RE.search(text):
         return 0.8
     if _HEDGING_LOW_RE.search(text):
         return 0.05
-    return 0.5
+    return 0.35
 
 
 # ---------------------------------------------------------------------------

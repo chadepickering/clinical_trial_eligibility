@@ -171,24 +171,37 @@ def build_model(criteria_evaluations: list[dict]) -> pm.Model:
     with pm.Model() as model:
         beta_vars = []
 
-        for i, ev in enumerate(stochastic):
+        # SUBJECTIVE criteria retain independent per-criterion Beta priors.
+        # Each represents a distinct physician judgment (life expectancy,
+        # ability to comply, adequate function) — genuine independent
+        # uncertainties that compound appropriately.
+        subj_idx = 0
+        for ev in stochastic:
             if ev["kind"] == SUBJECTIVE:
                 hedging = float(ev["hedging"])
                 alpha = max(2.0 * (1.0 - hedging), 0.1)
                 beta_param = max(2.0 * hedging, 0.1)
-            else:
-                # Beta(3, 1): mean = 0.75, SD ≈ 0.19.
-                # Reflects the referral-population selection effect: patients
-                # actively seeking oncology trial enrollment are healthier than
-                # the general population, so unobservable criteria are more
-                # likely met than a coin-flip (Beta(1,1)) would imply.
-                # Beta(3,1) is still wide enough to be honest about uncertainty
-                # while avoiding the unrealistic 50% floor of Beta(1,1).
-                alpha, beta_param = 3.0, 1.0
+                beta_vars.append(
+                    pm.Beta(f"p_subj_{subj_idx}", alpha=alpha, beta=beta_param)
+                )
+                subj_idx += 1
 
-            beta_vars.append(
-                pm.Beta(f"p_{i}", alpha=alpha, beta=beta_param)
-            )
+        # UNOBSERVABLE and UNEVALUABLE criteria are collapsed into a single
+        # grouped Beta(3, 1) factor rather than one variable per criterion.
+        #
+        # Rationale: independent per-criterion multiplication assumes the
+        # n_unobs criteria are independent, but they all describe the same
+        # patient — a patient who is healthy enough to seek trial enrollment.
+        # Multiplying 7 independent Beta(3,1) priors gives 0.75^7 ≈ 0.13,
+        # which confidently under-estimates eligibility for patients who
+        # have no hard fails and several observable criteria that DO pass.
+        # One grouped Beta(3,1) says: "given this patient's profile, we
+        # have a 75% prior that the unobservable block as a whole is met."
+        n_unobs_group = sum(
+            1 for e in stochastic if e["kind"] in (UNOBSERVABLE, UNEVALUABLE)
+        )
+        if n_unobs_group > 0:
+            beta_vars.append(pm.Beta("p_unobs_group", alpha=3.0, beta=1.0))
 
         if beta_vars:
             pm.Deterministic("p_eligible", pt.prod(pt.stack(beta_vars)))

@@ -64,15 +64,17 @@ SYSTEM_PROMPT = (
 # All use fictional NCT IDs (NCT00000001–9) to avoid ambiguity with real trials.
 #
 # Pattern covered by each example:
-#   1. Numeric lab threshold FAIL  — platelet count below required minimum
-#   2. Age range FAIL              — patient below minimum age
-#   3. Time window FAIL            — platinum-sensitive misclassified as resistant
-#   4. Numeric lab threshold PASS  — comma-formatted ANC correctly above threshold
-#   5. Performance status FAIL     — ECOG above maximum allowed
-#   6. Prior therapy exclusion     — anthracycline exposure disqualifies patient
-#   7. Organ function FAIL         — bilirubin exceeds hepatic function limit
-#   8. Missing information         — key criterion unverifiable from description → UNCERTAIN
-#   9. Fully eligible              — all inclusion criteria clearly met across multiple domains
+#   1.  Numeric lab threshold FAIL  — platelet count below required minimum
+#   2.  Age range FAIL              — patient below minimum age
+#   3.  Time window FAIL            — platinum-sensitive misclassified as resistant
+#   4.  Numeric lab threshold PASS  — comma-formatted ANC correctly above threshold
+#   5.  Performance status FAIL     — ECOG above maximum allowed
+#   6.  Prior therapy exclusion     — anthracycline exposure disqualifies patient
+#   7.  Organ function FAIL         — bilirubin exceeds hepatic function limit
+#   8.  Missing information         — key criterion unverifiable from description → UNCERTAIN
+#   9.  Fully eligible              — all inclusion criteria clearly met across multiple domains
+#   10. Cancer type mismatch FAIL   — patient's cancer type differs from trial's required diagnosis
+#   11. Prior treatment required    — trial requires ≥1 prior line; treatment-naïve patient ineligible
 #
 # Note: Mistral-7B-Instruct-v0.2 supports a 32K context window, so the expanded
 # few-shot block (~750 tokens) leaves ample room for trial documents at the
@@ -163,6 +165,24 @@ PATIENT: Female, 56yo. Stage IV ovarian serous carcinoma, biopsy confirmed. No p
 
 Assessment: Histologically confirmed ovarian carcinoma: biopsy confirmed. Stage III or IV: Stage IV, met. No prior chemotherapy or radiation: met. ECOG ≤ 2: patient ECOG 1, met. Hemoglobin ≥ 9.0 g/dL: 11.2 g/dL, met. Creatinine ≤ 1.5 mg/dL: 0.9 mg/dL, met. All stated criteria are satisfied.
 VERDICT: ELIGIBLE
+
+---
+TRIAL: NCT00000010
+Inclusion Criteria: Histologically documented recurrent or refractory endometrial adenocarcinoma or uterine sarcoma. No prior chemotherapy for metastatic disease. ECOG ≤ 2.
+
+PATIENT: Female, 52yo. Stage III ovarian serous carcinoma. No prior chemotherapy or radiotherapy. ECOG 1.
+
+Assessment: The trial requires histologically documented endometrial adenocarcinoma or uterine sarcoma. The patient has ovarian serous carcinoma, which is a distinct histologic entity and does not meet this disease-specific inclusion criterion. The cancer type stated in the trial document does not match the patient's diagnosis. This inclusion criterion is not met regardless of other characteristics.
+VERDICT: NOT ELIGIBLE
+
+---
+TRIAL: NCT00000011
+Inclusion Criteria: At least one prior line of platinum-based chemotherapy for advanced disease. Measurable disease per RECIST 1.1 criteria. ECOG ≤ 2.
+
+PATIENT: Female, 44yo. Stage IIB ovarian clear cell carcinoma. No prior chemotherapy or radiotherapy. ECOG 0.
+
+Assessment: The trial requires at least one prior line of platinum-based chemotherapy. The patient has received no prior chemotherapy. Since the patient has not received any prior chemotherapy, this inclusion criterion is not met. The absence of prior treatment disqualifies the patient regardless of all other characteristics being met.
+VERDICT: NOT ELIGIBLE
 
 """
 
