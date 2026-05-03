@@ -1382,3 +1382,183 @@ the scope of this project.
 | `tests/test_criterion_evaluator.py` | 135 tests across all evaluator functions including integration |
 | `tests/test_bayesian.py` | 103 tests across all model functions and B1/B2/B3 permutations |
 | `tests/test_uncertainty.py` | 38 tests for summarize_posterior and uncertainty_decomposition |
+
+---
+
+## Step 11 — Streamlit Interface
+
+### What happens
+
+The Streamlit interface ties all pipeline components together into an interactive
+clinical decision support tool. A clinician fills in a patient profile in the
+sidebar, clicks "Find matching trials", and the system retrieves the top-10
+semantically similar trials from ChromaDB, scores each against the patient with
+the Bayesian model, and provides an AI narrative from Mistral-7B on demand.
+
+For NCT00127920 (our reference trial) and the example patient (52yo female,
+stage III ovarian carcinoma, no prior therapy, ECOG 1, full labs panel), here
+is what the interface produces end-to-end.
+
+### Trial search
+
+The "Find matching trials" button calls `_build_patient_description()` to
+auto-generate a free-text description from the structured sidebar fields:
+
+```
+Female, 52yo. stage III ovarian carcinoma. Prior chemotherapy: none. Prior
+radiation therapy: none. Brain metastases: none. Pregnant: no. ECOG 1.
+Karnofsky 80%. Labs: Platelets 180,000 /mm³, Hgb 12.5 g/dL, ANC 2,800 /mm³,
+Creatinine 0.9 mg/dL, Bilirubin 0.7 mg/dL, ALT 28 U/L, AST 22 U/L, LVEF 62%.
+```
+
+This string is encoded into a 384-dim unit vector by `all-MiniLM-L6-v2` and
+sent to ChromaDB's HNSW index. The index returns the 10 nearest trials by
+cosine similarity. Similarity scores are displayed in a colour-coded table
+(green ≥ 0.7 → yellow 0.5 → red ≤ 0.3) with trial names fetched in a single
+batch DuckDB query.
+
+For this patient, NCT00127920 (Taxol, Carboplatin, Bevacizumab in Advanced
+Stage Ovarian Carcinoma) typically appears in the top 3 — semantic similarity
+driven by the overlap in disease area, treatment-naïve status, and staging.
+
+### Bayesian assessment
+
+After selecting NCT00127920, the app calls `_run_bayesian()` (cached by
+`nct_id` + `patient_hash`). The evaluator runs `evaluate_all_criteria` on the
+trial's criteria, producing a mix of kinds:
+
+```
+deterministic_pass : 5   (age ≥ 18 ✓, sex=female ✓, no prior chemo ✓,
+                          platelets ≥ 100k ✓, creatinine ≤ 1.5 ✓)
+subjective         : 2   (adequate performance status, surgery eligibility)
+unobservable       : 4   (histologic confirmation, specific staging details,
+                          signed consent, physician judgment items)
+unevaluable        : 1   (ECOG criterion with ambiguous text — field present
+                          but threshold unparseable)
+```
+
+Coverage = (5 + 2) / 12 = 58% — above the 30% gate. PyMC runs:
+
+- 5 deterministic passes → factor = 1.0 each (excluded from product)
+- 2 subjective → `Beta(p_subj_0, 1.3, 0.7)`, `Beta(p_subj_1, 1.3, 0.7)`
+- 4+1 unobservable/unevaluable → single `Beta(p_unobs_group, 3.0, 1.0)`
+
+```
+p_eligible = p_subj_0 × p_subj_1 × p_unobs_group
+           ≈ 0.65 × 0.65 × 0.75
+           ≈ 0.317 (prior predictive mean)
+```
+
+The actual sampled posterior (1,000 prior predictive draws) produces:
+
+```
+P(eligible) = 31.7%
+95% HDI: [0.042 – 0.673]
+HDI width: 0.631 → tier: HIGH UNCERTAINTY
+```
+
+This is the correct clinical interpretation: the patient passes all
+observable criteria, but histologic confirmation and physician judgment
+items are genuinely unknown from the structured profile. The wide HDI
+communicates that — completing the profile (adding histology, performance
+status assessment) could shift the probability substantially in either direction.
+
+### Criterion breakdown table
+
+The table renders all 12 criteria sorted FAIL → PASS → SUBJ → UNOBS → EVAL.
+The Patient Context column shows why each kind was assigned:
+
+| Kind | Type | Criterion (truncated) | Patient Context |
+|---|---|---|---|
+| ✓ PASS | INC | Age ≥ 18 years | Age 52 |
+| ✓ PASS | INC | Female patients | Sex: female |
+| ✓ PASS | INC | No prior chemotherapy or radiotherapy | Prior chemo: no |
+| ✓ PASS | INC | Platelet count ≥ 100,000/mm³ | Plt 180,000/mm³ |
+| ✓ PASS | INC | Creatinine ≤ 1.5 mg/dL | Creatinine 0.9 mg/dL |
+| ~ SUBJ | INC | Adequate performance status for surgery | ECOG 1 |
+| ~ SUBJ | INC | Subjects must have appropriate surgery… | Patient data absent |
+| ? UNOBS | INC | Histologic or cytologic diagnosis of stage III/IV… | Patient data absent |
+| ? UNOBS | INC | Subjects may be treated in neoadjuvant manner… | Patient data absent |
+| ? UNOBS | INC | Signed informed consent | Patient data absent |
+| ? UNOBS | INC | Physician judgment of suitability | Patient data absent |
+| ? EVAL | INC | ECOG ≥ 0 performance status required… | Patient data absent |
+
+The "Patient data absent" entries in the UNOBS rows correctly communicate
+that the system does not fabricate values — if the patient profile lacks
+histology confirmation, the criterion is genuinely unobservable and is
+marginalized via the grouped Beta(3,1) prior.
+
+### AI Narrative
+
+After clicking "Run AI narrative", the app fetches NCT00127920's composite
+document from ChromaDB and sends it to Mistral-7B via Ollama with an
+11-example few-shot prompt at `temperature=0.0`. A typical response:
+
+```
+The patient meets the primary inclusion criteria: stage III epithelial
+ovarian carcinoma, no prior chemotherapy or radiotherapy, female, age 52.
+Laboratory values (platelets 180,000/mm³, creatinine 0.9 mg/dL) fall within
+the required ranges. However, the trial requires histologically confirmed
+diagnosis — the patient description does not explicitly state biopsy
+confirmation. Additionally, the requirement for subjects to have undergone
+appropriate surgery cannot be verified from the description.
+
+VERDICT: UNCERTAIN
+```
+
+UNCERTAIN is the expected output here — the same unknowns that make the
+Bayesian HDI wide (histology, surgery status) are recognized by the LLM as
+the source of uncertainty. The two outputs are in agreement.
+
+### What changes if the patient has prior chemotherapy
+
+If `prior_chemo = True` is set in the sidebar, NCT00127920 short-circuits
+immediately:
+
+```
+Fail criterion: No prior chemotherapy or radiotherapy
+⛔ Ineligible — hard disqualifier
+```
+
+P(eligible) = 0, no PyMC call, no HDI. The criterion breakdown table shows
+the failing criterion in red at the top. Mistral confirms:
+
+```
+The trial requires no prior chemotherapy or radiotherapy. The patient
+has received prior chemotherapy. This exclusion criterion is triggered.
+VERDICT: NOT ELIGIBLE
+```
+
+Both components agree: deterministic fail, LLM confirms, no probabilistic
+uncertainty remains.
+
+### Why the probability is not 0% or 100% for a "matched" trial
+
+This is the central insight of the Bayesian layer. A patient who appears
+to match a trial semantically (high similarity score) may still have a low
+or uncertain P(eligible) because:
+
+1. Several inclusion criteria require histologic/pathologic information not
+   captured in a structured profile (histology subtype, FIGO stage confirmation)
+2. Some criteria require physician judgment that cannot be encoded in a form
+
+P = 31.7% does not mean the patient is "unlikely" eligible — it means the
+system has resolved 7 of 12 criteria (58% coverage) and the remaining 5
+introduce genuine uncertainty. A clinician reading this output knows exactly
+what to collect next to reduce the HDI: histology report, operative note,
+and performance status assessment.
+
+This is the core argument for the Bayesian layer documented in Key Design
+Decision #8: the LLM says "uncertain" because it cannot resolve these items
+from the description; the Bayesian model says *why* — 5 criteria are
+unobservable — and *how much* uncertainty that implies.
+
+### Files produced
+
+| File | Purpose |
+|---|---|
+| `app/streamlit_app.py` | Full Streamlit interface — sidebar, search, Bayesian panel, criterion table, AI narrative |
+| `scripts/batch_eval_harness.py` | 3-stage batch evaluator: 30 patients × 200 trials, Bayesian + Mistral spot-check, aggregate analysis |
+| `data/eval/stage1_bayesian.parquet` | Stage 1 output: 6,000 patient-trial pairs with Bayesian classification |
+| `data/eval/stage2_mistral.parquet` | Stage 2 output: 1,032 Mistral verdicts + agreement labels |
+| `data/eval/stage3_report.txt` | Stage 3 aggregate report: fail patterns, disagreement rates, recommendations |

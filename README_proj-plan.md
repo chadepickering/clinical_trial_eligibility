@@ -534,7 +534,7 @@ The 1 persistent ineligible failure (`prior_mds_history_lymphoma`) involves a me
 
 ---
 
-### Step 10 — PyMC Bayesian Eligibility Model
+### Step 10 — PyMC Bayesian Eligibility Model ✓
 
 **Files:** `bayesian/criterion_evaluator.py`, `bayesian/eligibility_model.py`, `bayesian/uncertainty.py`
 
@@ -543,125 +543,172 @@ The 1 persistent ineligible failure (`prior_mds_history_lymphoma`) involves a me
 P(eligible) = ∏ P(meets criterion_i)
 ```
 
-Where each factor is:
-- **0 or 1** (deterministic) if B2=Objective and B3=Observable
-- **Sampled Beta** (uncertain) if B2=Subjective
-- **Marginalized** (unobservable) if B3=Unobservable
+**Five criterion kinds** (evaluated by `evaluate_all_criteria`):
 
-```python
-# bayesian/eligibility_model.py
-import pymc as pm
-import numpy as np
-from dataclasses import dataclass
+| Kind | Condition | Prior |
+|---|---|---|
+| `deterministic_pass` | Objective+Observable, patient field present, criterion met | Factor = 1.0 (excluded from product) |
+| `deterministic_fail` | Objective+Observable, patient field present, criterion fails | Short-circuit: P=0 immediately |
+| `subjective` | B2=0 (subjective language) | Beta(2(1−h), 2h) where h = hedging strength |
+| `unobservable` | B3=0, or B2/B3=None, or patient field absent | Single grouped Beta(3,1) across all UNOBS/UNEVALUABLE criteria |
+| `unevaluable` | B2=1+B3=1 but patient field absent | Included in grouped Beta(3,1) |
 
-@dataclass
-class Criterion:
-    text: str
-    label_inclusion: int      # B1
-    label_objective: int      # B2
-    label_observable: int     # B3
-    threshold_value: float    # from NER
-    patient_value: float      # from patient profile
+**Key design decisions made during implementation (vs. original plan):**
 
-def compute_eligibility_posterior(
-    criteria: list[Criterion],
-    patient_profile: dict,
-    n_samples: int = 2000
-) -> dict:
+1. **Prior predictive, not NUTS.** There is no observed data to condition on; we are propagating prior uncertainty through the product. `pm.sample_prior_predictive` is used instead of `pm.sample` — ~100× faster and mathematically equivalent for this use case.
 
-    with pm.Model() as model:
-        criterion_probs = []
+2. **Grouped UNOBS prior.** A single `Beta("p_unobs_group", 3, 1)` replaces one variable per UNOBS/UNEVALUABLE criterion. Per-criterion multiplication assumes criteria are independent, but they all describe the same patient — multiplying n Beta(3,1) variables produces 0.75^n which confidently under-estimates eligibility for healthy trial-seeking patients. The grouped prior says "across the unobservable block as a whole, we have a 75% prior that it is met."
 
-        for i, criterion in enumerate(criteria):
-            if criterion.label_objective == 1 and criterion.label_observable == 1:
-                # Deterministic
-                meets = evaluate_objective_criterion(criterion, patient_profile)
-                p = pm.math.constant(float(meets))
+3. **Beta(3,1) for UNOBS (mean=0.75, not 0.5).** Patients actively seeking trial enrollment are healthier than the general population. An uninformative Beta(1,1) underestimates eligibility; Beta(3,1) reflects the referral-population selection effect while remaining wide enough to be honest.
 
-            elif criterion.label_objective == 0:
-                # Subjective — uncertain, model as Beta
-                hedging_strength = estimate_hedging(criterion.text)
-                alpha = 2.0 * (1 - hedging_strength)
-                beta_param = 2.0 * hedging_strength
-                p = pm.Beta(f'p_subj_{i}', alpha=alpha, beta=beta_param)
+4. **Default hedging 0.35 (not 0.5).** Unclassified subjective criteria (no hedging keywords matched) default to Beta(1.3, 0.7) mean=0.65. Same population selection rationale — most protocol requirements are met by patients who reach screening.
 
-            else:
-                # Unobservable — marginalize with uninformative prior
-                p = pm.Beta(f'p_unobs_{i}', alpha=1, beta=1)
+5. **Coverage gate.** If fewer than 30% of criteria are evaluable (PASS + FAIL + SUBJ), the probability is suppressed and a "profile incomplete" warning shown instead. Prevents confidently-wrong low probabilities when a patient profile contains almost no fields matching the trial's criteria.
 
-            criterion_probs.append(p)
+6. **ULN multiplier guard.** Criteria expressed as "≤ 2.5 × ULN" cannot be evaluated without knowing the institution-specific ULN. Without the guard, the parser extracts 2.5 as an absolute value and hard-fails AST=28 against a threshold of 2.5. These criteria return None → UNOBSERVABLE.
 
-        if criterion_probs:
-            p_eligible = pm.math.prod(pm.math.stack(criterion_probs))
-        else:
-            p_eligible = pm.math.constant(1.0)
+7. **Concurrent treatment guard.** "Any concurrent chemotherapy" exclusion criteria are distinct from prior therapy history. The patient profile records prior_chemo (bool) but not concurrent/active treatment. Without the guard, prior_chemo=True triggers a false short-circuit.
 
-        trace = pm.sample(n_samples, tune=1000,
-                         progressbar=False, return_inferencedata=True)
+8. **Prose-format fallback parsing.** ~500 trials had no bullet-format criteria. `_split_paragraphs()` fallback in `criterion_splitter.py` recovers criteria from paragraph-format text, adding ~2,400 previously missing criteria.
 
-    posterior_samples = trace.posterior['p_eligible'].values.flatten()
+**Criterion evaluator routing order:**
+sex → pregnancy → ECOG → Karnofsky → prior chemo (with concurrent guard) → prior RT (with concurrent guard) → brain mets → NYHA → Child-Pugh → age → lab values (with ULN guard + creatinine clearance guard + compound criterion guard)
 
-    return {
-        'mean': float(np.mean(posterior_samples)),
-        'ci_lower': float(np.percentile(posterior_samples, 2.5)),
-        'ci_upper': float(np.percentile(posterior_samples, 97.5)),
-        'samples': posterior_samples,
-        'n_deterministic': sum(1 for c in criteria
-                               if c.label_objective == 1
-                               and c.label_observable == 1),
-        'n_subjective': sum(1 for c in criteria if c.label_objective == 0),
-        'n_unobservable': sum(1 for c in criteria if c.label_observable == 0)
-    }
-```
+**Hedging strengths:**
+- High (0.8): physician judgment, willingness, life expectancy, compliance → Beta(0.4, 1.6)
+- Low (0.05): written consent, IRB → Beta(1.9, 0.1)
+- Default (0.35): all other subjective → Beta(1.3, 0.7)
+
+**Uncertainty tiers** (by 95% HDI width):
+- `disqualified`: short-circuited (any hard fail)
+- `high confidence`: HDI width < 0.20
+- `moderate uncertainty`: HDI width < 0.50
+- `high uncertainty`: HDI width ≥ 0.50
 
 **Acceptance criteria for Step 10:**
-- [ ] Model runs without errors on a sample patient and trial
-- [ ] Posterior mean and 95% CI returned correctly
-- [ ] Deterministic criteria produce point-mass posteriors at 0 or 1
-- [ ] Subjective criteria produce diffuse posteriors
-- [ ] Runtime acceptable (<60 seconds per trial assessment)
+- [x] Model runs without errors on a sample patient and trial
+- [x] Posterior mean and 95% CI returned correctly
+- [x] Deterministic criteria produce point-mass posteriors at 0 or 1
+- [x] Subjective criteria produce diffuse posteriors
+- [x] Runtime acceptable (<60 seconds per trial assessment)
+- [x] Coverage gate suppresses unreliable probabilities for data-sparse profiles
+- [x] ULN multiplier, concurrent treatment, and compound criterion guards prevent false hard-fails
 
 ---
 
-### Step 11 — Streamlit Interface
+### Step 11 — Streamlit Interface ✓
 
 **File:** `app/streamlit_app.py`
 
-**Four panels:**
+**Run:**
+```bash
+streamlit run app/streamlit_app.py --server.headless true
+# → http://localhost:8501
+```
 
-**Panel 1 — Trial Search**
-- Natural language query input
-- Filter controls: cancer type, phase, status, intervention type
-- Results table: trial ID, title, conditions, relevance score
-- Click trial to load into Panel 3
+**Layout — sidebar + main column:**
 
-**Panel 2 — Patient Profile**
-Structured input for:
-- Demographics: age, sex, ECOG score
-- Diagnosis: cancer type, stage, histology
-- Lab values: HbA1c, eGFR, CBC components, LFTs
-- Treatment history: prior chemo, immunotherapy, radiation
-- Current medications
+**Sidebar — Patient Profile**
+Structured input for all common oncology fields derived from DuckDB criteria analysis:
+- Cancer type / condition (free text), prior therapy notes (free text)
+- Demographics: sex, age, ECOG (0–4), Karnofsky (%)
+- Medical history (Yes / No / not-specified selectboxes): prior chemotherapy, prior radiation therapy, brain metastases, pregnant/breastfeeding
+- Cardiac functional class: NYHA class I–IV
+- Hepatic: Child-Pugh class A/B/C
+- Lab values (grouped by system, 0 = omit):
+  - Haematology: platelets, Hgb, ANC, WBC
+  - Coagulation: INR, aPTT
+  - Renal: creatinine, eGFR/CrCl
+  - Hepatic: bilirubin, ALT, AST, albumin
+  - Cardiac: LVEF, QTc
+  - Metabolic: calcium, glucose, potassium, LDH
+  - Tumour markers: PSA, testosterone
+- "Load example patient" button pre-fills all fields
+- "Find matching trials" button embeds the profile and triggers search
 
-**Panel 3 — Eligibility Assessment**
-- Selected trial display: title, NCT ID, phase, status
-- Bayesian eligibility score displayed as probability gauge (0–100%)
-- 95% credible interval displayed as range
-- Uncertainty decomposition:
-  - N criteria deterministic / N subjective / N unobservable
-- Criterion-by-criterion breakdown table
+**Main column — four sections:**
 
-**Panel 4 — Explainability**
-- Primary sources of uncertainty
-- Sensitivity analysis: "If subjective criterion X is assumed met, eligibility rises from 42% to 68%"
-- Which unobservable criteria would most change the score if known
+**1. Trial Search**
+- Free-text query (auto-filled from patient profile via "Find matching trials")
+- Descriptive caption explaining nearest-neighbour semantic retrieval (MiniLM-L6-v2 + ChromaDB)
+- Results table with: NCT ID, Trial Name (truncated, fetched from DuckDB), Status, Sex, Min age, **Similarity Score** (coloured green→yellow→red with readable text contrast)
+- Single-row selection triggers eligibility assessment
+
+**2. Eligibility Assessment**
+- Descriptive caption explaining the Bayesian flow (criterion classification → Beta priors → PyMC posterior → 95% HDI)
+- **Short-circuit path:** red error box naming the failing criterion
+- **Coverage gate path** (< 30% evaluable or < 5 criteria total): amber warning listing specific gaps and which lab fields/profile items would improve coverage
+- **Scored path:** Plotly gauge (0–100%, tier colour, HDI shaded band) + uncertainty tier badge + dominant source callout (unobservable / subjective / deterministic) + 4-metric count row
+
+**3. Criterion Breakdown**
+- Caption and kind legend (FAIL / PASS / SUBJ / UNOBS / EVAL definitions)
+- HTML table sorted by kind (FAIL first): Kind chip, Type (INC/EXC), Criterion text (75 chars), **Patient Context** column (patient value(s) that explain the classification, or "Patient data absent"), Hedging score for SUBJ rows
+- Footer caption explaining INC/EXC, FAIL short-circuit, and UNOBS Beta(3,1) prior
+
+**4. AI Narrative (Mistral-7B)**
+- Caption justifying the section: LLM role (free-text nuance Bayesian cannot handle), Mistral characteristics (7B params, local via Ollama, no data leaves machine), guidance on when to use it
+- Patient description text area (auto-filled, editable for adding clinical context)
+- "Run AI narrative" button → Ollama call → verdict badge (colour-coded) + explanation blockquote
+- Graceful degradation if Ollama not running
+
+**Key implementation details:**
+
+- All heavy resources cached with `@st.cache_resource` (DuckDB connection, ChromaDB collection, sentence transformer) — survive reruns without reload
+- Bayesian scoring cached with `@st.cache_data` keyed on `(nct_id, patient_hash)` — re-runs only when patient profile changes
+- `_build_patient_description()` auto-generates free-text from structured fields for both the search query and the Mistral patient description
+- `_patient_context_for_criterion()` pattern-matches criterion text to produce the Patient Context column without re-running the evaluator
+- `df.style.map()` used for score cell colouring (not `column_config`) — required to actually apply background colour in Streamlit dataframes
+- Trial names batch-fetched from DuckDB via `_fetch_trial_titles()` (single query, cached)
+
+**Batch evaluation harness (`scripts/batch_eval_harness.py`):**
+
+Post-implementation, a 3-stage batch evaluation harness was built and run over 30 synthetic oncology patients × 200 top trials each (6,000 pairs):
+
+- **Stage 1** (Bayesian sweep, ~1 min): evaluates all 6,000 pairs, skips PyMC for short-circuited/gated pairs, outputs `data/eval/stage1_bayesian.parquet`
+- **Stage 2** (Mistral spot-check, ~5 hrs): runs Mistral on all 480 non-trivial pairs + 10% sample of SC/gated pairs, outputs `data/eval/stage2_mistral.parquet`
+- **Stage 3** (aggregate analysis): join + disagree analysis + pattern bucketing → `data/eval/stage3_report.txt`
+
+**Post-evaluation fixes applied to `bayesian/criterion_evaluator.py`:**
+
+| Fix | Pairs affected | Change |
+|---|---|---|
+| ULN multiplier guard | 9.8% of SC pairs (408/4167) → UNOBS | Return None for criteria with "× ULN" / "times ULN" — absolute threshold unknown |
+| Concurrent treatment guard | 2.7% of SC pairs (112/4167) → UNOBS | Return None when "concurrent" appears — prior_chemo ≠ concurrent treatment status |
+| English op ordering | Rare false fails on "no greater than X" | Compound phrases resolved before fragment phrases in substitution list |
+
+**Post-evaluation fixes applied to `bayesian/eligibility_model.py`:**
+
+| Fix | Effect |
+|---|---|
+| Grouped UNOBS prior (single Beta(3,1)) | p_mean for 3-PASS+2-SUBJ+6-UNOBS: 0.004 → 0.316 |
+| Default hedging 0.5 → 0.35 | Subjective criteria mean 0.5 → 0.65 |
+
+**Post-evaluation fixes applied to `rag/generator.py`:**
+
+| Fix | Coverage |
+|---|---|
+| Few-shot example 10: cancer-type mismatch | Patient cancer ≠ trial's required disease → NOT ELIGIBLE |
+| Few-shot example 11: prior treatment required | Trial requires ≥1 prior line; treatment-naïve → NOT ELIGIBLE |
+
+**Coverage gate recalibrated from 40% → 30%** after ULN fix: converting false-FAIL criteria to UNOBS reduces `n_evaluable`, artificially lowering coverage. The 30% threshold restores informative pairs to the scored pool while still gating genuinely data-sparse profiles.
+
+**Post-fix Stage 1 outcome distribution (6,000 pairs):**
+
+| Outcome | Count | % |
+|---|---|---|
+| Short-circuited (hard fail) | 3,745 | 62.4% |
+| Coverage-gated | 1,750 | 29.2% |
+| Non-trivial (PyMC ran) | 505 | 8.4% |
 
 **Acceptance criteria for Step 11:**
-- [ ] All four panels render without errors
-- [ ] Trial search returns results from ChromaDB
-- [ ] Patient profile input persists in session state
-- [ ] Bayesian scorer runs on selected trial and displays results
-- [ ] Criterion table correctly displays B1/B2/B3 labels and patient status
+- [x] All panels render without errors
+- [x] Trial search returns results from ChromaDB with coloured similarity scores and trial names
+- [x] Patient profile sidebar covers all common oncology criteria fields
+- [x] Bayesian scorer runs on selected trial and displays gauge + HDI + tier
+- [x] Criterion table displays kind, type, truncated text, patient context, and hedging
+- [x] Coverage gate suppresses unreliable probabilities with actionable guidance
+- [x] AI Narrative section justifies Mistral's role and degrades gracefully if Ollama offline
+- [x] Batch evaluation harness built and run; fixes applied and validated
 
 ---
 
