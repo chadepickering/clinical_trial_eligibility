@@ -12,6 +12,36 @@ genuine ambiguities the system must handle.
 
 ---
 
+## Step 1 — The Data Source
+
+### What ClinicalTrials.gov is
+
+[ClinicalTrials.gov](https://clinicaltrials.gov) is the United States registry of clinical research studies. Sponsors — pharmaceutical companies, academic medical centres, government agencies — are required by law to register trials before enrolling patients. Every registered trial receives a permanent **NCT ID** (e.g. `NCT00127920`), which functions as a globally unique identifier for that study.
+
+The registry exposes a public REST API (v2) with no authentication or rate limiting for read access. As of this project's data pull, it holds roughly 500,000 trials across all disease areas. Filtering to oncology studies with completed or active status yields approximately 15,000 trials — the corpus this pipeline is built on.
+
+### Anatomy of a clinical trial record
+
+Each record contains two categories of information that matter for patient matching:
+
+**Structured fields** — machine-readable values stored in typed columns: trial phase, enrollment status, sex eligibility, minimum and maximum age, primary conditions (using MeSH vocabulary), and drug interventions.
+
+**Free-text fields** — the eligibility criteria blob. This is a single unstructured string written by the trial's principal investigator. It typically lists inclusion criteria (conditions a patient *must* satisfy to enrol) and exclusion criteria (conditions that *disqualify* a patient), but the format is not standardised — headers, bullet styles, and section ordering vary widely across trials.
+
+The core engineering challenge this pipeline addresses is that patient matching must be done against the free-text eligibility criteria, not the structured fields. The structured fields answer broad questions (is this an adult oncology trial?); the eligibility text answers the clinical question (does *this patient* meet the specific thresholds, history requirements, and performance criteria this trial demands?).
+
+### NCT00127920
+
+This walkthrough follows **NCT00127920**: a Phase 2 pilot study testing Taxol (paclitaxel), Carboplatin, and Bevacizumab (Avastin) as first-line treatment for advanced-stage ovarian, fallopian tube, or peritoneal carcinoma. The trial was conducted at a single US academic centre, enrolled adult female patients, and has status COMPLETED.
+
+It was chosen as the walkthrough trial for three reasons:
+
+1. **Short eligibility text.** 10 criteria — small enough to read in full at each step without losing the thread.
+2. **Label diversity.** The 10 criteria span all label types the classifier must handle: objective and subjective language, observable and unobservable information, inclusion and exclusion sections.
+3. **Genuine ambiguity.** Several criteria illustrate real edge cases — a criterion that mixes "adequate" (subjective) with explicit numeric thresholds, a timing constraint that is neither clearly observable nor unobservable, a consent criterion that is structurally unobservable but always met in practice.
+
+---
+
 ## Step 2 — Ingestion
 
 ### What happens
