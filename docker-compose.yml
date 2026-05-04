@@ -10,8 +10,8 @@ services:
       - ./docker:/docker:ro                # mount startup script
     entrypoint: ["/bin/sh", "/docker/ollama_start.sh"]
     healthcheck:
-      # Passes once the Ollama API is up (model pull may still be in progress)
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      # ollama list exits 0 once the API is accepting requests
+      test: ["CMD", "ollama", "list"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -25,7 +25,8 @@ services:
       - "8501:8501"
     volumes:
       # Bind-mount pre-ingested data (run ingestion scripts on host first)
-      - ./data/processed:/app/data/processed:ro
+      # Not :ro — ChromaDB writes WAL files to the SQLite db even on queries
+      - ./data/processed:/app/data/processed
     environment:
       - OLLAMA_HOST=http://ollama:11434
     depends_on:

@@ -10,8 +10,6 @@ because its eligibility criteria are short enough to read in full, diverse
 enough to illustrate every label type, and realistic enough to expose the
 genuine ambiguities the system must handle.
 
-New sections will be appended as subsequent pipeline steps are completed.
-
 ---
 
 ## Step 2 — Ingestion
@@ -1562,3 +1560,88 @@ unobservable — and *how much* uncertainty that implies.
 | `data/eval/stage1_bayesian.parquet` | Stage 1 output: 6,000 patient-trial pairs with Bayesian classification |
 | `data/eval/stage2_mistral.parquet` | Stage 2 output: 1,032 Mistral verdicts + agreement labels |
 | `data/eval/stage3_report.txt` | Stage 3 aggregate report: fail patterns, disagreement rates, recommendations |
+
+---
+
+## Step 12 — Docker Containerization
+
+### What happens
+
+The full system is packaged into a two-service Docker Compose stack that can be started with a single command. The `ollama` service runs Mistral-7B and the `app` service runs the Streamlit interface. The app container waits for Ollama to be healthy before starting, and Mistral is pulled automatically on first run.
+
+### The two-service architecture
+
+```
+docker compose up --build
+        ↓
+ollama (ollama/ollama:latest)
+  └─ ollama_start.sh:
+       1. ollama serve &           # start API in background
+       2. until ollama list; ...   # wait for API ready
+       3. ollama pull mistral      # pull ~4GB model (first run only)
+       4. wait $SERVE_PID          # keep container alive
+  └─ healthcheck: ollama list → exit 0 once API is up
+        ↓ (service_healthy)
+app (built from Dockerfile)
+  └─ python:3.13-slim
+  └─ torch installed from CPU-only wheel (--index-url whl/cpu)
+  └─ streamlit run app/streamlit_app.py
+  └─ ./data/processed bind-mounted from host
+  └─ OLLAMA_HOST=http://ollama:11434
+```
+
+### Key wiring: OLLAMA_HOST and DATA_DIR
+
+Two environment variables control which services the app connects to:
+
+**`OLLAMA_HOST`** — read by both `rag/generator.py` and `app/streamlit_app.py`:
+```python
+_OLLAMA_BASE = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+```
+In Docker Compose: `http://ollama:11434` (container DNS). Locally: default `127.0.0.1:11434`.
+
+**`DATA_DIR`** — read by `app/streamlit_app.py` to locate the DuckDB file and ChromaDB directory:
+```python
+_DATA_DIR = os.path.join(_ROOT, os.environ.get("DATA_DIR", "data/processed"))
+```
+Docker Compose: uses default `data/processed` (bind-mounted from host). Streamlit Cloud demo: `DATA_DIR=data/demo` (committed 1k-trial subset).
+
+### Why CPU-only PyTorch
+
+The default `torch` wheel pulls CUDA runtime libraries and weighs ~2.5 GB. The hosted Streamlit app and any reviewer running `docker compose up` on a laptop without a GPU will never use CUDA. Installing from the CPU wheel index reduces the image to ~800 MB:
+
+```dockerfile
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir -r requirements.txt
+```
+
+### Why `ollama list` as the healthcheck
+
+The `ollama/ollama` image does not include `curl`. The healthcheck must use a binary that is guaranteed to exist in the container. `ollama list` calls the local API internally and exits 0 when it is ready — equivalent to `GET /api/tags` but without any external dependency.
+
+### Demo subset for Streamlit Cloud
+
+The full `data/processed/` directory (280 MB DuckDB + 683 MB ChromaDB) cannot be committed to git. `scripts/build_demo_subset.py` selects 1,000 oncology trials stratified by cancer type (19 types) and criteria-count bucket:
+
+| Bucket | Count | Role in demo |
+|---|---|---|
+| 5–9 criteria | 342 | Simple trials — coverage gate passes readily, Bayesian gauge visible |
+| 10–19 criteria | 346 | Mid-complexity — mix of visible and incomplete outputs |
+| 20+ criteria | 312 | Complex trials — often coverage-gated, demonstrates the incomplete path |
+
+The resulting `data/demo/` (10 MB + 31 MB) is committed and served by the hosted demo at [clinical-trial-eligibility-demo.streamlit.app](https://clinical-trial-eligibility-demo.streamlit.app/).
+
+### For NCT00127920
+
+The walkthrough trial is explicitly preserved in the demo subset. Loading the example patient profile (stage III ovarian carcinoma, age 52, ECOG 1, basic labs) and searching "advanced ovarian carcinoma" surfaces NCT00127920 in the top 10 results in both the demo and the full Docker deployment. Selecting it produces the same Bayesian assessment — P ≈ 31.7%, HDI [0.042–0.673], tier: high uncertainty — as documented in Step 11.
+
+### Files
+
+| File | Purpose |
+|---|---|
+| `Dockerfile` | App image: python:3.13-slim, CPU torch, Streamlit entrypoint |
+| `.dockerignore` | Excludes .venv, data/, models, .env from build context |
+| `docker/ollama_start.sh` | Ollama entrypoint: serve + wait + pull mistral |
+| `docker-compose.yml` | Two-service stack with healthcheck and volume mounts |
+| `scripts/build_demo_subset.py` | Builds stratified 1k-trial demo dataset |
+| `deploy/README.md` | Full deployment instructions (local, Docker, cloud) |

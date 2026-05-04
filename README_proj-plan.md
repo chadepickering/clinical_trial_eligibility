@@ -5,7 +5,7 @@
 An end-to-end clinical decision support system combining retrieval-augmented generation (RAG), transformer-based NLP, and Bayesian uncertainty quantification to match patients to oncology clinical trials. Given a patient profile, the system retrieves relevant trials, classifies eligibility criteria along three dimensions, and computes a posterior probability of eligibility with credible intervals reflecting uncertainty from subjective and unobservable criteria.
 
 **Type:** Independent production ML/AI project
-**Status:** Implementation in progress
+**Status:** Complete — [live demo](https://clinical-trial-eligibility-demo.streamlit.app/)
 **Total cost to run:** $0 (fully open-source stack)
 
 ---
@@ -114,47 +114,48 @@ DuckDB supports GCS and S3 reads natively with identical query syntax. The trans
 
 ```
 clinical_trial_eligibility/
-├── data/
-│   ├── raw/                    # gitignored → API JSON responses
-│   ├── processed/              # gitignored → DuckDB files, parquet
-│   └── labeled/                # manually labeled validation sets
-├── ingestion/
-│   ├── api_client.py           # ClinicalTrials.gov API wrapper with pagination
-│   ├── parser.py               # JSON → structured DuckDB records
-│   └── database.py             # DuckDB connection and schema
-├── nlp/
-│   ├── criterion_splitter.py   # split criteria blob into sentences
-│   ├── weak_labeler.py         # regex/heuristic weak supervision
-│   ├── multitask_classifier.py # SciBERT multi-task model (B1/B2/B3)
-│   ├── ner_extractor.py        # clinical entity extraction
-│   ├── trainer.py              # training loop with W&B logging
-│   └── evaluate.py             # F1 evaluation per subtask
-├── rag/
-│   ├── embedder.py             # sentence-transformers embedding pipeline
-│   ├── vector_store.py         # ChromaDB operations
-│   ├── retriever.py            # retrieval + cross-encoder reranking
-│   ├── generator.py            # Mistral-7B via Ollama
-│   ├── pipeline.py             # end-to-end RAG orchestration
-│   └── evaluate.py             # generation quality evaluation (verdict accuracy)
-├── bayesian/
-│   ├── criterion_evaluator.py  # patient vs criterion matching
-│   ├── eligibility_model.py    # PyMC Bayesian model
-│   └── uncertainty.py          # credible interval computation
 ├── app/
-│   └── streamlit_app.py        # Streamlit interface (4 panels)
-├── tests/
-│   ├── test_api_client.py
-│   ├── test_classifier.py
-│   ├── test_embed.py
-│   └── test_bayesian.py
-├── notebooks/
-│   └── exploration.ipynb       # EDA and prototyping
-├── embed.py                    # Embedding pipeline CLI
-├── .env                        # gitignored
+│   └── streamlit_app.py            # Streamlit interface
+├── bayesian/
+│   ├── criterion_evaluator.py      # patient vs criterion matching + routing
+│   ├── eligibility_model.py        # PyMC Bayesian model
+│   └── uncertainty.py              # posterior summarization, HDI, tiers
+├── data/
+│   ├── demo/                       # committed — 1k-trial demo subset (Streamlit Cloud)
+│   ├── processed/                  # gitignored — full corpus (DuckDB + ChromaDB)
+│   └── raw/                        # gitignored — API JSON responses
+├── deploy/
+│   └── README.md                   # local, Docker, and cloud deployment notes
+├── docker/
+│   └── ollama_start.sh             # waits for API ready, pulls Mistral on first run
+├── nlp/
+│   ├── criterion_splitter.py       # split criteria blob into sentence objects
+│   ├── weak_labeler.py             # regex/heuristic weak supervision labels
+│   ├── multitask_classifier.py     # SciBERT multi-task model (B1/B2/B3)
+│   ├── ner_extractor.py            # clinical entity extraction
+│   ├── trainer.py                  # training loop with W&B logging
+│   └── evaluate.py                 # F1 evaluation per subtask
+├── rag/
+│   ├── embedder.py                 # chunked mean-pool embedding pipeline
+│   ├── vector_store.py             # ChromaDB operations
+│   ├── retriever.py                # semantic retrieval
+│   ├── generator.py                # Mistral-7B via Ollama HTTP API
+│   ├── pipeline.py                 # end-to-end RAG orchestration
+│   └── evaluate_ragas.py           # generation quality evaluation
+├── scripts/
+│   ├── batch_eval_harness.py       # 3-stage Bayesian vs Mistral evaluation harness
+│   └── build_demo_subset.py        # builds the Streamlit Cloud demo dataset
+├── .dockerignore
 ├── .env.example
 ├── .gitignore
+├── Dockerfile                      # python:3.13-slim, CPU-only torch
+├── docker-compose.yml              # ollama + app, healthcheck-gated startup
+├── embed.py                        # embedding pipeline CLI
+├── ingest.py                       # ingestion pipeline CLI
 ├── requirements.txt
-├── docker-compose.yml          # Ollama service
+├── API_schema_reference.md
+├── PIPELINE_WALKTHROUGH.md
+├── README_proj-plan.md
 └── README.md
 ```
 
@@ -177,7 +178,8 @@ clinical_trial_eligibility/
 | RAG evaluation | Custom verdict accuracy (50+50 labeled cases) | Free |
 | Bayesian modeling | PyMC | Free |
 | Frontend | Streamlit | Free |
-| Containerization | Docker + docker-compose (Ollama service) | Free |
+| Containerization | Docker, Docker Compose (ollama + app, healthcheck-gated) | Free |
+| Cloud hosting | Streamlit Community Cloud (demo), Docker full stack (local) | Free |
 
 ---
 
@@ -712,55 +714,47 @@ Post-implementation, a 3-stage batch evaluation harness was built and run over 3
 
 ---
 
-### Step 12 — Docker Containerization (Ollama Service)
+### Step 12 — Docker Containerization ✓
 
-**File:** `docker-compose.yml`
+**Files created:** `Dockerfile`, `.dockerignore`, `docker/ollama_start.sh`, updated `docker-compose.yml`
 
-```yaml
-version: '3.8'
+**Two-service architecture:**
 
-services:
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    restart: unless-stopped
+| Service | Image | Role |
+|---|---|---|
+| `ollama` | `ollama/ollama:latest` | Serves Mistral-7B on port 11434 |
+| `app` | Built from `Dockerfile` | Streamlit interface on port 8501 |
 
-  app:
-    build: .
-    ports:
-      - "8501:8501"
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-    depends_on:
-      - ollama
-    volumes:
-      - ./data:/app/data
+**Implementation decisions:**
 
-volumes:
-  ollama_data:
-```
+- **CPU-only PyTorch** — `pip install torch --index-url https://download.pytorch.org/whl/cpu` reduces the app image from ~2.5 GB (CUDA build) to ~800 MB with no runtime difference on CPU-only hardware.
+- **Mistral auto-pull** — `docker/ollama_start.sh` starts `ollama serve` in the background, waits for the API to be healthy, then pulls Mistral-7B if not already cached in the `ollama_data` volume. Subsequent starts skip the pull.
+- **Healthcheck via `ollama list`** — `curl` is not installed in the `ollama/ollama` image; `ollama list` exits 0 once the API is accepting requests and is guaranteed to be available.
+- **`depends_on: condition: service_healthy`** — the `app` container waits for the Ollama healthcheck to pass before starting. Mistral may still be downloading, but the app degrades gracefully (the AI Narrative section shows a clear message until the model is ready).
+- **Data volume as bind mount** — `./data/processed` is bind-mounted (not baked into the image) so the host's pre-ingested data is available without rebuilding the image.
+- **`OLLAMA_HOST` env var** — both `rag/generator.py` and `app/streamlit_app.py` read `os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")`. Docker Compose sets `OLLAMA_HOST=http://ollama:11434`; local dev defaults to localhost.
+- **`DATA_DIR` env var** — `app/streamlit_app.py` reads `os.environ.get("DATA_DIR", "data/processed")` to support the Streamlit Cloud demo deployment (which sets `DATA_DIR=data/demo`).
+
+**Demo subset for Streamlit Cloud** — `scripts/build_demo_subset.py` selects 1,000 oncology trials stratified by cancer type and criteria-count bucket (5–9 / 10–19 / 20+ criteria) from the full 15k corpus. The resulting `data/demo/` directory (10 MB DuckDB + 31 MB ChromaDB) is committed to git and served by the hosted demo. The full corpus requires running `ingest.py` + `embed.py` locally or via Docker.
 
 **Acceptance criteria for Step 12:**
-- [ ] `docker-compose up` starts both services without errors
-- [ ] Streamlit app accessible at `localhost:8501`
-- [ ] RAG pipeline connects to Ollama container successfully
-- [ ] End-to-end query works inside Docker environment
+- [x] `docker compose up --build` starts both services without errors
+- [x] Streamlit app accessible at `localhost:8501`
+- [x] RAG pipeline connects to Ollama container via `OLLAMA_HOST` env var
+- [x] Mistral-7B pulled automatically on first run; cached across restarts
+- [x] End-to-end query (search → Bayesian → AI narrative) works inside Docker
 
 ---
 
-### Step 13 — README and Portfolio Documentation
+### Step 13 — Portfolio Documentation ✓
 
-**Contents:**
-- Project overview and motivation
-- Architecture diagram
-- Setup instructions (local and Docker)
-- Scalability note (three-tier architecture)
-- Example queries and screenshots
-- Evaluation results (verdict accuracy scores, NLP F1 per subtask)
-- Known limitations and future work
+**Files updated:** `README.md`, `README_proj-plan.md`, `PIPELINE_WALKTHROUGH.md`, `deploy/README.md`
+
+- **`README.md`** — full rewrite as portfolio landing page: live demo link, architecture diagram, key design decisions, quick-start instructions (local and Docker), project structure, known limitations, stack summary.
+- **`README_proj-plan.md`** — this document: all 13 steps documented with implementation details and acceptance criteria. Status updated to Complete.
+- **`PIPELINE_WALKTHROUGH.md`** — end-to-end trace of NCT00127920 through all 12 pipeline steps including Docker deployment. Covers the Bayesian output (P=31.7%, HDI [0.042–0.673]) for the example patient.
+- **`deploy/README.md`** — local dev, Docker first-run and subsequent-run instructions, environment variable reference, staging and production path notes.
+- **Live demo** — [clinical-trial-eligibility-demo.streamlit.app](https://clinical-trial-eligibility-demo.streamlit.app/) — 1,000 sampled oncology trials, full Bayesian scoring and semantic search, hosted on Streamlit Community Cloud.
 
 ---
 
