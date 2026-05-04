@@ -1019,6 +1019,25 @@ def main():
     st.title("Clinical Trial Eligibility Intelligence System")
     st.caption("Oncology trial matching with Bayesian uncertainty quantification")
 
+    # Demo banner — shown when running against the sampled demo dataset
+    if os.environ.get("DATA_DIR", "").startswith("data/demo"):
+        st.markdown(
+            "<div style='"
+            "background:#7f1d1d;color:#fff;padding:10px 16px;border-radius:6px;"
+            "font-size:0.9rem;margin-bottom:8px;'>"
+            "<strong>Demo mode</strong> — searching 1,000 sampled oncology trials "
+            "from a corpus of ~15,000 used during development. "
+            "Bayesian scoring, criterion breakdown, and semantic search are fully functional. "
+            "The AI Narrative (Mistral-7B) requires a local Ollama instance and is disabled in this hosted demo. "
+            "To interact with the full corpus, "
+            "<a href='https://github.com/chadepickering/clinical_trial_eligibility' "
+            "style='color:#fca5a5;'>pull the project from GitHub</a> "
+            "and run <code style='background:#991b1b;padding:1px 4px;border-radius:3px;'>"
+            "docker compose up</code>."
+            "</div>",
+            unsafe_allow_html=True,
+        )
+
     # 11b — Patient profile sidebar
     patient = _render_sidebar()
 

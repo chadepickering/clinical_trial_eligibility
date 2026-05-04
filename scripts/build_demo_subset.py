@@ -79,12 +79,20 @@ def _is_oncology(conditions: list[str], mesh_conditions: list[str]) -> bool:
 
 
 def select_trials(db_path: str, n: int, min_criteria: int, seed: int) -> list[str]:
-    """Return a list of nct_ids: anchor + stratified sample of oncology trials."""
+    """Return a list of nct_ids: anchor + stratified sample of oncology trials.
+
+    Stratification is two-dimensional:
+      1. Cancer type  — so the demo covers a broad disease landscape
+      2. Criteria-count bucket (5-9 / 10-19 / 20+) — so the demo includes
+         simple trials (easy to pass the 30% coverage gate and trigger the
+         Bayesian model) as well as complex trials (many unobservable criteria).
+         Roughly 50% of slots go to the 5-19 range to maximise demos where
+         the Bayesian output is visible.
+    """
     import duckdb
 
     con = duckdb.connect(db_path, read_only=True)
 
-    # Pull all oncology trials with their criteria count and conditions
     rows = con.execute("""
         SELECT t.nct_id,
                COUNT(c.criterion_id) AS n_crit,
@@ -98,7 +106,6 @@ def select_trials(db_path: str, n: int, min_criteria: int, seed: int) -> list[st
     """, [min_criteria]).fetchall()
     con.close()
 
-    # Filter to oncology only
     candidates = [
         (nct_id, n_crit, conds or [], mesh or [])
         for nct_id, n_crit, conds, mesh in rows
@@ -112,49 +119,63 @@ def select_trials(db_path: str, n: int, min_criteria: int, seed: int) -> list[st
     non_anchor = [(nct, nc, conds, mesh) for nct, nc, conds, mesh in candidates
                   if nct != ANCHOR_NCT]
 
-    # Group by cancer type
-    by_type: dict[str, list] = {}
-    for row in non_anchor:
-        label = _cancer_type(row[2])
-        by_type.setdefault(label, []).append(row)
+    def _crit_bucket(n_crit: int) -> str:
+        if n_crit < 10:  return "5-9"
+        if n_crit < 20:  return "10-19"
+        return "20+"
 
+    # Build a (cancer_type, crit_bucket) → [nct_id, ...] index
+    cell: dict[tuple[str, str], list[str]] = {}
+    for nct, nc, conds, mesh in non_anchor:
+        key = (_cancer_type(conds), _crit_bucket(nc))
+        cell.setdefault(key, []).append(nct)
+
+    # Desired bucket weights: favour the simpler tiers for better demo coverage
+    bucket_weight = {"5-9": 0.35, "10-19": 0.35, "20+": 0.30}
     n_remaining = n - len(selected)
-
-    # Proportional allocation — each type gets at least 1 slot if it has trials
-    n_types = len(by_type)
-    base_per_type = max(1, n_remaining // n_types)
 
     rng = random.Random(seed)
     pool: list[str] = []
 
-    for label, group in sorted(by_type.items()):
-        # Sort by n_criteria desc (richest first), then take base_per_type
-        group.sort(key=lambda x: -x[1])
-        quota = min(base_per_type, len(group))
-        pool.extend(row[0] for row in group[:quota])
+    # Two-pass fill: first pass allocates proportionally across (type, bucket) cells
+    n_types  = len({_cancer_type(row[2]) for row in non_anchor})
+    per_type = max(1, n_remaining // n_types)
 
-    # Fill remaining slots from the richest trials not yet selected
+    for cancer_type in sorted({_cancer_type(row[2]) for row in non_anchor}):
+        for bucket, weight in bucket_weight.items():
+            key = (cancer_type, bucket)
+            if key not in cell:
+                continue
+            quota = max(1, round(per_type * weight))
+            choices = cell[key][:]
+            rng.shuffle(choices)
+            pool.extend(choices[:quota])
+
+    # Second pass: fill remaining slots randomly from unused candidates
     already = set(pool) | selected
-    rich_remaining = [row[0] for row in non_anchor
-                      if row[0] not in already]
-    rng.shuffle(rich_remaining)
-    pool.extend(rich_remaining[:n_remaining - len(pool)])
+    remaining = [nct for nct, _, _, _ in non_anchor if nct not in already]
+    rng.shuffle(remaining)
+    pool.extend(remaining[:n_remaining - len(pool)])
 
-    # Final list: anchor + pool, capped at n
     final = list(selected) + pool[:n - len(selected)]
-    rng.shuffle(final)  # randomise order so anchor isn't always first
+    rng.shuffle(final)
 
-    type_counts = {}
+    # Summary
+    type_counts: dict[str, int] = {}
+    bucket_counts: dict[str, int] = {}
     for nct_id in final:
         row = next((r for r in candidates if r[0] == nct_id), None)
         if row:
-            label = _cancer_type(row[2])
-            type_counts[label] = type_counts.get(label, 0) + 1
+            type_counts[_cancer_type(row[2])] = type_counts.get(_cancer_type(row[2]), 0) + 1
+            bucket_counts[_crit_bucket(row[1])] = bucket_counts.get(_crit_bucket(row[1]), 0) + 1
 
     print(f"\nSelected {len(final)} trials by cancer type:")
     for label, cnt in sorted(type_counts.items(), key=lambda x: -x[1]):
         print(f"  {label:<20} {cnt}")
-    print(f"  {'(anchor included)':<20} {ANCHOR_NCT}")
+    print(f"\nBy criteria-count bucket:")
+    for b in ("5-9", "10-19", "20+"):
+        print(f"  {b:<10} {bucket_counts.get(b, 0)}")
+    print(f"\n  Anchor: {ANCHOR_NCT}")
 
     return final
 
@@ -258,8 +279,8 @@ def main():
     parser.add_argument("--db",            default="data/processed/trials.duckdb")
     parser.add_argument("--chroma",        default="data/processed/chroma")
     parser.add_argument("--out-dir",       default="data/demo")
-    parser.add_argument("--n",             type=int, default=500)
-    parser.add_argument("--min-criteria",  type=int, default=15)
+    parser.add_argument("--n",             type=int, default=1000)
+    parser.add_argument("--min-criteria",  type=int, default=5)
     parser.add_argument("--seed",          type=int, default=42)
     args = parser.parse_args()
 
