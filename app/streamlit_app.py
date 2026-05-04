@@ -219,9 +219,20 @@ def _tier_badge(tier: str) -> str:
 def _render_sidebar() -> dict:
     st.sidebar.header("Patient Profile")
 
+    # Dark-red styling for the "Load example patient" button (first stButton in sidebar)
+    st.sidebar.markdown(
+        "<style>"
+        "div[data-testid='stSidebarContent'] div.stButton:nth-child(1) button {"
+        "  background-color: #7f1d1d !important;"
+        "  color: #ffffff !important;"
+        "  border-color: #7f1d1d !important;"
+        "}"
+        "</style>",
+        unsafe_allow_html=True,
+    )
     if st.sidebar.button("Load example patient", use_container_width=True):
         st.session_state["_ex"] = True
-    if st.sidebar.button("Clear", use_container_width=True):
+    if st.sidebar.button("Clear fields below", use_container_width=True):
         st.session_state["_ex"] = False
         st.session_state["auto_query"] = ""
 
@@ -280,8 +291,8 @@ def _render_sidebar() -> dict:
     cp_opts = ["(not specified)", "A", "B", "C"]
     cp_raw = st.sidebar.selectbox("Child-Pugh class", cp_opts, index=0)
 
-    with st.sidebar.expander("Lab values *(leave 0 to omit)*", expanded=ex):
-        st.markdown("*Haematology*")
+    with st.sidebar.expander("Lab values *(leave blank / 0 if not specified)*", expanded=ex):
+        st.markdown("*Hematology*")
         plat  = st.number_input("Platelet count (/mm³)", 0, 1_000_000,
                                 value=180_000 if ex else 0, step=1_000)
         hgb   = st.number_input("Hemoglobin (g/dL)", 0.0, 25.0,
@@ -589,13 +600,21 @@ def _render_search() -> str | None:
     nct_ids = [r["nct_id"] for r in results]
     title_map = _fetch_trial_titles(json.dumps(nct_ids))
 
+    # Enable text wrapping in the AG Grid dataframe for the Trial Name column
+    st.markdown(
+        "<style>"
+        ".stDataFrame .ag-cell { white-space: normal !important; word-break: break-word; }"
+        ".stDataFrame .ag-row { align-items: flex-start; }"
+        "</style>",
+        unsafe_allow_html=True,
+    )
+
     rows = []
     for r in results:
         raw_title = title_map.get(r["nct_id"], "")
-        short_title = (raw_title[:52] + "…") if len(raw_title) > 52 else raw_title
         rows.append({
             "NCT ID":           r["nct_id"],
-            "Trial Name":       short_title,
+            "Trial Name":       raw_title,
             "Status":           r.get("status", ""),
             "Sex":              r.get("sex", ""),
             "Min age":          r.get("min_age", ""),
@@ -906,7 +925,7 @@ def _render_criterion_table(evaluations: list[dict], patient: dict | None = None
 # ---------------------------------------------------------------------------
 
 def _render_llm_panel(nct_id: str, patient: dict):
-    st.subheader("AI Narrative (Mistral-7B)")
+    st.subheader("Second opinion: AI Narrative (Mistral-7B)")
     st.caption(
         "The Bayesian model excels at objective, data-driven criteria but cannot reason "
         "over free-text nuance (e.g. platinum-sensitivity windows, combination drug rules, "
