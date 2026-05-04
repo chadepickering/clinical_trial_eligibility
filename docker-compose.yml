@@ -1,13 +1,38 @@
 version: "3.9"
 
 services:
+
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
     ports:
       - "11434:11434"
     volumes:
-      - ollama_data:/root/.ollama
+      - ollama_data:/root/.ollama          # persist downloaded models across restarts
+      - ./docker:/docker:ro                # mount startup script
+    entrypoint: ["/bin/sh", "/docker/ollama_start.sh"]
+    healthcheck:
+      # Passes once the Ollama API is up (model pull may still be in progress)
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: clinical_trial_app
+    ports:
+      - "8501:8501"
+    volumes:
+      # Bind-mount pre-ingested data (run ingestion scripts on host first)
+      - ./data/processed:/app/data/processed:ro
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:

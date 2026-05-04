@@ -1,0 +1,15 @@
+.venv/
+.git/
+__pycache__/
+*.py[cod]
+data/
+chroma_db/
+models/
+wandb/
+*.log
+.env
+.DS_Store
+Thumbs.db
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/

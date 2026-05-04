@@ -27,11 +27,13 @@ Usage:
 """
 
 import json
+import os
 import re
 
 import requests
 
-OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
+_OLLAMA_BASE = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+OLLAMA_URL = f"{_OLLAMA_BASE}/api/generate"
 DEFAULT_MODEL = "mistral"
 DEFAULT_TIMEOUT = 120  # seconds
 

@@ -52,9 +52,12 @@ def _get_embedder():
     return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 
+_OLLAMA_BASE = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+
+
 def _ollama_available() -> bool:
     try:
-        r = requests.get("http://127.0.0.1:11434/api/tags", timeout=2)
+        r = requests.get(f"{_OLLAMA_BASE}/api/tags", timeout=2)
         r.raise_for_status()
         models = [m["name"] for m in r.json().get("models", [])]
         return any("mistral" in m for m in models)
