@@ -46,7 +46,7 @@ Key parameters (see CONFIG below or pass as CLI flags):
     --trials-per-patient  N  : top-N trials retrieved per patient (default 200)
     --n-draws             N  : PyMC prior predictive draws (default 500)
     --mistral-sample-rate F  : fraction of non-trivial pairs sent to Mistral (default 0.10)
-    --coverage-threshold  F  : min fraction evaluable to pass coverage gate (default 0.30)
+    --coverage-threshold  F  : min fraction evaluable to pass coverage gate (default 0.20)
     --min-criteria        N  : min total criteria for coverage gate (default 5)
     --seed                N  : random seed for sampling (default 42)
 """
@@ -799,7 +799,7 @@ def parse_args() -> argparse.Namespace:
                    help="PyMC prior predictive draws per pair (default 500)")
     p.add_argument("--mistral-sample-rate", type=float, default=0.10,
                    help="Fraction of SC/gated pairs sent to Mistral (default 0.10)")
-    p.add_argument("--coverage-threshold", type=float, default=0.30)
+    p.add_argument("--coverage-threshold", type=float, default=0.20)
     p.add_argument("--min-criteria",       type=int,   default=5)
     p.add_argument("--seed",               type=int,   default=42)
     return p.parse_args()

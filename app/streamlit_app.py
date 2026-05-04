@@ -697,10 +697,10 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
 
     # --- Coverage gate ---
     # Two conditions must both pass before showing a probability:
-    #   1. Coverage ≥ 40%: enough of the criteria are evaluable (not just UNOBS)
+    #   1. Coverage ≥ 20%: at least 1-in-5 criteria are evaluable from this profile
     #   2. At least 5 total criteria: guards against trials with only 2-3 trivial
     #      metadata criteria yielding a spuriously confident P=1.0
-    _COVERAGE_THRESHOLD = 0.3
+    _COVERAGE_THRESHOLD = 0.2
     _MIN_CRITERIA = 5
     n_total = len(evaluations)
     n_evaluable = sum(
@@ -729,7 +729,7 @@ def _render_bayesian_panel(nct_id: str, patient: dict) -> tuple[list, dict] | No
         reason = (
             f"only {n_total} criteria in database (minimum 5 required)"
             if n_total < _MIN_CRITERIA
-            else f"{n_evaluable} of {n_total} criteria evaluable ({coverage:.0%}, threshold 30%)"
+            else f"{n_evaluable} of {n_total} criteria evaluable ({coverage:.0%}, threshold 20%)"
         )
         st.warning(
             f"**Profile incomplete** — {reason}. The eligibility probability would be "
