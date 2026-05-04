@@ -124,6 +124,10 @@ clinical_trial_eligibility/
 │   └── README.md                   # local, Docker, and cloud deployment notes
 ├── docker/
 │   └── ollama_start.sh             # waits for API, pulls Mistral on first run
+├── ingestion/
+│   ├── api_client.py               # ClinicalTrials.gov REST API client + pagination
+│   ├── database.py                 # DuckDB schema creation and write helpers
+│   └── parser.py                   # JSON → flat trial dict parser
 ├── nlp/
 │   ├── criterion_splitter.py       # split criteria blob into sentence objects
 │   ├── weak_labeler.py             # regex/heuristic weak supervision labels
@@ -134,10 +138,10 @@ clinical_trial_eligibility/
 ├── rag/
 │   ├── embedder.py                 # chunked mean-pool embedding pipeline
 │   ├── vector_store.py             # ChromaDB operations
-│   ├── retriever.py                # semantic retrieval
+│   ├── retriever.py                # semantic retrieval + cross-encoder reranking
 │   ├── generator.py                # Mistral-7B via Ollama HTTP API
 │   ├── pipeline.py                 # end-to-end RAG orchestration
-│   └── evaluate_ragas.py           # generation quality evaluation
+│   └── evaluate.py                 # verdict accuracy evaluation runner
 ├── scripts/
 │   ├── batch_eval_harness.py       # 3-stage Bayesian vs Mistral evaluation harness
 │   └── build_demo_subset.py        # builds the Streamlit Cloud demo dataset
@@ -147,6 +151,7 @@ clinical_trial_eligibility/
 ├── docker-compose.yml              # ollama + app, healthcheck-gated startup
 ├── embed.py                        # embedding pipeline CLI
 ├── ingest.py                       # ingestion pipeline CLI
+├── label.py                        # criterion splitting and weak labeling CLI
 ├── requirements.txt
 ├── API_schema_reference.md
 ├── PIPELINE_WALKTHROUGH.md

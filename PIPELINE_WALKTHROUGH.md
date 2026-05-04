@@ -1465,7 +1465,7 @@ unevaluable        : 1   (ECOG criterion with ambiguous text — field present
                           but threshold unparseable)
 ```
 
-Coverage = (5 + 2) / 12 = 58% — above the 30% gate. PyMC runs:
+Coverage = (5 + 2) / 12 = 58% — above the 20% gate. PyMC runs:
 
 - 5 deterministic passes → factor = 1.0 each (excluded from product)
 - 2 subjective → `Beta(p_subj_0, 1.3, 0.7)`, `Beta(p_subj_1, 1.3, 0.7)`

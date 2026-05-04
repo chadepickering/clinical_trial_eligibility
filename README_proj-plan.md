@@ -32,7 +32,7 @@ DuckDB (structured criteria store → labeled criterion objects)
 ┌──────────────────────────┐   ┌────────────────────────────┐
 │  Embedding Layer         │   │  Named Entity              │
 │  sentence-               │   │  Recognition               │
-│  transformers            │   │  (SciBERT NER head)        │
+│  transformers            │   │  (Regex + MeSH dictionary) │
 │  all-MiniLM-L6-v2        │   │  Conditions, drugs,        │
 └──────────────────────────┘   │  lab values, thresholds,   │
         ↓                      │  demographics              │
@@ -43,12 +43,11 @@ ChromaDB                       └───────────────�
         └──────────────┬────────────────────┘
                        ↓
 ┌─────────────────────────────────────────────────────┐
-│  RAG Layer (LlamaIndex)                             │
-│  - Query understanding                              │
-│  - Semantic retrieval from ChromaDB                 │
-│  - Cross-encoder reranking                          │
+│  Retrieval + Generation Layer (custom pipeline)     │
+│  - Bi-encoder retrieval (MiniLM → ChromaDB top 20) │
+│  - Cross-encoder reranking (ms-marco-MiniLM)        │
 │  - Response generation (Mistral-7B via Ollama)      │
-│  - Generation quality evaluation (verdict accuracy) │
+│  - Verdict accuracy evaluation (100 labeled cases)  │
 └─────────────────────────────────────────────────────┘
         ↓
 ┌─────────────────────────────────────────────────────┐
@@ -128,6 +127,10 @@ clinical_trial_eligibility/
 │   └── README.md                   # local, Docker, and cloud deployment notes
 ├── docker/
 │   └── ollama_start.sh             # waits for API ready, pulls Mistral on first run
+├── ingestion/
+│   ├── api_client.py               # ClinicalTrials.gov REST API client + pagination
+│   ├── database.py                 # DuckDB schema creation and write helpers
+│   └── parser.py                   # JSON → flat trial dict parser
 ├── nlp/
 │   ├── criterion_splitter.py       # split criteria blob into sentence objects
 │   ├── weak_labeler.py             # regex/heuristic weak supervision labels
@@ -138,13 +141,30 @@ clinical_trial_eligibility/
 ├── rag/
 │   ├── embedder.py                 # chunked mean-pool embedding pipeline
 │   ├── vector_store.py             # ChromaDB operations
-│   ├── retriever.py                # semantic retrieval
+│   ├── retriever.py                # semantic retrieval + cross-encoder reranking
 │   ├── generator.py                # Mistral-7B via Ollama HTTP API
 │   ├── pipeline.py                 # end-to-end RAG orchestration
-│   └── evaluate_ragas.py           # generation quality evaluation
+│   ├── evaluate.py                 # verdict accuracy evaluation runner (Step 9)
+│   └── evaluate_ragas.py           # historical — replaced by evaluate.py
 ├── scripts/
 │   ├── batch_eval_harness.py       # 3-stage Bayesian vs Mistral evaluation harness
-│   └── build_demo_subset.py        # builds the Streamlit Cloud demo dataset
+│   ├── build_demo_subset.py        # builds the Streamlit Cloud demo dataset
+│   ├── sample_annotation.py        # Step 5 — samples None-row criteria for annotation
+│   ├── llm_annotate.py             # Step 5 — Claude-based annotation with rubric
+│   └── review_annotations.py       # Step 5 — human adjudication of flagged rows
+├── tests/
+│   ├── test_api_client.py
+│   ├── test_bayesian.py            # 103 tests — Bayesian model and B1/B2/B3 permutations
+│   ├── test_classifier.py
+│   ├── test_criterion_evaluator.py # 135 tests — evaluator functions + integration
+│   ├── test_criterion_splitter.py
+│   ├── test_embed.py               # 12 tests — embedding geometry + retrieval correctness
+│   ├── test_generator.py           # 30 tests — prompt, verdict parsing, ineligibility suite
+│   ├── test_parser.py
+│   ├── test_pipeline.py            # 12 tests — result shape, filter propagation, latency
+│   ├── test_rag.py                 # 9 tests — retriever contract + BRCA1 benchmark
+│   ├── test_uncertainty.py         # 38 tests — summarize_posterior + decomposition
+│   └── test_weak_labeler.py
 ├── .dockerignore
 ├── .env.example
 ├── .gitignore
@@ -152,6 +172,7 @@ clinical_trial_eligibility/
 ├── docker-compose.yml              # ollama + app, healthcheck-gated startup
 ├── embed.py                        # embedding pipeline CLI
 ├── ingest.py                       # ingestion pipeline CLI
+├── label.py                        # criterion splitting and weak labeling CLI
 ├── requirements.txt
 ├── API_schema_reference.md
 ├── PIPELINE_WALKTHROUGH.md
@@ -173,7 +194,7 @@ clinical_trial_eligibility/
 | Embeddings | sentence-transformers/all-MiniLM-L6-v2 | Free |
 | Vector store | ChromaDB (local persistent) | Free |
 | LLM | Mistral-7B via Ollama (local) | Free |
-| RAG orchestration | LlamaIndex | Free |
+| RAG orchestration | Custom pipeline (retriever.py + generator.py) | Free |
 | Reranking | cross-encoder/ms-marco-MiniLM-L-6-v2 | Free |
 | RAG evaluation | Custom verdict accuracy (50+50 labeled cases) | Free |
 | Bayesian modeling | PyMC | Free |
@@ -565,7 +586,7 @@ P(eligible) = ∏ P(meets criterion_i)
 
 4. **Default hedging 0.35 (not 0.5).** Unclassified subjective criteria (no hedging keywords matched) default to Beta(1.3, 0.7) mean=0.65. Same population selection rationale — most protocol requirements are met by patients who reach screening.
 
-5. **Coverage gate.** If fewer than 30% of criteria are evaluable (PASS + FAIL + SUBJ), the probability is suppressed and a "profile incomplete" warning shown instead. Prevents confidently-wrong low probabilities when a patient profile contains almost no fields matching the trial's criteria.
+5. **Coverage gate.** If fewer than 20% of criteria are evaluable (PASS + FAIL + SUBJ), the probability is suppressed and a "profile incomplete" warning shown instead. Prevents confidently-wrong low probabilities when a patient profile contains almost no fields matching the trial's criteria.
 
 6. **ULN multiplier guard.** Criteria expressed as "≤ 2.5 × ULN" cannot be evaluated without knowing the institution-specific ULN. Without the guard, the parser extracts 2.5 as an absolute value and hard-fails AST=28 against a threshold of 2.5. These criteria return None → UNOBSERVABLE.
 
@@ -639,7 +660,7 @@ Structured input for all common oncology fields derived from DuckDB criteria ana
 **2. Eligibility Assessment**
 - Descriptive caption explaining the Bayesian flow (criterion classification → Beta priors → PyMC posterior → 95% HDI)
 - **Short-circuit path:** red error box naming the failing criterion
-- **Coverage gate path** (< 30% evaluable or < 5 criteria total): amber warning listing specific gaps and which lab fields/profile items would improve coverage
+- **Coverage gate path** (< 20% evaluable or < 5 criteria total): amber warning listing specific gaps and which lab fields/profile items would improve coverage
 - **Scored path:** Plotly gauge (0–100%, tier colour, HDI shaded band) + uncertainty tier badge + dominant source callout (unobservable / subjective / deterministic) + 4-metric count row
 
 **3. Criterion Breakdown**
@@ -692,7 +713,7 @@ Post-implementation, a 3-stage batch evaluation harness was built and run over 3
 | Few-shot example 10: cancer-type mismatch | Patient cancer ≠ trial's required disease → NOT ELIGIBLE |
 | Few-shot example 11: prior treatment required | Trial requires ≥1 prior line; treatment-naïve → NOT ELIGIBLE |
 
-**Coverage gate recalibrated from 40% → 30%** after ULN fix: converting false-FAIL criteria to UNOBS reduces `n_evaluable`, artificially lowering coverage. The 30% threshold restores informative pairs to the scored pool while still gating genuinely data-sparse profiles.
+**Coverage gate recalibrated from 40% → 30% → 20%** after two rounds of adjustment. First recalibration (40% → 30%): after the ULN fix, converting false-FAIL criteria to UNOBS reduced `n_evaluable`, artificially lowering coverage — 30% restored informative pairs to the scored pool. Second recalibration (30% → 20%): diagnostic sweep of the 1k-trial demo subset found that mean coverage for trials at the gate was 0.20, meaning the 30% threshold was suppressing valid Bayesian assessments on simpler trials with fewer total criteria.
 
 **Post-fix Stage 1 outcome distribution (6,000 pairs):**
 
@@ -739,7 +760,7 @@ Post-implementation, a 3-stage batch evaluation harness was built and run over 3
 
 **Acceptance criteria for Step 12:**
 - [x] `docker compose up --build` starts both services without errors
-- [x] Streamlit app accessible at `localhost:8501`
+- [x] Streamlit app accessible locally
 - [x] RAG pipeline connects to Ollama container via `OLLAMA_HOST` env var
 - [x] Mistral-7B pulled automatically on first run; cached across restarts
 - [x] End-to-end query (search → Bayesian → AI narrative) works inside Docker
@@ -791,14 +812,3 @@ Post-implementation, a 3-stage batch evaluation harness was built and run over 3
 6. **Cross-encoder reranking** — improves retrieval precision over bi-encoder alone at acceptable latency cost
 7. **Enriched patient profile baseline** — mean of training features used as integrated gradients baseline rather than zero vector
 8. **Generator and Bayesian scorer have non-overlapping roles** — the LLM verdict and the posterior probability answer adjacent but architecturally distinct questions about the same trial-patient pair. The generator (Mistral-7B) reads the full trial document and patient description together and produces a prose explanation in clinical language — its output is consumed by the clinician at the Streamlit interface. It cannot produce calibrated probabilities; a language model has no mechanism for computing a posterior over a product of independent criterion probabilities. The Bayesian scorer (PyMC) operates on structured inputs — SciBERT B2/B3 labels and NER-extracted thresholds — and computes a posterior P(eligible) with a 95% credible interval. Its credible intervals communicate *why* uncertainty exists structurally: how many criteria are subjective, how many are unobservable. It has no language understanding and no access to the trial text. Each component does something the other is architecturally incapable of. In the Streamlit interface these map to Panel 3 (probability gauge + credible interval from PyMC) and Panel 4 (criterion-level explainability + LLM narrative). The LLM verdict currently has zero formal weight in the Bayesian posterior — it is a display artifact for the clinician, not an input to the model. Connecting them (e.g. using the LLM's per-criterion uncertainty to modulate Beta prior strength) is a meaningful future extension but outside the scope of this project.
-
----
-
-## Connection to UCI Diabetes Portfolio Project
-
-This project directly extends several analytical threads from the UCI Diabetes readmission prediction project:
-
-- **Bayesian eligibility scorer** extends the Bayesian inference and experimental design work from Part 1
-- **NLP classification** extends the feature engineering and interpretability methodology
-- **RAG pipeline** introduces a genuinely new LLM/GenAI capability not present in the UCI project
-- **Clinical domain** — oncology trial matching is adjacent to the clinical data science work at XYZ Biosciences, grounding design decisions in real domain expertise
