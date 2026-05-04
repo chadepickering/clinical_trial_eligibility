@@ -26,6 +26,9 @@ _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
+# DATA_DIR: override via env var for cloud deployment (e.g. DATA_DIR=data/demo)
+_DATA_DIR = os.path.join(_ROOT, os.environ.get("DATA_DIR", "data/processed"))
+
 # ---------------------------------------------------------------------------
 # Cached heavy resources (process-level, survives reruns)
 # ---------------------------------------------------------------------------
@@ -34,7 +37,7 @@ if _ROOT not in sys.path:
 def _get_db():
     import duckdb
     return duckdb.connect(
-        os.path.join(_ROOT, "data", "processed", "trials.duckdb"),
+        os.path.join(_DATA_DIR, "trials.duckdb"),
         read_only=True,
     )
 
@@ -42,7 +45,7 @@ def _get_db():
 @st.cache_resource
 def _get_collection():
     from rag.vector_store import get_client, get_collection
-    client = get_client(os.path.join(_ROOT, "data", "processed", "chroma"))
+    client = get_client(os.path.join(_DATA_DIR, "chroma"))
     return get_collection(client)
 
 

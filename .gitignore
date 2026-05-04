@@ -1,6 +1,8 @@
 # Data — large files and sensitive outputs
 data/raw/
 data/processed/
+# Demo subset committed for Streamlit Community Cloud (small files only)
+!data/demo/
 
 # Environment
 .env
